@@ -16,6 +16,7 @@ export interface Article {
   createAt: string;
   updateAt: string;
   author: string;
+  author_email: string;
   urls: {
     type: UrlsTypes;
     url: string;
