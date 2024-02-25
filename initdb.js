@@ -1,9 +1,11 @@
 const sql = require('better-sqlite3');
+const slugify = require('slugify');
+
 const db = sql('articles.db');
 
 const articles = [
   {
-    slug: 'wash-the-sins-not-only-the-face',
+    slug: slugify('Wash the sins not only the face', { lower: true }),
     title: 'Wash the sins not only the face',
     introduction: 'Esben and The Witch, 2013',
     main: `Iceland Spar

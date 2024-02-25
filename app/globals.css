@@ -1,2 +1,15 @@
 @import 'normalize.css';
 @import 'sakura.css/css/sakura-dark.css';
+
+:root {
+  --titles: 'Ibarra Real Nova', serif;
+  --content: 'helvetica neue', helvetica, arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--titles);
+}
+
+p, span, li, a, button {
+  font-family: var(--content);
+}

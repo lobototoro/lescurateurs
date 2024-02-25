@@ -14,9 +14,13 @@
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sakura.css": "^1.5.0"
+    "sakura.css": "^1.5.0",
+    "server-only": "^0.0.1",
+    "slugify": "^1.6.6",
+    "xss": "^1.0.14"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.9",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
