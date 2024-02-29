@@ -4,6 +4,9 @@
 :root {
   --titles: 'Ibarra Real Nova', serif;
   --content: 'helvetica neue', helvetica, arial, sans-serif;
+  --primary-color: #290ce6;
+  --secondary-color: #0ce64d;
+  --tertiary-color: #e69a0c;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -12,4 +15,107 @@ h1, h2, h3, h4, h5, h6 {
 
 p, span, li, a, button {
   font-family: var(--content);
+}
+
+/* struct */
+@media (max-width: 640px) {
+	* {
+		box-sizing: border-box;
+	}
+	
+	/* passer body (et tous les éléments de largeur fixe) en largeur automatique */
+
+	body {
+		width: auto;
+		margin: 0;
+		padding: 0;
+    height: 100vh;
+	}
+	
+	/* fixer une largeur maximale de 100% aux éléments potentiellement problématiques */
+
+	img,
+	table,
+	td,
+	blockquote,
+	code,
+	pre,
+	textarea,
+	input,
+	iframe,
+	object,
+	embed,
+	video {
+		max-width: 100%;
+	}
+	
+	/* conserver le ratio des images */
+
+	img {
+		height: auto;
+	}
+	
+	/* gestion des mots longs */
+
+	textarea,
+	table,
+	td,
+	th,
+	code,
+	pre,
+	samp {
+		-webkit-hyphens: auto; /* césure propre */
+		-moz-hyphens: auto;
+		hyphens: auto;
+		word-wrap: break-word; /* passage à la ligne forcé */
+	}
+	
+	code,
+	pre,
+	samp {
+		white-space: pre-wrap; /* passage à la ligne spécifique pour les éléments à châsse fixe */
+	}
+	
+	/* Passer à une seule colonne (à appliquer aux éléments multi-colonnes) */
+
+	.element1,
+	.element2 {
+		float: none;
+		width: auto;
+	}
+	
+	/* masquer/afficher les éléments  */
+
+	.u-mobile {          display: block;          display: revert !important; /* affichage des éléments */        }        .u-no-mobile {          display: none !important; /* masquage des éléments */        }
+	
+	/* Un message personnalisé */
+
+	/* body:before {
+		content: "Version mobile du site";
+		display: block;
+		text-align: center;
+		font-style: italic;
+		color: #777;
+	} */
+}
+
+@media (max-device-width:768px) and (orientation: landscape) {
+  html {
+   -webkit-text-size-adjust: 100%;
+   -ms-text-size-adjust: 100%;
+  }
+}
+
+/* content styles */
+.navigation {
+  min-height: 5%;
+  background-color: #290ce6;
+}
+.main {
+  min-height: 85%;
+  background-color: #0ce64d;
+}
+.footer {
+  min-height: 10%;
+  background-color: #e69a0c;
 }

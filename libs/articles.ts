@@ -1,11 +1,11 @@
 import 'server-only';
 
-import fs from 'node:fs';
+// import fs from 'node:fs';
 import sql from 'better-sqlite3';
-import slugify from 'slugify';
-import xss from 'xss';
+// import slugify from 'slugify';
+// import xss from 'xss';
 
-const db = sql('articles.db');
+const db = sql('lcfr.db');
 
 export async function getArticle(slug: string) {
   return db
@@ -13,3 +13,8 @@ export async function getArticle(slug: string) {
     .get(slug);
 }
 
+export async function getSlugs() {
+  return db
+    .prepare('SELECT * FROM slugs')
+    .all();
+}

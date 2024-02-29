@@ -20,5 +20,6 @@ export interface Article {
   urls: {
     type: UrlsTypes;
     url: string;
+    credits?: string;
   }[];
-}
+};

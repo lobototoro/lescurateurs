@@ -16,7 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={ibarra.className}>{children}</body>
+      <body className={ibarra.className}>
+        <nav className="navigation"></nav>
+        <main className="main">
+          {children}
+        </main>
+        <footer className="footer"></footer>
+      </body>
     </html>
   );
 }
