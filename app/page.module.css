@@ -1,5 +1,9 @@
 .home-title {
-  color: var(--primary-color);
+  color: var(--secondary-cool-gray);
+  font-family: var(--titles);
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1.1;
   letter-spacing: -0.05rem;
   text-transform: uppercase;
   margin-top: 0;

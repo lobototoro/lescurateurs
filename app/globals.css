@@ -4,9 +4,12 @@
 :root {
   --titles: 'Ibarra Real Nova', serif;
   --content: 'helvetica neue', helvetica, arial, sans-serif;
-  --primary-color: #290ce6;
-  --secondary-color: #0ce64d;
-  --tertiary-color: #e69a0c;
+  --primary-peri-winkle: rgb(169, 175, 209);
+  --secondary-cool-gray: rgb(125, 129, 155);
+	--secondary--payne-gray: rgb(87, 96, 118);
+  --tertiary-charcoal: rgb(49, 62, 80);
+	--accent-dark-ultra-violet: rgb(79, 81, 125);
+	--accent-tropical-indigo: rgb(169, 151, 223);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -30,6 +33,8 @@ p, span, li, a, button {
 		margin: 0;
 		padding: 0;
     height: 100vh;
+		background-color: var(--tertiary-charcoal);
+		overflow: hidden;
 	}
 	
 	/* fixer une largeur maximale de 100% aux éléments potentiellement problématiques */
@@ -108,14 +113,16 @@ p, span, li, a, button {
 
 /* content styles */
 .navigation {
+	width: 100vw;
   min-height: 5%;
-  background-color: #290ce6;
+  background-color: var(--secondary--payne-gray);
 }
 .main {
   min-height: 85%;
-  background-color: #0ce64d;
+  background-color: transparent;
 }
 .footer {
+	width: 100vw;
   min-height: 10%;
-  background-color: #e69a0c;
+  background-color: var(--secondary--payne-gray);
 }
