@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Ibarra_Real_Nova } from "next/font/google";
+
 import "./globals.css";
+import Header from "./components/header";
 
 const ibarra = Ibarra_Real_Nova({ subsets: ["latin"] });
 
@@ -17,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={ibarra.className}>
-        <nav className="navigation"></nav>
+        <section className="navigation">
+          <Header />
+        </section>
         <main className="main">
           {children}
         </main>

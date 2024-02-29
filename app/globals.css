@@ -34,7 +34,7 @@ p, span, li, a, button {
 		padding: 0;
     height: 100vh;
 		background-color: var(--tertiary-charcoal);
-		overflow: hidden;
+		/* overflow: hidden; */
 	}
 	
 	/* fixer une largeur maximale de 100% aux éléments potentiellement problématiques */
@@ -115,14 +115,16 @@ p, span, li, a, button {
 .navigation {
 	width: 100vw;
   min-height: 5%;
-  background-color: var(--secondary--payne-gray);
+  background-color: var(--accent-dark-ultra-violet);
+	overflow: hidden;
 }
 .main {
-  min-height: 85%;
+  min-height: 92%;
   background-color: transparent;
 }
 .footer {
 	width: 100vw;
-  min-height: 10%;
-  background-color: var(--secondary--payne-gray);
+  min-height: 3%;
+  background-color: var(--accent-dark-ultra-violet);
+	overflow: hidden;
 }
