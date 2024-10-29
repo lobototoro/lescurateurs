@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-import { Meal } from '@/models/meal-types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import { Meal } from '@/models/meal-types';
 import sql from 'better-sqlite3';
 import slugify from 'slugify';
 import xss from 'xss';
@@ -20,6 +21,7 @@ export async function getMeal(slug: string) {
     .prepare('SELECT * FROM meals WHERE slug = ?')
     .get(slug);
 }
+
 // TODO: do not mutate the received object
 export async function createMeal(meal: any) {
   const slug = slugify(meal.title, { lower: true });
