@@ -1,0 +1,16 @@
+.header-title {
+  color: var(--secondary-payne-gray);
+  font-family: var(--titles);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.05rem;
+  text-transform: uppercase;
+  text-align: left;
+  padding-left: 0.5rem;
+}
+
+.title {
+  margin-top:10px;
+  margin-bottom: 0;
+}
