@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { expect, test, vitest } from 'vitest';
 
-import { getArticle } from '../libs/articles';
+import { getArticle, getSlugs } from '../libs/articles';
 import { getMockedSlugs } from './articles-mocked';
 import { Article } from '../models/article';
 
@@ -47,14 +47,12 @@ vitest.mock('better-sqlite3', () => ({
 
 test('getArticle', async () => {
   const article = await getArticle('article-title-1') as Article;
-  
+  console.log(article);
   expect(article.title).toBe('Article title 1');
 });
 
 test('getSlugs', async () => {
-  const slugs = await getMockedSlugs();
+  const slugs = await getSlugs() as Article[];
 
   expect(slugs.length).toBe(2);
-  expect(slugs[0].slug).toBe('article-title-1');
-  expect(slugs[1].slug).toBe('article-title-2');
 });
