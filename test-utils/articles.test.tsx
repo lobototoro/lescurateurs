@@ -47,7 +47,7 @@ vitest.mock('better-sqlite3', () => ({
 
 test('getArticle', async () => {
   const article = await getArticle('article-title-1') as Article;
-  console.log(article);
+
   expect(article.title).toBe('Article title 1');
 });
 
