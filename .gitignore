@@ -37,3 +37,5 @@ next-env.d.ts
 
 # specific
 initdb.js
+
+certificates
