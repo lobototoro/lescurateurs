@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
     "better-sqlite3": "^9.4.3",
     "bulma": "^1.0.2",
     "isomorphic-dompurify": "^2.21.0",
