@@ -10,6 +10,14 @@
   --tertiary-charcoal: rgb(49, 62, 80);
 	--accent-dark-ultra-violet: rgb(79, 81, 125);
 	--accent-tropical-indigo: rgb(169, 151, 223);
+	--font-small: 1rem;
+	--font-medium: 1.5rem;
+	--font-large: 2rem;
+	--font-extra-large: 3rem;
+	--lh-smmall: calc(var(--font-small) * 1.2);
+	--lh-medium: calc(var(--font-medium) * 1.2);
+	--lh-large: calc(var(--font-large) * 1.2);
+	--lh-extra-large: calc(var(--font-extra-large) * 1.2);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -127,4 +135,22 @@ p, span, li, a, button {
   min-height: 3%;
   background-color: var(--accent-dark-ultra-violet);
 	overflow: hidden;
+}
+
+/* article styles */
+.article-title_small {
+	font-size: var(--font-small);
+	line-height: var(--lh-smmall);
+}
+.article-title_medium {
+	font-size: var(--font-medium);
+	line-height: var(--lh-medium);
+}
+.article-title_large {
+	font-size: var(--font-large);
+	line-height: var(--lh-large);
+}
+.article-title_extra-large {
+	font-size: var(--font-extra-large);
+	line-height: var(--lh-extra-large);
 }
