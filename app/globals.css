@@ -154,3 +154,15 @@ p, span, li, a, button {
 	font-size: var(--font-extra-large);
 	line-height: var(--lh-extra-large);
 }
+.article-title_white {
+	color: var(--primary-peri-winkle);
+}
+.article-title_black {
+	color: var(--tertiary-charcoal);
+}
+.article-title_primary {
+	color: var(--accent-tropical-indigo);
+}
+.article-title_secondary {
+	color: var(--accent-dark-ultra-violet);
+}
