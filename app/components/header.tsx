@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './header.module.css';
-import { ArticleTitle } from './ArticleTitle';
+import { ArticleTitle } from './single-elements/ArticleTitle';
 
 export default function Header() {
   return (

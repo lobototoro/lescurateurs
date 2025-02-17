@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 
-import { ArticleTitle } from '../app/components/ArticleTitle';
+import { ArticleTitle } from '../app/components/single-elements/ArticleTitle';
 
 // vitest.mock('isomorphic-dompurify', () => ({
 //   default: vitest.fn().mockImplementation(() => {
