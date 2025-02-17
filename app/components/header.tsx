@@ -6,7 +6,12 @@ import { ArticleTitle } from './ArticleTitle';
 export default function Header() {
   return (
     <header className={styles['header-title']}>
-      <ArticleTitle text="LES CURATEURS" level="h1" size="extra-large" />
+      <ArticleTitle
+        text="LES CURATEURS"
+        level="h1"
+        size="extra-large"
+        color="black"
+      />
     </header>
   );
 };

@@ -12,9 +12,9 @@ import { ArticleTitle } from '../app/components/ArticleTitle';
 // }));
 
 test('ArticleTitle', () => {
-  render(<ArticleTitle text="Article title" level="h1" size="extra-large" />);
+  render(<ArticleTitle text="Article title" level="h1" size="extra-large" color="white" />);
 
   const container = screen.getByText('Article title');
   expect(container).toBeDefined();
-  expect(container.className).toBe('article-title_extra-large');
+  expect(container.className).toBe('article-title_extra-large article-title_white');
 });
