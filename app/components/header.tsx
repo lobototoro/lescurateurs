@@ -1,11 +1,12 @@
 import React from 'react';
 
 import styles from './header.module.css';
+import { ArticleTitle } from './ArticleTitle';
 
 export default function Header() {
   return (
     <header className={styles['header-title']}>
-      <h1 className={styles.title}>LES CURATEURS</h1>
+      <ArticleTitle text="LES CURATEURS" level="h1" size="extra-large" />
     </header>
   );
 };
