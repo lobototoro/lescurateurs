@@ -1,13 +1,14 @@
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0/client';
-import React from 'react';
+import { useUser } from "@auth0/nextjs-auth0/client";
+
 import UserDetails from './components/userDetails';
 
 function Profile() {
-  const { user, isLoading } = useUser();
-  if (isLoading) {
-    return <h1>loading....</h1>;
-  }
+  const { user } = useUser();
   
-  return <section className='container grid_2'>{user && <UserDetails user={user} />}</section>;
+  return (
+    <section>
+      {user && <UserDetails user={user} />}
+    </section>
+  );
 }
-export default withPageAuthRequired(Profile);
+export default Profile;
