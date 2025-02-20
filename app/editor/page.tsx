@@ -1,11 +1,29 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 "use client";
-import { UserProvider } from '@auth0/nextjs-auth0/client';
-import LoginPage from './components/loginPage';
+import { useUser } from "@auth0/nextjs-auth0/client";
+
+import Profile from './profile';
+import Header from './components/header';
 
 export default function Login() {
+  const { user, error, isLoading } = useUser();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
+  if (!user) {
+    return (
+      <>
+        <a href="/api/auth/login?returnTo=/editor">
+          <button>Log in</button>
+        </a>
+      </>
+    );
+  }
+  
   return (
-    <UserProvider>
-      <LoginPage />
-    </UserProvider>
+    <>
+      <Header />
+      <Profile />
+    </>
   );
 }
