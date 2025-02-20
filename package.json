@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --experimental-https --turbopack",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -11,10 +11,10 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^3.5.0",
+    "@auth0/nextjs-auth0": "^3.6.0",
     "better-sqlite3": "^9.4.3",
     "bulma": "^1.0.2",
-    "next": "^15.0.2",
+    "next": "^15.1.7",
     "normalize.css": "^8.0.1",
     "react": "^19.0.0-rc-7c8e5e7a-20241101",
     "react-dom": "^19.0.0-rc-7c8e5e7a-20241101",
