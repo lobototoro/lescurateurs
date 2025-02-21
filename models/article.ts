@@ -13,7 +13,7 @@ export interface Article {
   mainAudioUrl: string | null;
   urlToMainIllustration: string;
   publishedAt: string | null;
-  createAt: string;
+  createdAt: string;
   updateAt: string;
   author: string;
   author_email: string;
