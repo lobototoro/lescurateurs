@@ -9,11 +9,7 @@ const db = sql('lcfr.db');
 export async function getUser(email: string) {
   return db
     .prepare('SELECT * FROM users WHERE email = ?')
-    .get(email, (err: any) => {
-      if (err) {
-        console.error('get user func ', err);
-      }
-    });
+    .get(email);
 }
 
 export async function createUser(user: User) {
@@ -37,11 +33,7 @@ export async function createUser(user: User) {
       ?,
       ?
     )`)
-    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt, (err: any) => {
-      if (err) {
-        console.error('Create user func ', err);
-      }
-    });
+    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt);
 }
 
 export async function updateUser(user: User) {
@@ -59,28 +51,16 @@ export async function updateUser(user: User) {
       permissions = ?,
       createdAt = ?
     WHERE email = ?`)
-    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt, user.email, (err: any) => {
-      if (err) {
-        console.error('Update user func ', err);
-      }
-    });
+    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt, user.email);
 }
 
 export async function deleteUser(email: string) {
   db.prepare('DELETE FROM users WHERE email = ?')
-    .run(email, (err: any) => {
-      if (err) {
-        console.error('Delete user func ', err);
-      }
-    });
+    .run(email);
 }
 
 export async function getAllUsers() {
   return db
     .prepare('SELECT * FROM users')
-    .all((err: any) => {
-      if (err) {
-        console.error('get all users func ', err);
-      }
-    });
+    .all();
 }

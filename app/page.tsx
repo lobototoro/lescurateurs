@@ -1,5 +1,5 @@
 // import styles from "./page.module.css";
-import { getSlugs } from "@/libs/articles";
+import { getSlugs } from "@/lib/articles";
 import { slugs as Slugs } from "@/models/slugs";
 import { ArticleList } from "./components/ArticleList";
 import { Suspense } from "react";

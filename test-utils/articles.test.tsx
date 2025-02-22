@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { expect, test, vitest } from 'vitest';
 
-import { getArticle, getSlugs } from '../libs/articles';
+import { getArticle, getSlugs } from '../lib/articles';
 import { getMockedSlugs } from './articles-mocked';
 import { Article } from '../models/article';
 
