@@ -1,19 +1,13 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-"use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { auth0 } from "@/lib/auth0"
 
-import Profile from './profile';
-import Header from './components/header';
+export default async function Login() {
+  const session = await auth0.getSession()
 
-export default function Login() {
-  const { user, error, isLoading } = useUser();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
-  if (!user) {
+  if (!session) {
     return (
       <>
-        <a href="/api/auth/login?returnTo=/editor">
+        <a href="/auth/login?returnTo=/editor">
           <button>Log in</button>
         </a>
       </>
@@ -22,8 +16,11 @@ export default function Login() {
   
   return (
     <>
-      <Header />
-      <Profile />
+      You're logged in {session?.user.name}!
+      <br />
+      <a href="/auth/logout">
+        <button>Log out</button>
+      </a>
     </>
   );
 }

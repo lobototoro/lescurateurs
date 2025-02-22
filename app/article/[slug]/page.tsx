@@ -1,5 +1,5 @@
 import { Article } from '@/models/article';
-import { getArticle } from '@/libs/articles';
+import { getArticle } from '@/lib/articles';
 import { Params } from '@/models/slugs';
 
 export default async function ArticlePage(props: { params: Promise<Params> }) {

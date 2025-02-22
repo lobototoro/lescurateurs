@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Ibarra_Real_Nova } from "next/font/google";
-import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 
 import "./globals.css";
@@ -20,17 +19,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <UserProvider>
-        <body className={ibarra.className}>
-          <section className="navigation">
-            <Header />
-          </section>
-          <main className="main">
-            {children}
-          </main>
-          <footer className="footer"></footer>
-        </body>
-      </UserProvider>
+      <body className={ibarra.className}>
+        <section className="navigation">
+          <Header />
+        </section>
+        <main className="main">
+          {children}
+        </main>
+        <footer className="footer"></footer>
+      </body>
     </html>
   );
 }
