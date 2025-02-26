@@ -2,7 +2,9 @@
 import { auth0 } from "@/lib/auth0"
 import { getUser } from "@/lib/users";
 import { User } from "@/models/user";
-import Header from "./components/header";
+import EditorForm from "./components/formComponents/editorForm";
+
+// import Header from "./components/formComponents/headerNode";
 
 export default async function Login() {
   const session = await auth0.getSession()
@@ -21,10 +23,14 @@ export default async function Login() {
 
   return (
     <>
-      <Header
+      {/* <Header
         role={credentials.role}
         permissions={credentials.permissions}
-      />
+      /> */}
+      {session && <EditorForm
+        role={credentials.role}
+        permissions={credentials.permissions}
+      />}
       <br />
       <a href="/auth/logout">
         <button>Log out</button>

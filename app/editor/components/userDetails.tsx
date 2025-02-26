@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { UserProfile } from '@auth0/nextjs-auth0/client';
-
-export default function UserDetails({ user }: { user: UserProfile }) {
+export default function UserDetails({ user }: { user: any }) {
   return (
     <section>
       <figure>

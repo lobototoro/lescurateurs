@@ -1,4 +1,4 @@
-export default function Header({ role, permissions }: {
+export default function HeaderNode({ role, permissions }: {
   role: string;
   permissions: string;
 }) {
