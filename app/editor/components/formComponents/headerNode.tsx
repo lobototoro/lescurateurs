@@ -1,27 +1,23 @@
-export default function HeaderNode({ role, permissions }: {
+"use client";
+import React from "react";
+
+export default function HeaderNode({ role, permissions, setSelection }: {
   role: string;
   permissions: string;
+  setSelection: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const stringifiedPermissions = JSON.parse(permissions);
-  const filteredMenu = stringifiedPermissions.map( (permission: string) => {
-    if (permission.split(':')[1] === 'articles') {
-      return `${permission.split(':')[0]} article`;
-    }
-    if (permission.split(':')[1] === 'user') {
-      return `${permission.split(':')[0]} user`;
-    }
-    if (permission.split(':')[1] === 'maintenance') {
-      return `${permission.split(':')[0]} maintenance`;
-    }
+  const filteredMenu = stringifiedPermissions.map( (permission: string, index: number) => {
+    if (permission === 'read:articles') return;
+
+    return <li key = { index } onClick={ () => setSelection(permission.split(':').join('')) }>{permission.split(':')[0]} {permission.split(':')[1]}</li>;
   });
 
   return (
     <header>
       <ul>
         <li>Role: { role }</li>
-        { filteredMenu.map( (permission: string, index: number) => (
-          <li key={ index }>{ permission }</li>
-        ))}
+        { filteredMenu }
       </ul>
     </header>
   );

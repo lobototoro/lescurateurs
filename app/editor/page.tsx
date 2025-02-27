@@ -27,7 +27,7 @@ export default async function Login() {
         role={credentials.role}
         permissions={credentials.permissions}
       /> */}
-      {session && <EditorForm
+      {session && credentials && <EditorForm
         role={credentials.role}
         permissions={credentials.permissions}
       />}
