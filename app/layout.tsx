@@ -20,13 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={raleway.className}>
-        <section className="navigation">
+        <section className="navigation container">
           <Header />
         </section>
-        <main className="main">
+        <main className="main container">
           {children}
         </main>
-        <footer className="footer"></footer>
+        <footer className="footer container"></footer>
       </body>
     </html>
   );
