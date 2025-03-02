@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Ibarra_Real_Nova } from "next/font/google";
+import { Raleway } from "next/font/google";
 
 
 import "./globals.css";
 import Header from "./components/header";
 
-const ibarra = Ibarra_Real_Nova({ subsets: ["latin"] });
+const raleway = Raleway({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={ibarra.className}>
+      <body className={raleway.className}>
         <section className="navigation">
           <Header />
         </section>
