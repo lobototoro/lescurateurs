@@ -6,13 +6,20 @@ const alegreya = Alegreya({
   display: 'swap',
 });
 
-export const ArticleTitle = ({ text, level, size = 'medium', color = 'white' }: { 
+export const ArticleTitle = ({
+  text,
+  level,
+  size = 'medium',
+  color = 'white',
+  spacings = ''
+}: { 
   text: string,
   level: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
   color?: 'white' | 'black' | 'primary' | 'secondary',
-  size?: 'small' | 'medium' | 'large' | 'extra-large'
+  size?: 'small' | 'medium' | 'large' | 'extra-large',
+  spacings?: string | ''
 }) => {
-  const tag: string = DOMPurify.sanitize(`<${level} class="${alegreya.className} article-title_${size} article-title_${color}">${text}</${level}>`);
+  const tag: string = DOMPurify.sanitize(`<${level} class="${alegreya.className} article-title_${size} article-title_${color} ${spacings}">${text}</${level}>`);
 
   return (
     <div dangerouslySetInnerHTML={{ __html: tag }} />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import HeaderNode from "./headerNode";
+import CreatearticlesForm from "./createArticlesForm";
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -19,9 +20,9 @@ export default function EditorForm({ role, permissions }: {
         permissions={permissions}
         setSelection={setSelection}
       />
-      <p>{ selection }</p>
-      {/* { (selection === 'createarticles') && <CreatearticlesForm /> }
-      { (selection === 'updatearticles') && <UpdateAaticleForm /> }
+      {/* <p>{ selection }</p> */}
+      { (selection === 'createarticles') && <CreatearticlesForm /> }
+      {/* (selection === 'updatearticles') && <UpdateAaticleForm /> }
       { (selection === 'deletearticles') && <DeleteArticleForm /> }
       { (selection === 'validatearticles') && <ValidateArticleForm /> }
       { (selection === 'shiparticles') && <ShipArticleForm /> }
