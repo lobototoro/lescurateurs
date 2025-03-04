@@ -1,12 +1,28 @@
 "use client";
 import React from "react";
 
-// import { AddUrlsObjects } from "./addUrlsObjects";
-import { UrlObjectIterator } from "./urlObjectIter";
-import { Article, UrlsTypes } from '@/models/article';
+import { AddUrlsObjects } from "./addUrlsObjects";
+
+// import { UrlObjectIterator } from "./urlObjectIter";
+import { UrlsTypes } from '@/models/article';
 
 export default function CreatearticlesForm() {
-  const [urls, setUrls] = React.useState<Pick<Article, "urls">[]>([]);
+  const initialUrls = [
+    {
+      type: 'website' as UrlsTypes,
+      url: '',
+      credits: '',
+    }
+  ]
+  const [urls, setUrls] = React.useState<{ type: UrlsTypes; url: string; credits?: string }[]>(initialUrls);
+  const addInputs = () => {
+    setUrls([...urls, ...initialUrls]);
+  }
+  const removeInputs = () => {
+    if (urls.length > 1) {
+      setUrls(urls.slice(0, -1));
+    }
+  }
   console.log('in create article ', urls);
   
   return (
@@ -42,11 +58,17 @@ export default function CreatearticlesForm() {
       </div>
     </div>
     {/* <AddUrlsObjects /> */}
-    <UrlObjectIterator
+    {/* <UrlObjectIterator
       addUrls={setUrls}
       type={'audio' as UrlsTypes}
       url="https://google.com"
       credits="google"
+    /> */}
+    <AddUrlsObjects
+      urls={urls}
+      setUrls={setUrls}
+      addInputs={addInputs}
+      removeInputs={removeInputs}
     />
   </div>);
 }

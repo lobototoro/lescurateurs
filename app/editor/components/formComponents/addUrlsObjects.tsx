@@ -1,42 +1,42 @@
 "use client";
 
 // import { useState } from "react";
-import { Article, UrlsTypes } from "@/models/article";
+import { UrlsTypes } from "@/models/article";
+import { UrlObjectIterator } from "./urlObjectIter";
 
 export function AddUrlsObjects({
   urls,
   setUrls,
+  addInputs,
+  removeInputs
 }: {
-  urls?: Pick<Article, "urls">;
-  setUrls?: React.Dispatch<React.SetStateAction<any>>;
+  urls: { type: UrlsTypes; url: string; credits?: string }[];
+  setUrls: React.Dispatch<React.SetStateAction<any>>;
+  addInputs: () => void;
+  removeInputs: () => void;
 }) {
-  console.info(urls, setUrls);
-
-  // const [added, setAdded] = useState<Pick<Article, "urls"> | null>(null);
 
   return (
-    <div className="field is-grouped is-flex is-align-items-center">
-      <div className="">
-        <label className="is-hidden">Selectionnez un type</label>
-        <div className="select">
-          <select>
-            <option value={UrlsTypes.WEBSITE}>website</option>
-            <option value={UrlsTypes.VIDEOS}>videos</option>
-            <option value={UrlsTypes.AUDIO}>audio</option>
-            <option value={UrlsTypes.SOCIAL}>sociaux</option>
-            <option value={UrlsTypes.IMAGE}>image</option>
-          </select>
-        </div>
+    <>
+    <div className="field">
+      {urls?.map(({ type, url, credits }, index: number) => (
+        
+          <UrlObjectIterator
+            key={`add-url-${index}`}
+            type={type || UrlsTypes.WEBSITE}
+            url={url || ''}
+            credits={credits || ''}
+            addUrls={setUrls}
+          />
+          
+      ))}
+      <div className="button is-primary" onClick={addInputs}>
+            +
       </div>
-      <div className="ml-2">
-        <label className="mr-1">url</label>
-        <input type="url" name="url" />
+      <div className="button is-primary" onClick={removeInputs}>
+            -
       </div>
-      <div className="ml-2">
-        <label className="mr-1">crédits</label>
-        <input type="text" name="credits" />
       </div>
-      <button type="submit" className="button">Ajouter</button>
-    </div>
+    </>
   );
 };
