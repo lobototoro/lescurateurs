@@ -1,6 +1,13 @@
-// import { Article } from '@/models/article';
+"use client";
+import React from "react";
+
+// import { AddUrlsObjects } from "./addUrlsObjects";
+import { UrlObjectIterator } from "./urlObjectIter";
+import { Article, UrlsTypes } from '@/models/article';
 
 export default function CreatearticlesForm() {
+  const [urls, setUrls] = React.useState<Pick<Article, "urls">[]>([]);
+  console.log('in create article ', urls);
   
   return (
     <div className="mt-6">
@@ -29,11 +36,17 @@ export default function CreatearticlesForm() {
     </div>
 
     <div className="field">
-      <label className="label">lien vers l'illustration</label>
+      <label className="label is-inline-flex">lien vers l'illustration</label>
       <div className="control">
         <input className="input" type="text" placeholder="lien vers l'illustration" name="urlToMainIllustration" />
       </div>
     </div>
-
+    {/* <AddUrlsObjects /> */}
+    <UrlObjectIterator
+      addUrls={setUrls}
+      type={'audio' as UrlsTypes}
+      url="https://google.com"
+      credits="google"
+    />
   </div>);
 }
