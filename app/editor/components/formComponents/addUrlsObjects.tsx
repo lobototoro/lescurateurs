@@ -2,7 +2,7 @@
 
 // import { useState } from "react";
 import { UrlsTypes } from "@/models/article";
-import { UrlObjectIterator } from "./urlObjectIter";
+import { UrlObjectItem } from "./urlObjectItem";
 
 export function AddUrlsObjects({
   urls,
@@ -21,7 +21,7 @@ export function AddUrlsObjects({
       <div className="field">
         {urls?.map(({ type, url, credits }, index: number) => (
           
-            <UrlObjectIterator
+            <UrlObjectItem
               key={`add-url-${index}`}
               type={type}
               url={url}

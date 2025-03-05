@@ -3,7 +3,7 @@ import React from "react";
 
 import { UrlsTypes } from "@/models/article";
 
-export function UrlObjectIterator({
+export function UrlObjectItem({
   type,
   url,
   credits,

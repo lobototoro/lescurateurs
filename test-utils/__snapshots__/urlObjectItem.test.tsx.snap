@@ -1,0 +1,247 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UrlObjectIterator > should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="field is-grouped is-flex is-align-items-center"
+  >
+    <div
+      class=""
+    >
+      <label
+        class="is-hidden"
+      >
+        Selectionnez un type
+      </label>
+      <div
+        class="select"
+      >
+        <select>
+          <option
+            value="website"
+          >
+            website
+          </option>
+          <option
+            value="videos"
+          >
+            videos
+          </option>
+          <option
+            value="audio"
+          >
+            audio
+          </option>
+          <option
+            value="social"
+          >
+            sociaux
+          </option>
+          <option
+            value="image"
+          >
+            image
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="ml-2"
+    >
+      <label
+        class="mr-2"
+      >
+        url
+      </label>
+      <input
+        name="url"
+        type="url"
+        value=""
+      />
+    </div>
+    <div
+      class="ml-2"
+    >
+      <label
+        class="mr-2"
+      >
+        crédits
+      </label>
+      <input
+        name="credits"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      class="button ml-2"
+    >
+      Ajouter
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`checking rendering > should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="field is-grouped is-flex is-align-items-center"
+  >
+    <div
+      class=""
+    >
+      <label
+        class="is-hidden"
+      >
+        Selectionnez un type
+      </label>
+      <div
+        class="select"
+      >
+        <select>
+          <option
+            value="website"
+          >
+            website
+          </option>
+          <option
+            value="videos"
+          >
+            videos
+          </option>
+          <option
+            value="audio"
+          >
+            audio
+          </option>
+          <option
+            value="social"
+          >
+            sociaux
+          </option>
+          <option
+            value="image"
+          >
+            image
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="ml-2"
+    >
+      <label
+        class="mr-2"
+      >
+        url
+      </label>
+      <input
+        name="url"
+        type="url"
+        value=""
+      />
+    </div>
+    <div
+      class="ml-2"
+    >
+      <label
+        class="mr-2"
+      >
+        crédits
+      </label>
+      <input
+        name="credits"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      class="button ml-2"
+    >
+      Ajouter
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`checking rendering and data integrety > should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="field is-grouped is-flex is-align-items-center"
+  >
+    <div
+      class=""
+    >
+      <label
+        class="is-hidden"
+      >
+        Selectionnez un type
+      </label>
+      <div
+        class="select"
+      >
+        <select>
+          <option
+            value="website"
+          >
+            website
+          </option>
+          <option
+            value="videos"
+          >
+            videos
+          </option>
+          <option
+            value="audio"
+          >
+            audio
+          </option>
+          <option
+            value="social"
+          >
+            sociaux
+          </option>
+          <option
+            value="image"
+          >
+            image
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      class="ml-2"
+    >
+      <label
+        class="mr-2"
+      >
+        url
+      </label>
+      <input
+        name="url"
+        type="url"
+        value=""
+      />
+    </div>
+    <div
+      class="ml-2"
+    >
+      <label
+        class="mr-2"
+      >
+        crédits
+      </label>
+      <input
+        name="credits"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      class="button ml-2"
+    >
+      Ajouter
+    </div>
+  </div>
+</DocumentFragment>
+`;
