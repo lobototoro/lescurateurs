@@ -5,24 +5,32 @@ import { AddUrlsObjects } from "./addUrlsObjects";
 
 // import { UrlObjectIterator } from "./urlObjectIter";
 import { UrlsTypes } from '@/models/article';
+import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
 
 export default function CreatearticlesForm() {
-  const initialUrls = [
-    {
+  const [urls, setUrls] = React.useState<{ type: UrlsTypes; url: string; credits?: string }[]>([]);
+
+  const initialUrls = {
       type: 'website' as UrlsTypes,
       url: '',
       credits: '',
-    }
-  ]
-  const [urls, setUrls] = React.useState<{ type: UrlsTypes; url: string; credits?: string }[]>(initialUrls);
+  };
+  
   const addInputs = () => {
-    setUrls([...urls, ...initialUrls]);
+    setUrls([...urls, initialUrls]);
   }
   const removeInputs = () => {
     if (urls.length > 1) {
       setUrls(urls.slice(0, -1));
     }
   }
+
+  const updateUrls = (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => {
+    const newUrls = [...urls];
+    newUrls[index] = newUrl;
+    setUrls(newUrls);
+  };
+  
   console.log('in create article ', urls);
   
   return (
@@ -57,6 +65,13 @@ export default function CreatearticlesForm() {
         <input className="input" type="text" placeholder="lien vers l'illustration" name="urlToMainIllustration" />
       </div>
     </div>
+    <ArticleTitle
+      text="Ajouter des liens multimédias"
+      level="h4"
+      size="medium"
+      color="white"
+      spacings="mt-5 mb-4"
+    />
     {/* <AddUrlsObjects /> */}
     {/* <UrlObjectIterator
       addUrls={setUrls}
@@ -66,7 +81,7 @@ export default function CreatearticlesForm() {
     /> */}
     <AddUrlsObjects
       urls={urls}
-      setUrls={setUrls}
+      updateUrls={updateUrls}
       addInputs={addInputs}
       removeInputs={removeInputs}
     />

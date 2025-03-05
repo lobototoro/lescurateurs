@@ -7,16 +7,24 @@ export function UrlObjectIterator({
   type,
   url,
   credits,
+  urls,
+  index,
   addUrls
 }: {
   type?: UrlsTypes;
   url?: string;
   credits?: string;
-  addUrls?: React.Dispatch<React.SetStateAction<any>>;
+  urls?: { type: UrlsTypes; url: string; credits?: string }[];
+  index: number;
+  addUrls?: (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => void;
 }) {
   const [selectedValue, setSelectedValue] = React.useState<UrlsTypes>(type || UrlsTypes.WEBSITE);
   const [givenUrl, setGivenUrl] = React.useState<string>(url || '');
   const [givenCredits, setGivenCredits] = React.useState<string>(credits || '');
+
+  const isinArray = (url: string) => {
+    return urls?.some((item) => item.url === url && item.url !== '');
+  };
 
   return (
     <div className="field is-grouped is-flex is-align-items-center">
@@ -36,7 +44,7 @@ export function UrlObjectIterator({
         </div>
       </div>
       <div className="ml-2">
-        <label className="mr-1">url</label>
+        <label className="mr-2">url</label>
         <input
           type="url"
           name="url"
@@ -45,7 +53,7 @@ export function UrlObjectIterator({
         />
       </div>
       <div className="ml-2">
-        <label className="mr-1">crédits</label>
+        <label className="mr-2">crédits</label>
         <input
           type="text"
           name="credits"
@@ -55,14 +63,17 @@ export function UrlObjectIterator({
       </div>
       <div
         className="button ml-2"
-        onClick={() => addUrls && addUrls(
-          {
-            type: selectedValue,
-            url: givenUrl,
-            credits: givenCredits,
-          })}
+        onClick={() => addUrls && addUrls({
+              type: selectedValue,
+              url: givenUrl,
+              credits: givenCredits
+            },
+            index
+          )}
       >
-        {(!type && !url && !credits) ? 'Ajouter' : 'Modifier'}
+        {
+          (isinArray(givenUrl)) ? 'Modifier' : 'Ajouter'
+        }
       </div>
     </div>
   );
