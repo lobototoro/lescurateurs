@@ -1,37 +1,37 @@
 "use client";
 import React from "react";
 
-import { AddUrlsObjects } from "./addUrlsObjects";
+// import { AddUrlsObjects } from "./addUrlsObjects";
 
 // import { UrlObjectIterator } from "./urlObjectIter";
-import { UrlsTypes } from '@/models/article';
+// import { UrlsTypes } from '@/models/article';
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
 
 export default function CreatearticlesForm() {
-  const [urls, setUrls] = React.useState<{ type: UrlsTypes; url: string; credits?: string }[]>([]);
+  // const [urls, setUrls] = React.useState<{ type: UrlsTypes; url: string; credits?: string }[]>([]);
 
-  const initialUrls = {
-      type: 'website' as UrlsTypes,
-      url: '',
-      credits: '',
-  };
+  // const initialUrls = {
+  //     type: 'website' as UrlsTypes,
+  //     url: '',
+  //     credits: '',
+  // };
   
-  const addInputs = () => {
-    setUrls([...urls, initialUrls]);
-  }
-  const removeInputs = () => {
-    if (urls.length > 1) {
-      setUrls(urls.slice(0, -1));
-    }
-  }
+  // const addInputs = () => {
+  //   setUrls([...urls, initialUrls]);
+  // }
+  // const removeInputs = () => {
+  //   if (urls.length > 1) {
+  //     setUrls(urls.slice(0, -1));
+  //   }
+  // }
 
-  const updateUrls = (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => {
-    const newUrls = [...urls];
-    newUrls[index] = newUrl;
-    setUrls(newUrls);
-  };
+  // const updateUrls = (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => {
+  //   const newUrls = [...urls];
+  //   newUrls[index] = newUrl;
+  //   setUrls(newUrls);
+  // };
   
-  console.log('in create article ', urls);
+  // console.log('in create article ', urls);
   
   return (
     <div className="mt-6">
@@ -79,11 +79,11 @@ export default function CreatearticlesForm() {
       url="https://google.com"
       credits="google"
     /> */}
-    <AddUrlsObjects
+    {/* <AddUrlsObjects
       urls={urls}
       updateUrls={updateUrls}
       addInputs={addInputs}
       removeInputs={removeInputs}
-    />
+    /> */}
   </div>);
 }

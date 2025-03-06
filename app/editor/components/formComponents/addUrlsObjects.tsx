@@ -11,7 +11,7 @@ export function AddUrlsObjects({
   removeInputs
 }: {
   urls: { type: UrlsTypes; url: string; credits?: string }[];
-  updateUrls: (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => void;
+  updateUrls: (newUrl: { type: UrlsTypes; url: string; credits?: string }) => void;
   addInputs: () => void;
   removeInputs: () => void;
 }) {

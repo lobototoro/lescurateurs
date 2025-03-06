@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    coverage: {
+      provider: 'istanbul' // or 'v8'
+    },
   },
   resolve: {
     alias: {

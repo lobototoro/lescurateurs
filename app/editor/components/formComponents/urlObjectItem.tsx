@@ -32,6 +32,8 @@ export function UrlObjectItem({
         <label className="is-hidden">Selectionnez un type</label>
         <div className="select">
           <select
+            role="combobox"
+            aria-label="Selectionnez un type"
             value={selectedValue || UrlsTypes.WEBSITE}
             onChange={(e) => setSelectedValue(e.target.value as UrlsTypes)}
           >
