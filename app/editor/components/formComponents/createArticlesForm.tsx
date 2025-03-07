@@ -1,14 +1,15 @@
 "use client";
-import React from "react";
+import { useState, useActionState, useRef } from "react";
 
+import { createArticleAction } from "@/app/articleActions";
 import { AddUrlsObjects } from "./addUrlsObjects";
-
-// import { UrlObjectIterator } from "./urlObjectIter";
 import { UrlsTypes } from '@/models/article';
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
 
-export default function CreatearticlesForm() {
-  const [urls, setUrls] = React.useState<{ type: UrlsTypes; url: string; credits?: string }[]>([]);
+export default function CreateArticleForm() {
+  const [state, formAction, isPending] = useActionState(createArticleAction, null);
+  const [urls, setUrls] = useState<{ type: UrlsTypes; url: string; credits?: string }[]>([]);
+  const hiddenRef = useRef<HTMLInputElement>(null);
 
   const initialUrls = {
       type: 'website' as UrlsTypes,
@@ -34,56 +35,58 @@ export default function CreatearticlesForm() {
   // console.log('in create article ', urls);
   
   return (
-    <div className="mt-6">
+    <form action={formAction}>
+      {isPending && <p className="is-loading">Loading...</p>}
+      {state?.message && <p>{state.text}</p>}
+      {(state?.message === false) && <p>{state.text}</p>}
+      <div className="mt-6">
+        <div className="field">
+        <label className="label" aria-label="label du champ Titre">Titre</label>
+        <div className="control">
+          <input className="input" type="text" placeholder="titre" name="title" />
+        </div>
+      </div>
+
       <div className="field">
-      <label className="label">Titre</label>
-      <div className="control">
-        <input className="input" type="text" placeholder="titre" name="title" />
+        <label className="label" aria-label="label du champ introduction">introduction</label>
+        <textarea className="textarea is-small" placeholder="introduction" name="introduction"></textarea>
       </div>
-    </div>
 
-    <div className="field">
-      <label className="label">introduction</label>
-      <textarea className="textarea is-small" placeholder="introduction" name="introduction"></textarea>
-    </div>
-
-    <div className="field">
-      <label className="label">Texte</label>
-      <textarea className="textarea is-large" placeholder="Texte" name="main" rows={10} cols={40}></textarea>
-    </div>
-
-    <div className="field">
-      <label className="label">lien audio principal</label>
-      <div className="control">
-        <input className="input" type="text" placeholder="lien audio" name="mainAudioUrl" />
+      <div className="field">
+        <label className="label" aria-label="label du champ Texte">Texte</label>
+        <textarea className="textarea is-large" placeholder="Texte" name="main" rows={10} cols={40}></textarea>
       </div>
-    </div>
 
-    <div className="field">
-      <label className="label is-inline-flex">lien vers l'illustration</label>
-      <div className="control">
-        <input className="input" type="text" placeholder="lien vers l'illustration" name="urlToMainIllustration" />
+      <div className="field">
+        <label className="label" aria-label="label du champ lien audio principal">lien audio principal</label>
+        <div className="control">
+          <input className="input" type="text" placeholder="lien audio" name="mainAudioUrl" />
+        </div>
       </div>
+
+      <div className="field">
+        <label className="label is-inline-flex" aria-label="label du champ lien vers l'illustration">lien vers l'illustration</label>
+        <div className="control">
+          <input className="input" type="text" placeholder="lien vers l'illustration" name="urlToMainIllustration" />
+        </div>
+      </div>
+      <ArticleTitle
+        text="Ajouter des liens multimédias"
+        level="h4"
+        size="medium"
+        color="white"
+        spacings="mt-5 mb-4"
+      />
+      <input type="hidden" ref={hiddenRef} name="urls" value={JSON.stringify(urls)} />
+      <AddUrlsObjects
+        urls={urls}
+        updateUrls={updateUrls}
+        addInputs={addInputs}
+        removeInputs={removeInputs}
+      />
     </div>
-    <ArticleTitle
-      text="Ajouter des liens multimédias"
-      level="h4"
-      size="medium"
-      color="white"
-      spacings="mt-5 mb-4"
-    />
-    {/* <AddUrlsObjects /> */}
-    {/* <UrlObjectIterator
-      addUrls={setUrls}
-      type={'audio' as UrlsTypes}
-      url="https://google.com"
-      credits="google"
-    /> */}
-    <AddUrlsObjects
-      urls={urls}
-      updateUrls={updateUrls}
-      addInputs={addInputs}
-      removeInputs={removeInputs}
-    />
-  </div>);
-}
+    <div className="field">
+      <input type="submit" className="button is-primary is-size-6 has-text-white" value="Valider" />
+    </div>
+  </form>
+)};

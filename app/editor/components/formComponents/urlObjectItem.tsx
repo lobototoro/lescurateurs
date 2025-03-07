@@ -34,6 +34,7 @@ export function UrlObjectItem({
           <select
             role="combobox"
             aria-label="Selectionnez un type"
+            name={`type-${index}`}
             value={selectedValue || UrlsTypes.WEBSITE}
             onChange={(e) => setSelectedValue(e.target.value as UrlsTypes)}
           >
@@ -46,11 +47,10 @@ export function UrlObjectItem({
         </div>
       </div>
       <div className="ml-2">
-        <label className="mr-2" role="label">url</label>
+        <label className="mr-2">url</label>
         <input
-          role="textbox"
           type="url"
-          name="url"
+          name={`url-${index}`}
           value={givenUrl || ""}
           onChange={(e) => setGivenUrl(e.target.value)}
         />
@@ -58,9 +58,8 @@ export function UrlObjectItem({
       <div className="ml-2">
         <label className="mr-2" role="label">crédits</label>
         <input
-          role="textbox"
           type="text"
-          name="credits"
+          name={`credits-${index}`}
           value={givenCredits || ""}
           onChange={(e) => setGivenCredits(e.target.value)}
         />

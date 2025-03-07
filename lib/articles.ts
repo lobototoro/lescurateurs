@@ -2,6 +2,8 @@ import 'server-only';
 
 // import fs from 'node:fs';
 import sql from 'better-sqlite3';
+import { Article } from '@/models/article';
+import { Slugs } from '@/models/slugs';
 
 // import slugify from 'slugify';
 // import xss from 'xss';
@@ -18,4 +20,14 @@ export async function getSlugs() {
   return db
     .prepare('SELECT * FROM slugs')
     .all();
+}
+
+export async function createSlug(slugObject: Slugs) {
+  return db.prepare('INSERT INTO slugs (slug, createdAt) VALUES (@slug, @createdAt)')
+    .run(slugObject);
+}
+
+export async function createArticle(article: Article) {
+  return db.prepare('INSERT INTO articles (slug, title, introduction, main, urls, mainAudioUrl, urlToMainIllustration, author, author_email, createdAt, updatedAt, publishedAt, validated, shipped) VALUES (@slug, @title, @introduction, @main, @urls, @mainAudioUrl, @urlToMainIllustration, @author, @author_email, @createdAt, @updatedAt, @publishedAt, @validated, @shipped)') 
+    .run(article);
 }

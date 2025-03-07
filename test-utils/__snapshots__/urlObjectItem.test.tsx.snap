@@ -18,6 +18,7 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
       >
         <select
           aria-label="Selectionnez un type"
+          name="type-0"
           role="combobox"
         >
           <option
@@ -53,13 +54,11 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
-        role="label"
       >
         url
       </label>
       <input
-        name="url"
-        role="textbox"
+        name="url-0"
         type="url"
         value=""
       />
@@ -74,8 +73,7 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
         crédits
       </label>
       <input
-        name="credits"
-        role="textbox"
+        name="credits-0"
         type="text"
         value=""
       />

@@ -1,6 +1,4 @@
 "use client";
-
-// import { useState } from "react";
 import { UrlsTypes } from "@/models/article";
 import { UrlObjectItem } from "./urlObjectItem";
 
