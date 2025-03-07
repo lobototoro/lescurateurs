@@ -25,7 +25,6 @@ describe('Placing multiple inputs and test them', () => {
         removeInputs={removeInputs}
       />
     );
-    screen.debug();
     expect(screen.getByRole('combobox')).toBeDefined();
   });
 });
