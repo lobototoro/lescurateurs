@@ -53,11 +53,13 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
+        role="label"
       >
         url
       </label>
       <input
         name="url"
+        role="textbox"
         type="url"
         value=""
       />
@@ -67,11 +69,13 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
+        role="label"
       >
         crédits
       </label>
       <input
         name="credits"
+        role="textbox"
         type="text"
         value=""
       />

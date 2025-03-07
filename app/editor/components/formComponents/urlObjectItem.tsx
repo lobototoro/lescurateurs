@@ -46,8 +46,9 @@ export function UrlObjectItem({
         </div>
       </div>
       <div className="ml-2">
-        <label className="mr-2">url</label>
+        <label className="mr-2" role="label">url</label>
         <input
+          role="textbox"
           type="url"
           name="url"
           value={givenUrl || ""}
@@ -55,8 +56,9 @@ export function UrlObjectItem({
         />
       </div>
       <div className="ml-2">
-        <label className="mr-2">crédits</label>
+        <label className="mr-2" role="label">crédits</label>
         <input
+          role="textbox"
           type="text"
           name="credits"
           value={givenCredits || ""}
