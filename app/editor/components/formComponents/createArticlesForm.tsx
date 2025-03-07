@@ -49,25 +49,25 @@ export default function CreateArticleForm() {
 
       <div className="field">
         <label className="label" aria-label="label du champ introduction">introduction</label>
-        <textarea className="textarea is-small" placeholder="introduction" name="introduction"></textarea>
+        <textarea className="textarea" placeholder="introduction" name="introduction" rows={5}></textarea>
       </div>
 
       <div className="field">
         <label className="label" aria-label="label du champ Texte">Texte</label>
-        <textarea className="textarea is-large" placeholder="Texte" name="main" rows={10} cols={40}></textarea>
+        <textarea className="textarea" placeholder="Texte" name="main" rows={10}></textarea>
       </div>
 
       <div className="field">
         <label className="label" aria-label="label du champ lien audio principal">lien audio principal</label>
         <div className="control">
-          <input className="input" type="text" placeholder="lien audio" name="mainAudioUrl" />
+          <input className="input" type="url" placeholder="lien audio" name="mainAudioUrl" />
         </div>
       </div>
 
       <div className="field">
         <label className="label is-inline-flex" aria-label="label du champ lien vers l'illustration">lien vers l'illustration</label>
         <div className="control">
-          <input className="input" type="text" placeholder="lien vers l'illustration" name="urlToMainIllustration" />
+          <input className="input" type="url" placeholder="lien vers l'illustration" name="urlToMainIllustration" />
         </div>
       </div>
       <ArticleTitle
@@ -85,7 +85,7 @@ export default function CreateArticleForm() {
         removeInputs={removeInputs}
       />
     </div>
-    <div className="field">
+    <div className="field mt-5">
       <input type="submit" className="button is-primary is-size-6 has-text-white" value="Valider" />
     </div>
   </form>
