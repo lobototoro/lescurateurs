@@ -6,15 +6,15 @@ import { createArticle, createSlug } from "@/lib/articles";
 
 export async function createArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session) {
+  if (!session?.user) {
     return {
       message: false,
       text: 'You must be logged in to create an article'
     }
   }
   console.log(session);
-  const author = session.user.name;
-  const author_email = session.user.email;
+  const author = session?.user.nickname;
+  const author_email = session?.user.email;
   const title = formData.get('title') as string;
   const introduction = formData.get('introduction') as string;
   const main = formData.get('main') as string;
@@ -35,7 +35,7 @@ export async function createArticleAction(prevState: any, formData: FormData) {
       slug,
       createdAt
     });
-    
+
     await createArticle({
       slug,
       title,
