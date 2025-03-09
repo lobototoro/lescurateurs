@@ -35,6 +35,4 @@ describe('Create article form', () => {
     
     expect(asFragment()).toMatchSnapshot();
   });
-
-
 });

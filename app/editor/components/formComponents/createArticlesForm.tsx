@@ -32,13 +32,10 @@ export default function CreateArticleForm() {
     setUrls(newUrls);
   };
   
-  // console.log('in create article ', urls);
-  
   return (
     <form action={formAction}>
       {isPending && <p className="is-loading">Loading...</p>}
-      {state?.message && <p>{state.text}</p>}
-      {(state?.message === false) && <p>{state.text}</p>}
+      {state && <p>{state.text}</p>}
       <div className="mt-6">
         <div className="field">
         <label className="label" aria-label="label du champ Titre">Titre</label>
