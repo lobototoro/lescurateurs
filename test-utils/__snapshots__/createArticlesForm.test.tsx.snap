@@ -17,7 +17,7 @@ exports[`should render correctly 1`] = `
           Titre
         </label>
         <div
-          class="control"
+          class="field"
         >
           <input
             class="input"
@@ -62,26 +62,6 @@ exports[`should render correctly 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ lien audio principal"
-          class="label"
-          for="mainAudioUrl"
-        >
-          lien audio principal
-        </label>
-        <div
-          class="control"
-        >
-          <input
-            class="input"
-            name="mainAudioUrl"
-            type="url"
-          />
-        </div>
-      </div>
-      <div
-        class="field"
-      >
-        <label
           aria-label="label du champ lien vers l'illustration"
           class="label is-inline-flex"
           for="urlToMainIllustration"
@@ -98,6 +78,26 @@ exports[`should render correctly 1`] = `
           />
         </div>
       </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ lien audio principal"
+          class="label"
+          for="mainAudioUrl"
+        >
+          lien audio principal
+        </label>
+        <div
+          class="control"
+        >
+          <input
+            class="input"
+            name="mainAudioUrl"
+            type="url"
+          />
+        </div>
+      </div>
       <div>
         <h4
           class="undefined article-title_medium article-title_white mt-5 mb-4"
@@ -105,11 +105,6 @@ exports[`should render correctly 1`] = `
           Ajouter des liens multimédias
         </h4>
       </div>
-      <input
-        name="urls"
-        type="hidden"
-        value=""
-      />
       <div
         class="field"
       >

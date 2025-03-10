@@ -1,8 +1,8 @@
 "use client";
-import { useState, useActionState, startTransition, useCallback, useEffect } from "react";
+import { useActionState, startTransition, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import{ z } from "zod"; 
+import{ isValid, z } from "zod"; 
 
 import { isEmpty } from "@/lib/isEmpty";
 import { articleSchema } from "@/models/articleSchema";
@@ -13,13 +13,16 @@ import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
 
 export default function CreateArticleForm() {
   const [state, formAction, isPending] = useActionState(createArticleAction, null);
-  const [urls, setUrls] = useState<{ type: UrlsTypes; url: string; credits?: string }[]>([]);
-
+  
+  // init for react-hook-form where we define methods that will be used and the engine for validation (zod) and the default values
   const {
     register,
     handleSubmit,
     watch,
     clearErrors,
+    setValue,
+    getValues,
+    reset,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
@@ -27,14 +30,18 @@ export default function CreateArticleForm() {
       title: "",
       introduction: "",
       main: "",
-      urls: "",
       mainAudioUrl: "",
       urlToMainIllustration: "",
+      urls: "",
     }
   });
 
+  // urls is a special field, set in a sub sub component and instead of using a input type=hidden, we just set a register for it and a special treatment for value since it is an stringified object (sqlite doesn't support storing complex object)
+  register('urls');
+  const urlsToArray = getValues('urls') !== '' ? JSON.parse(getValues('urls')) : [];
+
   const onSubmit = useCallback((data: z.infer<typeof articleSchema>) => {
-    console.log('in create article DATA ', data);
+
     startTransition(async () => {
       const formData = new FormData();
       formData.append('title', data.title);
@@ -43,21 +50,23 @@ export default function CreateArticleForm() {
       formData.append('urls', data.urls);
       formData.append('mainAudioUrl', data.mainAudioUrl || '');
       formData.append('urlToMainIllustration', data.urlToMainIllustration);
-      const submit = await formAction(formData);
-      console.log('in create article form', submit);
+      await formAction(formData);
     });
   }, [formAction]);
 
+  // this useEffect aims to watch for errors while typing
   useEffect(() => {
-    console.info('in create article form useEffect', urls);
     const subscription = watch((value, { name }) => {
       if (name) {
         clearErrors(name);
       }
     });
+    if (state?.message) {
+      reset();
+    }
 
     return () => subscription.unsubscribe();
-  }, [watch, clearErrors, urls]);
+  }, [watch, clearErrors, state, reset]);
 
   const initialUrls = {
       type: 'website' as UrlsTypes,
@@ -65,49 +74,47 @@ export default function CreateArticleForm() {
       credits: '',
   };
   
+  // the following 3 func are used in sub compoennts to manage adding or removing additional urls
   const addInputs = () => {
-    setUrls([...urls, initialUrls]);
+    const urls = urlsToArray;
+    setValue('urls', JSON.stringify([...urls, initialUrls]));
   }
   const removeInputs = () => {
-    if (urls.length > 1) {
-      setUrls(urls.slice(0, -1));
+    if (urlsToArray.length > 1) {
+      setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
     }
   }
 
   const updateUrls = (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => {
-    const newUrls = [...urls];
+    const newUrls = urlsToArray;
     newUrls[index] = newUrl;
-    setUrls(newUrls);
+
+    // setUrls(newUrls);
+    setValue('urls', JSON.stringify(newUrls));
   };
-  console.log('in create article form:erros ', errors)
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {isPending && <p className="is-loading">Loading...</p>}
-      {state && <p>{state.text}</p>}
+      { state && <p className="has-text-success">{state.text}</p>}
       <div className="mt-6">
         <div className="field">
         <label className="label" aria-label="label du champ Titre" htmlFor="title">Titre</label>
-        <div className="control">
+        <div className="field">
           <input className="input" type="text" {...register('title')} />
         </div>
+        { errors.title && <p className="has-text-danger">{errors.title.message}</p>}
       </div>
 
       <div className="field">
         <label className="label" aria-label="label du champ introduction" htmlFor="introduction">introduction</label>
         <textarea className="textarea" {...register('introduction')} rows={5}></textarea>
+        { errors.introduction && <p className="has-text-danger">{errors.introduction.message}</p>}
       </div>
 
       <div className="field">
         <label className="label" aria-label="label du champ Texte" htmlFor="main">Texte</label>
         <textarea className="textarea" {...register('main')} rows={10}></textarea>
-      </div>
-
-      <div className="field">
-        <label className="label" aria-label="label du champ lien audio principal" htmlFor="mainAudioUrl">lien audio principal</label>
-        <div className="control">
-          <input className="input" type="url" {...register('mainAudioUrl')} />
-        </div>
+        { errors.main && <p className="has-text-danger">{errors.main.message}</p>}
       </div>
 
       <div className="field">
@@ -115,7 +122,17 @@ export default function CreateArticleForm() {
         <div className="control">
           <input className="input" type="url" {...register('urlToMainIllustration')} />
         </div>
+        { errors.urlToMainIllustration && <p className="has-text-danger">{errors.urlToMainIllustration.message}</p>}
       </div>
+
+      <div className="field">
+        <label className="label" aria-label="label du champ lien audio principal" htmlFor="mainAudioUrl">lien audio principal</label>
+        <div className="control">
+          <input className="input" type="url" {...register('mainAudioUrl')} />
+        </div>
+        { errors.mainAudioUrl && <p className="has-text-danger">{errors.mainAudioUrl.message}</p>}
+      </div>
+
       <ArticleTitle
         text="Ajouter des liens multimédias"
         level="h4"
@@ -123,23 +140,19 @@ export default function CreateArticleForm() {
         color="white"
         spacings="mt-5 mb-4"
       />
-      <input type="hidden" {...register('urls')} />
+      { errors.urls && <p className="has-text-danger">{errors.urls.message}</p>}
       <AddUrlsObjects
-        urls={urls}
+        urls={urlsToArray}
         updateUrls={updateUrls}
         addInputs={addInputs}
         removeInputs={removeInputs}
       />
     </div>
-    { errors.urls && <p className="has-text-danger">{errors.urls.message}</p>}
-    { errors.title && <p className="has-text-danger">{errors.title.message}</p>}
-    { errors.introduction && <p className="has-text-danger">{errors.introduction.message}</p>}
-    { errors.main && <p className="has-text-danger">{errors.main.message}</p>}
-    { errors.mainAudioUrl && <p className="has-text-danger">{errors.mainAudioUrl.message}</p>}
-    { errors.urlToMainIllustration && <p className="has-text-danger">{errors.urlToMainIllustration.message}</p>}
-    { !isEmpty(errors) && <p className="help has-text-danger">Des erreurs existent dans le formulaire</p>}
+    
+    { !isEmpty(errors) && <p className="has-text-danger">Des erreurs existent dans le formulaire</p>}
+    { state && <p className="mt-5 has-text-success">{state.text}</p>}
     <div className="field mt-5">
-      <input type="submit" className="button is-primary is-size-6 has-text-white" value="Valider" />
+      <input type="submit" className="button is-primary is-size-6 has-text-white" value="Valider" disabled={!isValid || isPending} />
     </div>
   </form>
 )};
