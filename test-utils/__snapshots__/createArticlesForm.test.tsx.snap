@@ -2,9 +2,7 @@
 
 exports[`should render correctly 1`] = `
 <DocumentFragment>
-  <form
-    action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
-  >
+  <form>
     <div
       class="mt-6"
     >
@@ -14,6 +12,7 @@ exports[`should render correctly 1`] = `
         <label
           aria-label="label du champ Titre"
           class="label"
+          for="title"
         >
           Titre
         </label>
@@ -23,7 +22,6 @@ exports[`should render correctly 1`] = `
           <input
             class="input"
             name="title"
-            placeholder="titre"
             type="text"
           />
         </div>
@@ -34,13 +32,13 @@ exports[`should render correctly 1`] = `
         <label
           aria-label="label du champ introduction"
           class="label"
+          for="introduction"
         >
           introduction
         </label>
         <textarea
           class="textarea"
           name="introduction"
-          placeholder="introduction"
           rows="5"
         />
       </div>
@@ -50,13 +48,13 @@ exports[`should render correctly 1`] = `
         <label
           aria-label="label du champ Texte"
           class="label"
+          for="main"
         >
           Texte
         </label>
         <textarea
           class="textarea"
           name="main"
-          placeholder="Texte"
           rows="10"
         />
       </div>
@@ -66,6 +64,7 @@ exports[`should render correctly 1`] = `
         <label
           aria-label="label du champ lien audio principal"
           class="label"
+          for="mainAudioUrl"
         >
           lien audio principal
         </label>
@@ -75,7 +74,6 @@ exports[`should render correctly 1`] = `
           <input
             class="input"
             name="mainAudioUrl"
-            placeholder="lien audio"
             type="url"
           />
         </div>
@@ -86,6 +84,7 @@ exports[`should render correctly 1`] = `
         <label
           aria-label="label du champ lien vers l'illustration"
           class="label is-inline-flex"
+          for="urlToMainIllustration"
         >
           lien vers l'illustration
         </label>
@@ -95,7 +94,6 @@ exports[`should render correctly 1`] = `
           <input
             class="input"
             name="urlToMainIllustration"
-            placeholder="lien vers l'illustration"
             type="url"
           />
         </div>
@@ -110,7 +108,7 @@ exports[`should render correctly 1`] = `
       <input
         name="urls"
         type="hidden"
-        value="[]"
+        value=""
       />
       <div
         class="field"
