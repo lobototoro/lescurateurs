@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import HeaderNode from "./headerNode";
 import CreateArticleForm from "./createArticlesForm";
+import SearchArticle from "./searchArticle";
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -21,6 +22,7 @@ export default function EditorForm({ role, permissions }: {
         permissions={permissions}
         setSelection={setSelection}
       />
+      <SearchArticle />
       {/* <p>{ selection }</p> */}
       { (selection === 'createarticles') && <CreateArticleForm /> }
       {/* (selection === 'updatearticles') && <UpdateAaticleForm /> }

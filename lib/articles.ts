@@ -31,3 +31,9 @@ export async function createArticle(article: Article) {
   return db.prepare('INSERT INTO articles (slug, title, introduction, main, urls, mainAudioUrl, urlToMainIllustration, author, author_email, createdAt, updatedAt, publishedAt, validated, shipped) VALUES (@slug, @title, @introduction, @main, @urls, @mainAudioUrl, @urlToMainIllustration, @author, @author_email, @createdAt, @updatedAt, @publishedAt, @validated, @shipped)') 
     .run(article);
 }
+
+export async function searchSlugs(searchTerm: string) {
+  return db
+    .prepare('SELECT * FROM slugs WHERE slug LIKE @searchTerm')
+    .all({ searchTerm: `%${searchTerm}%` });
+}
