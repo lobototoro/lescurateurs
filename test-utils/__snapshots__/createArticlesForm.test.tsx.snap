@@ -22,6 +22,7 @@ exports[`should render correctly 1`] = `
           <input
             class="input"
             name="title"
+            required=""
             type="text"
           />
         </div>
@@ -39,6 +40,7 @@ exports[`should render correctly 1`] = `
         <textarea
           class="textarea"
           name="introduction"
+          required=""
           rows="5"
         />
       </div>
@@ -55,6 +57,7 @@ exports[`should render correctly 1`] = `
         <textarea
           class="textarea"
           name="main"
+          required=""
           rows="10"
         />
       </div>
@@ -74,6 +77,7 @@ exports[`should render correctly 1`] = `
           <input
             class="input"
             name="urlToMainIllustration"
+            required=""
             type="url"
           />
         </div>
@@ -94,6 +98,7 @@ exports[`should render correctly 1`] = `
           <input
             class="input"
             name="mainAudioUrl"
+            required=""
             type="url"
           />
         </div>
@@ -122,6 +127,24 @@ exports[`should render correctly 1`] = `
             -
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      class="modal"
+    >
+      <div
+        class="modal-background"
+      />
+      <div
+        class="modal-content is-danger"
+      >
+        <p
+          class="is-size-6 has-text-white has-background-primary p-6"
+        />
+        <button
+          aria-label="close modal"
+          class="modal-close is-large"
+        />
       </div>
     </div>
     <div
