@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`should render correctly 1`] = `
+exports[`Create article form > should render correctly 1`] = `
 <DocumentFragment>
   <form>
     <div
@@ -21,6 +21,7 @@ exports[`should render correctly 1`] = `
         >
           <input
             class="input"
+            data-testid="title"
             name="title"
             required=""
             type="text"
@@ -39,6 +40,7 @@ exports[`should render correctly 1`] = `
         </label>
         <textarea
           class="textarea"
+          data-testid="introduction"
           name="introduction"
           required=""
           rows="5"
@@ -56,6 +58,7 @@ exports[`should render correctly 1`] = `
         </label>
         <textarea
           class="textarea"
+          data-testid="main"
           name="main"
           required=""
           rows="10"
@@ -76,6 +79,7 @@ exports[`should render correctly 1`] = `
         >
           <input
             class="input"
+            data-testid="urlToMainIllustration"
             name="urlToMainIllustration"
             required=""
             type="url"
@@ -97,6 +101,7 @@ exports[`should render correctly 1`] = `
         >
           <input
             class="input"
+            data-testid="mainAudioUrl"
             name="mainAudioUrl"
             required=""
             type="url"
@@ -131,6 +136,7 @@ exports[`should render correctly 1`] = `
     </div>
     <div
       class="modal"
+      data-testid="create-article-modal"
     >
       <div
         class="modal-background"
@@ -152,6 +158,7 @@ exports[`should render correctly 1`] = `
     >
       <input
         class="button is-primary is-size-6 has-text-white"
+        data-testid="submit"
         type="submit"
         value="Valider"
       />
