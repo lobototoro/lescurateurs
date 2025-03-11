@@ -5,7 +5,7 @@ import { ArticleTitle } from './single-elements/ArticleTitle';
 
 export default function Header() {
   return (
-    <header className={styles['header-title']}>
+    <header className={`${styles['header-title']} container`}>
       <ArticleTitle
         text="LES CURATEURS"
         level="h1"

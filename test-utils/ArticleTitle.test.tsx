@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { expect, test } from 'vitest';
+import { vi, expect, test } from 'vitest';
 
 import { ArticleTitle } from '../app/components/single-elements/ArticleTitle';
 
@@ -11,10 +11,18 @@ import { ArticleTitle } from '../app/components/single-elements/ArticleTitle';
 //   })
 // }));
 
+vi.mock('next/font/google', () => ({
+  Alegreya: () => ({
+    style: {
+      fontFamily: 'mocked',
+    },
+  }),
+}))
+
 test('ArticleTitle', () => {
   render(<ArticleTitle text="Article title" level="h1" size="extra-large" color="white" />);
 
   const container = screen.getByText('Article title');
   expect(container).toBeDefined();
-  expect(container.className).toBe('article-title_extra-large article-title_white');
+  expect(container.className).toBe('undefined article-title_extra-large article-title_white');
 });

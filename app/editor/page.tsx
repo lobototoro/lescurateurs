@@ -1,5 +1,10 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { auth0 } from "@/lib/auth0"
+import { getUser } from "@/lib/users";
+import { User } from "@/models/user";
+import EditorForm from "./components/formComponents/editorForm";
+
+// import Header from "./components/formComponents/headerNode";
 
 export default async function Login() {
   const session = await auth0.getSession()
@@ -13,10 +18,19 @@ export default async function Login() {
       </>
     );
   }
-  
+
+  const credentials = await getUser(session?.user.email as string) as User;
+
   return (
     <>
-      You're logged in {session?.user.name}!
+      {/* <Header
+        role={credentials.role}
+        permissions={credentials.permissions}
+      /> */}
+      {session && credentials && <EditorForm
+        role={credentials.role}
+        permissions={credentials.permissions}
+      />}
       <br />
       <a href="/auth/logout">
         <button>Log out</button>

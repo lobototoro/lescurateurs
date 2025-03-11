@@ -1,0 +1,87 @@
+"use client";
+import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
+import React, { useRef } from "react";
+
+export default function HeaderNode({
+  role,
+  permissions,
+  setSelection
+}: {
+  role: string;
+  permissions: string;
+  setSelection: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const stringifiedPermissions = JSON.parse(permissions);
+  const filteredMenu = stringifiedPermissions.map( (permission: string, index: number) => {
+    if (permission === 'read:articles') return;
+
+    return (
+      <div className="navbar-item" key={ index }>
+        <a
+          className="button"
+          onClick={ () => setSelection(permission.split(':').join('')) }
+        >
+          {permission.split(':')[0]} {permission.split(':')[1]}
+        </a>
+      </div>
+    );
+  });
+  const toggledMenu = useRef<HTMLDivElement>(null);
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const target = toggledMenu.current as HTMLDivElement;
+
+    target.classList.contains('is-active')
+      ? target.classList.remove('is-active')
+      : target.classList.add('is-active');
+  };
+
+  return (
+    <>
+      <ArticleTitle
+        text="ÉDITEUR"
+        level="h2"
+        size="large"
+        color="black"
+        spacings="mt-5 mb-5"
+      />
+      <nav className="navbar box" role="navigation" aria-label="main navigation">
+        <div className="navbar-brand">
+          <a
+            role="button"
+            className="navbar-burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="navbarMenuItems"
+            onClick={(e: React.MouseEvent) => toggleMenu(e)}
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      
+        <div id="navbarMenuItems" className="navbar-menu is-flex-direction-column" ref={toggledMenu}>
+          <div className="navbar-start container is-flex-wrap-wrap">
+            { filteredMenu }
+          </div>
+
+          <div className="">
+            <div className="navbar-item">
+              <div className="buttons">
+                <a className="button is-info" href="/auth/logout">
+                  Log out
+                </a>
+                <span className="tag is-dark">
+                  <strong>Role : {role}</strong>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </nav>
+    </>
+  );
+}

@@ -7,7 +7,7 @@ export const ArticleList = ({ list }: { list: slugs[] }) => {
   const formatDate = ( date: string ) => new Date(date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <ul>
+    <ul className="container">
       {list.map(( article ) => (
         <li key={ article.id }>
           <Link href={`article/${article.slug}`}>

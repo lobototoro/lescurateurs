@@ -1,5 +1,5 @@
-export interface slugs {
-  id: number;
+export interface Slugs {
+  id?: number;
   slug: string;
   createdAt: string;
 }

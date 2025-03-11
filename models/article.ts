@@ -7,6 +7,8 @@ export enum UrlsTypes {
 }
 
 export interface Article {
+  id?: number;
+  slug: string;
   title: string;
   introduction: string | null;
   main: string;
@@ -14,12 +16,10 @@ export interface Article {
   urlToMainIllustration: string;
   publishedAt: string | null;
   createdAt: string;
-  updateAt: string;
+  updatedAt: string;
   author: string;
   author_email: string;
-  urls: {
-    type: UrlsTypes;
-    url: string;
-    credits?: string;
-  }[];
+  urls: string;
+  validated: string;
+  shipped: string;
 };
