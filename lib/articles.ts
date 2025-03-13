@@ -37,3 +37,9 @@ export async function searchSlugs(searchTerm: string) {
     .prepare('SELECT * FROM slugs WHERE slug LIKE @searchTerm')
     .all({ searchTerm: `%${searchTerm}%` });
 }
+
+export async function searchArticles(searchTerm: string) {
+  return db
+    .prepare('SELECT * FROM articles WHERE slug LiKE @searchTerm')
+    .all({ searchTerm: `%${searchTerm}%` });
+}
