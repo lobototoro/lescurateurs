@@ -1,6 +1,9 @@
 @import 'normalize.css';
 @import "bulma/css/bulma.min.css";
 
+/* https: //marella.github.io/material-design-icons/demo/font/ */
+@import '@material-design-icons/font';
+
 :root {
   --titles: 'Alegreya', serif;
   --content: 'Raleway', helvetica, arial, sans-serif;
