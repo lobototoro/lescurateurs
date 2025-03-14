@@ -57,10 +57,10 @@ export default function SearchArticle({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slugs]);
 
-  const handleReference = (id: number) => {
+  const handleReference = (id: number, slug?: Slugs) => {
     switch(target) {
       case 'search':
-        redirect(`/article/${id}`); // Redirect to article page but search for slug
+        redirect(`/article/${slug}`); // Redirect to article page but search for slug
       case 'update':
       case 'delete':
       case 'validate':
@@ -81,7 +81,7 @@ export default function SearchArticle({
   console.info('env var ', DEFAULT_PAGE, DEFAULT_LIMIT);
 
   return (
-    <div className="box">
+    <div className="container">
       <form onSubmit={handleSubmit} role="search">
         <div className="is-flex is-flex-direction-row is-flex-justify-space-between is-flex-align-items-center">
           <label htmlFor="search" className="is-hidden">Search</label>
@@ -104,20 +104,20 @@ export default function SearchArticle({
               
               return (
                 <li className="mt-3 mb-3" key={`article-${article?.id}`}>
-                  <input
+                  {['delete', 'validate', 'ship'].includes(target) && <input
                     type="radio"
                     className="radio"
                     id="articleSelection"
                     name="article"
                     onClick={() => handleReference(article?.id as number)}
-                  />
+                  />}
                   <ArticleTitle
                     color="primary"
                     level="h5"
                     size="medium"
-                    text={`${article?.title} - ${article?.createdAt?.slice(0, 10)}`}
+                    text={`${article?.title} - <span class="is-size-6 has-text-grey-light">${article?.createdAt?.slice(0, 10)} - ${article?.author} - ${article?.author}</span>`}
                   />
-                  <p className="content">
+                  <p className="content has-text-white">
                     { (article?.introduction as string).length > 20
                       ? article?.introduction?.slice(0, 50)
                       : article?.introduction
