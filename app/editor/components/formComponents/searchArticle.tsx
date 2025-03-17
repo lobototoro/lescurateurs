@@ -7,11 +7,12 @@ import { Slugs } from "@/models/slugs";
 import { redirect } from "next/navigation";
 import { Article } from "@/models/article";
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
+import { PaginatedarticlesSearchDisplay } from "@/app/components/PaginatedArticlesSearch";
 
 type TargetTypes = 'search' | 'update' | 'delete' | 'validate' | 'ship';
 
-const DEFAULT_PAGE = process.env.NEXT_PUBLIC_DEFAULT_PAGE;
-const DEFAULT_LIMIT = process.env.NEXT_PUBLIC_DEFAULT_LIMIT;
+const DEFAULT_PAGE = process.env.NEXT_PUBLIC_DEFAULT_PAGE || 1;
+const DEFAULT_LIMIT = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || 10;
 
 export default function SearchArticle({
   target,
@@ -27,6 +28,7 @@ export default function SearchArticle({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (searchTerm.trim() === '') return;
     const result = await searchForSlugs(searchTerm) as { message: boolean; slugs: Slugs[] };
 
     if (result?.message) {
@@ -78,8 +80,6 @@ export default function SearchArticle({
     setNotification('');
   }
 
-  console.info('env var ', DEFAULT_PAGE, DEFAULT_LIMIT);
-
   return (
     <div className="container">
       <form onSubmit={handleSubmit} role="search">
@@ -98,36 +98,20 @@ export default function SearchArticle({
           <button className="delete" onClick={() => clearNotification()}></button>
           {notification}
         </div>}
-        {slugs.length > 0 && <div className="box">
-          <ul className="list result-list">
-            {articlesList.map((article: Article) => {
-              
-              return (
-                <li className="mt-3 mb-3" key={`article-${article?.id}`}>
-                  {['delete', 'validate', 'ship'].includes(target) && <input
-                    type="radio"
-                    className="radio"
-                    id="articleSelection"
-                    name="article"
-                    onClick={() => handleReference(article?.id as number)}
-                  />}
-                  <ArticleTitle
-                    color="primary"
-                    level="h5"
-                    size="medium"
-                    text={`${article?.title} - <span class="is-size-6 has-text-grey-light">${article?.createdAt?.slice(0, 10)} - ${article?.author} - ${article?.author}</span>`}
-                  />
-                  <p className="content has-text-white">
-                    { (article?.introduction as string).length > 20
-                      ? article?.introduction?.slice(0, 50)
-                      : article?.introduction
-                    }...
-                  </p>
-                </li>
-              )
-            })}
-          </ul>
-        </div>}
+        {articlesList.length > 0 && <ArticleTitle
+          size="medium"
+          level="h3"
+          color="secondary"
+          text={`Vous avez cherché " ${searchTerm} " avec ${articlesList.length} résultat(s)`}
+          spacings="mt-3 mb-5"
+        />}
+        <PaginatedarticlesSearchDisplay
+          articlesList={articlesList}
+          defaultPage={DEFAULT_PAGE as number}
+          defaultLimit={DEFAULT_LIMIT as number}
+          target={target}
+          handleReference={handleReference}
+        />
       </form>
     </div>
   )
