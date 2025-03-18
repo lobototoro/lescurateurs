@@ -1,6 +1,6 @@
 import CreateArticleForm from "@/app/editor/components/formComponents/createArticlesForm";
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
-import { expect, it, vi, describe, afterEach } from "vitest";
+import { fireEvent, render, waitFor } from "@testing-library/react";
+import { expect, it, vi, describe } from "vitest";
 
 vi.mock('@/app/articleActions', () => ({
   createArticleAction: vi.fn().mockImplementation(() => {
@@ -11,23 +11,7 @@ vi.mock('@/app/articleActions', () => ({
   })
 }));
 
-vi.mock('next/font/google', () => ({
-  Alegreya: () => ({
-    style: {
-      fontFamily: 'mocked',
-    },
-  }),
-  Raleway: () => ({
-    style: {
-      fontFamily: 'mocked',
-    },
-  })
-}));
-
 describe('Create article form', () => {
-  afterEach(() => {
-    cleanup();
-  });
 
   it('should render correctly', () => {
     const { asFragment } = render(<CreateArticleForm />);

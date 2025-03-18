@@ -1,15 +1,7 @@
 import { render, screen, cleanup } from '@testing-library/react';
-import { vi, expect, test } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { ArticleTitle } from '../app/components/single-elements/ArticleTitle';
-
-vi.mock('next/font/google', () => ({
-  Alegreya: () => ({
-    style: {
-      fontFamily: 'mocked',
-    },
-  }),
-}))
 
 test('ArticleTitle', () => {
   render(<ArticleTitle text="Article title" level="h1" size="extra-large" color="white" />);
