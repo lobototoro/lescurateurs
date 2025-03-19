@@ -31,12 +31,7 @@ export async function createArticleAction(prevState: any, formData: FormData) {
   const slug = slugify(title, { lower: true });
 
   try {
-    await createSlug({
-      slug,
-      createdAt
-    });
-
-    await createArticle({
+    const articleresult = await createArticle({
       slug,
       title,
       introduction,
@@ -51,6 +46,12 @@ export async function createArticleAction(prevState: any, formData: FormData) {
       publishedAt,
       validated,
       shipped,
+    });
+
+    await createSlug({
+      slug,
+      createdAt,
+      articleId: articleresult?.lastInsertRowid as number,
     });
 
     return {
