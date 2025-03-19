@@ -23,7 +23,7 @@ export async function getSlugs() {
 }
 
 export async function createSlug(slugObject: Slugs) {
-  return db.prepare('INSERT INTO slugs (slug, createdAt) VALUES (@slug, @createdAt)')
+  return db.prepare('INSERT INTO slugs (slug, createdAt, articleId) VALUES (@slug, @createdAt, @articleId)')
     .run(slugObject);
 }
 
