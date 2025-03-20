@@ -43,3 +43,8 @@ export async function searchArticles(searchTerm: string) {
     .prepare('SELECT * FROM articles WHERE slug LiKE @searchTerm')
     .all({ searchTerm: `%${searchTerm}%` });
 }
+
+export async function deleteArticle(articleId: number | bigint) {
+  return db.prepare('DELETE FROM articles WHERE id = ?')
+    .run(articleId);
+}

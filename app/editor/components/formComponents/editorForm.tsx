@@ -22,7 +22,7 @@ export default function EditorForm({ role, permissions }: {
         permissions={permissions}
         setSelection={setSelection}
       />
-      {/* <SearchArticle target="search" /> */}
+      <SearchArticle target="search" />
       {/* <p>{ selection }</p> */}
       { (selection === 'createarticles') && <CreateArticleForm /> }
       { (selection === 'updatearticles') && <SearchArticle target="update" /> }

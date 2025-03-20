@@ -4,7 +4,7 @@ import slugify from 'slugify';
 
 import { auth0 } from "@/lib/auth0"
 
-import { createArticle, createSlug } from "@/lib/articles";
+import { createArticle, createSlug, deleteArticle } from "@/lib/articles";
 
 export async function createArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
@@ -30,6 +30,7 @@ export async function createArticleAction(prevState: any, formData: FormData) {
   const shipped = 'false';
   const slug = slugify(title, { lower: true });
 
+  let articleError;
   try {
     const articleresult = await createArticle({
       slug,
@@ -48,6 +49,8 @@ export async function createArticleAction(prevState: any, formData: FormData) {
       shipped,
     });
 
+    articleError = articleresult?.lastInsertRowid;
+
     await createSlug({
       slug,
       createdAt,
@@ -60,6 +63,7 @@ export async function createArticleAction(prevState: any, formData: FormData) {
     }
   } catch (error) {
     console.log(error);
+    await deleteArticle(articleError as number | bigint);
 
     return {
       message: false,

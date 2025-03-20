@@ -1,13 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { searchForSlugs, searchForArticle } from "@/app/searchActions";
-
+import { searchForSlugs } from "@/app/searchActions";
 import { Slugs } from "@/models/slugs";
-import { redirect } from "next/navigation";
-import { Article } from "@/models/article";
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
-import { PaginatedarticlesSearchDisplay } from "@/app/components/PaginatedArticlesSearch";
+import { PaginatedArticlesSearchDisplay } from "@/app/components/PaginatedArticlesSearch";
 
 type TargetTypes = 'search' | 'update' | 'delete' | 'validate' | 'ship';
 
@@ -19,11 +16,10 @@ export default function SearchArticle({
   setSelection 
 }: {
   target: TargetTypes,
-  setSelection?: React.Dispatch<React.SetStateAction<number>>
+  setSelection?: React.Dispatch<React.SetStateAction<number | string>>
 }) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [slugs, setSlugs] = useState<Slugs[]>([]);
-  const [articlesList, setArticlesList] = useState<Article[]>([]);
   const [notification, setNotification] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,33 +32,18 @@ export default function SearchArticle({
     }
     if (result?.slugs.length === 0) {
       setNotification('No slug results found');
-      
+
       return;
     }
   }
 
-  useEffect(() => {
-    const searchResults = slugs.map(async (slug) => {
-      const response = await searchForArticle(slug.slug);
-
-      if (response?.message) {
-        return response?.article as Article[];
-      } else {
-        setNotification(response?.text as string);
-      }
-    });
-
-    Promise.all(searchResults).then(searchResults => {
-      setArticlesList(searchResults.flat() as Article[]);
-    });
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slugs]);
-
-  const handleReference = (id: number, slug?: Slugs) => {
+  const handleReference = (id: number, slug?: string) => {
     switch(target) {
       case 'search':
-        redirect(`/article/${slug}`); // Redirect to article page but search for slug
+        if (slug !== undefined && setSelection) {
+        setSelection(`/article/${slug}`); // super with slugs instead of id
+        }
+        break;
       case 'update':
       case 'delete':
       case 'validate':
@@ -89,29 +70,33 @@ export default function SearchArticle({
             className="input is-inline-flex"
             id="search"
             type="text"
+            data-testid="search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit" className="button is-primary is-inline-flex ml-4 mr-4">Search</button>
+          <button type="submit" className="button is-primary is-inline-flex ml-4 mr-4" data-testid="submit-search">Search</button>
         </div>
+
         {notification && <div className="notification is-primary is-light mt-4 mb-4">
           <button className="delete" onClick={() => clearNotification()}></button>
           {notification}
         </div>}
-        {articlesList.length > 0 && <ArticleTitle
+
+        {slugs.length > 0 && <ArticleTitle
           size="medium"
           level="h3"
           color="secondary"
-          text={`Vous avez cherché " ${searchTerm} " avec ${articlesList.length} résultat(s)`}
+          text={`Vous avez cherché " ${searchTerm} " avec ${slugs.length} résultat(s)`}
           spacings="mt-3 mb-5"
         />}
-        <PaginatedarticlesSearchDisplay
-          articlesList={articlesList}
+
+        {(slugs.length > 0) && <PaginatedArticlesSearchDisplay
+          slugsList={slugs}
           defaultPage={DEFAULT_PAGE as number}
           defaultLimit={DEFAULT_LIMIT as number}
           target={target}
           handleReference={handleReference}
-        />
+        />}
       </form>
     </div>
   )

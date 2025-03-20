@@ -1,26 +1,26 @@
 "use client";
 import { useState } from "react";
 
-import { Article } from "@/models/article";
+import { Slugs } from "@/models/slugs";
 import { ArticleTitle } from "./single-elements/ArticleTitle";
 
-export function PaginatedarticlesSearchDisplay({
-  articlesList,
+export function PaginatedArticlesSearchDisplay({
+  slugsList,
   defaultPage,
   defaultLimit,
   target,
   handleReference,
 }: {
-  articlesList: Article[],
+  slugsList: Slugs[],
   defaultPage: number,
   defaultLimit: number,
   target: string,
-  handleReference: (id: number) => void,
+  handleReference: (id: number, slug?: string) => void,
 }) {
   const [activePage, setActivePage] = useState<number>(Number(defaultPage))
-  const totalPages = Math.ceil(articlesList.length / Number(defaultLimit))
+  const totalPages = Math.ceil(slugsList.length / Number(defaultLimit))
   const offset = Number(defaultLimit) * (activePage - 1)
-  const paginatedItems = articlesList.slice(offset, Number(defaultLimit) * activePage)
+  const paginatedItems = slugsList.slice(offset, Number(defaultLimit) * activePage)
 
   const handleChangePage = (page: number) => {
     setActivePage(page)
@@ -28,42 +28,50 @@ export function PaginatedarticlesSearchDisplay({
 
   return (
     <section className="section">
-      <ul className="article-list is-flex is-justify-content-center is-flex-wrap-wrap is-align-content-space-around">
-        {paginatedItems.map((article: Article) => {
+      <table className="table container slugs-list">
+        <thead>
+          <tr>
+            <th>
+              <abbr title="identifiant">ID</abbr>
+            </th>
+            <th>Slug</th>
+            <th>Créé le</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {paginatedItems.map((slug: Slugs) => {
                       
           return (
-            <li
-              key={`article-${article?.id}`}
-              className="m-5 is-flex is-align-self-stretch"
+            <tr
+              key={`slug-${slug?.id}`}
             >
-              {['delete', 'validate', 'ship'].includes(target) && <input
-                type="radio"
-                className="radio mr-4"
-                id="articleSelection"
-                name="article"
-                onClick={() => handleReference(article?.id as number)}
-              />}
-              <div className="is-flex-direction-column has-background-dark p-5">
+              <td>{slug?.id}</td>
+              <td>
                 <ArticleTitle
                   color="primary"
                   level="h5"
                   size="medium"
-                  text={`${article?.title} - <span class="is-size-6 has-text-grey-light">${article?.createdAt?.slice(0, 10)} - ${article?.author} - ${article?.author}</span>`}
+                  text={`${slug?.slug}`}
                 />
-                <p className="content has-text-grey is-size-6">
-                  { (article?.introduction as string).length > 20
-                    ? article?.introduction?.slice(0, 50)
-                    : article?.introduction
-                  }...
-                </p>
-              </div>
-              {['search', 'update'].includes(target) && <button className="button is-size-6" onClick={() => handleReference(article?.id as number)}>validez</button>}
-            </li>
-          )
-        })}
-      </ul>
+              </td>
+              <td>{slug?.createdAt}</td>
+              <td>
+                {['search'].includes(target) && <button className="button is-size-6" onClick={() => handleReference(0, slug?.slug)}>validez</button>}
+
+                {['update', 'delete', 'validate', 'ship'].includes(target) && <button
+                  className="button mr-4"
+                  onClick={() => handleReference(slug?.articleId as number)}
+                >
+                  Sélectionner
+                </button>}
+              </td>
+            </tr>
+        )})}
+        </tbody>
+      </table>
       {/* pagination */}
-      <nav className="pagination" role="navigation" aria-label="pagination">
+      {(totalPages > 1) && <nav className="pagination" role="navigation" aria-label="pagination">
         <button
           className={`pagination-previous ${(activePage <= 1) ? 'is-disabled' : ''}`}
           title="This is the first page"
@@ -76,6 +84,7 @@ export function PaginatedarticlesSearchDisplay({
           className={`pagination-next ${(activePage >= totalPages) ? 'is-disabled' : ''}`}
           onClick={() => handleChangePage(activePage + 1)}
           disabled={activePage >= totalPages}
+          data-testid="next-button"
         >
           Next page
         </button>
@@ -93,7 +102,7 @@ export function PaginatedarticlesSearchDisplay({
             </li>))
           }
         </ul>
-      </nav>
+      </nav>}
     </section>
   );
 }
