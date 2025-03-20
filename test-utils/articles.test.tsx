@@ -54,5 +54,5 @@ test('getArticle', async () => {
 test('getSlugs', async () => {
   const slugs = await getSlugs() as Article[];
 
-  expect(slugs.length).toBe(2);
+  expect(slugs.length).toBe(11);
 });

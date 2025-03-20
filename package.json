@@ -31,6 +31,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@next/env": "^15.2.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@types/better-sqlite3": "^7.6.9",

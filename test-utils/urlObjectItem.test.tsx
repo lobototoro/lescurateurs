@@ -1,5 +1,5 @@
-import { act, cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { UrlObjectItem } from "@/app/editor/components/formComponents/urlObjectItem";
 import { UrlsTypes } from "@/models/article";
@@ -7,9 +7,6 @@ import { UrlsTypes } from "@/models/article";
 const setNewUrl = vi.fn();
 
 describe("checking rendering and data integrety", () => {
-  afterEach(() => {
-    cleanup();
-  });
 
   it("should render correctly", () => {
     const { asFragment } = render(
@@ -44,9 +41,6 @@ describe("checking rendering and data integrety", () => {
 });
 
 describe("checking rendering and data integritie", () => {
-  afterEach(() => {
-    cleanup(); 
-  });
 
   it("should return an object filled with the correct values when 'ajouter' is clicked", () => {
     const screen = render(
