@@ -42,7 +42,7 @@ vi.mock('@/app/searchActions', () => ({
 
 describe('Search article', () => {
   it('Should render search results', async () => {
-    const { getByTestId, getByText, debug } = render(<SearchArticle target="search" />);
+    const { getByTestId, getByText } = render(<SearchArticle target="search" />);
 
     const searchInput = getByTestId('search-input');
     fireEvent.change(searchInput, { target: { value: 'slugs' } });
@@ -50,7 +50,6 @@ describe('Search article', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      debug();
       expect(getByText('article-1')).toBeDefined();
     });
   });
