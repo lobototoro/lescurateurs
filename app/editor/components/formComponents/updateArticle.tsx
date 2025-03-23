@@ -1,0 +1,178 @@
+"use client";
+
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import{ z } from "zod";
+
+import { fetchArticleById, updateArticleAction } from "@/app/articleActions";
+import { UrlsTypes } from "@/models/article";
+import { articleSchema } from "@/models/articleSchema";
+import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
+import { isEmpty } from "@/lib/isEmpty";
+
+export default function UpdateArticleForm() {
+  const [state, formAction] = useActionState(updateArticleAction, null);
+  
+  const [currentArticle, setCurrentArticle] = useState<z.infer<typeof articleSchema>>();
+  const [selectedId, setSelectedId] = useState<string | number>();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    clearErrors,
+    setValue,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm<z.infer<typeof articleSchema>>({
+    resolver: zodResolver(articleSchema),
+    defaultValues: {
+      id: 0,
+      slug: "",
+      title: "",
+      introduction: "",
+      main: "",
+      publishedAt: "",
+      createdAt: "",
+      updatedAt: "",
+      author: "",
+      author_email: "",
+      validated: 'false',
+      shipped: 'false',
+      urls: "",
+      mainAudioUrl: "",
+      urlToMainIllustration: "",
+    },
+    values: currentArticle
+  });
+
+  register('id', { required: true });
+  register('slug', { required: true });
+  register('author', { required: true });
+  register('author_email', { required: true });
+  register('createdAt', { required: true });
+  register('updatedAt', { required: true });
+  register('publishedAt', { required: true });
+  register('validated', { required: true });
+  register('shipped', { required: true });
+
+  register('urls');
+  const urlsToArray = (getValues('urls') && getValues('urls') !== '') ? JSON.parse(getValues('urls')) : [];
+
+  const formSentModal = useRef<HTMLDivElement>(null);
+  const openModal = () => formSentModal.current?.classList.add('is-active'); 
+  const closeModal = () => {
+    formSentModal.current?.classList.remove('is-active');
+  };
+
+  const onSubmit = (data: z.infer<typeof articleSchema>) => {
+    startTransition(() => {
+      const formData = new FormData();
+      formData.append('id', data.id as unknown as string);
+      formData.append('slug', data.slug as string);
+      formData.append('title', data.title);
+      formData.append('introduction', data.introduction);
+      formData.append('main', data.main);
+      formData.append('urls', data.urls);
+      formData.append('mainAudioUrl', data.mainAudioUrl || '');
+      formData.append('urlToMainIllustration', data.urlToMainIllustration);
+      formData.append('author', data.author as string);
+      formData.append('author_email', data.author_email as string);
+      formData.append('createdAt', data.createdAt as string);
+      formData.append('updatedAt', data.updatedAt as string);
+      formData.append('publishedAt', data.publishedAt as string);
+      formData.append('validated', data.validated as string);
+      formData.append('shipped', data.shipped as string);
+      formAction(formData);
+      openModal();
+    });
+  };
+
+  useEffect(() => {
+    startTransition(async () => {
+      if (selectedId === undefined) {
+        setCurrentArticle(undefined);
+        reset();
+        
+        return;
+      }
+      const response = await fetchArticleById(selectedId as number | bigint);
+      
+      setCurrentArticle(response?.article as z.infer<typeof articleSchema>);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId]);
+  
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name) {
+        clearErrors(name);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, clearErrors]);
+  
+  const initialUrls = {
+      type: 'website' as UrlsTypes,
+      url: '',
+      credits: '',
+  };
+
+  const addInputs = () => {
+    const urls = urlsToArray;
+    setValue('urls', JSON.stringify([...urls, initialUrls]));
+  }
+  const removeInputs = () => {
+    if (urlsToArray.length > 1) {
+      setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
+    }
+  }
+
+  const updateUrls = (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => {
+    const newUrls = urlsToArray;
+    newUrls[index] = newUrl;
+    setValue('urls', JSON.stringify(newUrls));
+  };
+
+  const backToSearch = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setSelectedId(undefined);
+  };
+
+  return (
+    <>
+      {isEmpty(currentArticle) ? (<SearchArticle
+        target="update"
+        setSelection={setSelectedId as React.Dispatch<React.SetStateAction<string | number>>}
+      />) : (
+      <>
+        <ArticleMarkupForm
+          handleSubmit={handleSubmit(onSubmit)}
+          register={register}
+          errors={errors}
+          urlsToArray={urlsToArray}
+          updateUrls={updateUrls}
+          addInputs={addInputs}
+          removeInputs={removeInputs}
+          formSentModal={formSentModal as React.RefObject<HTMLDivElement>}
+          state={state}
+          closeModal={closeModal}
+        />
+        <div className="is-flex is-justify-content-flex-end">
+          <button
+            className="button is-secondary is-size-6 has-text-white"
+            onClick={(event: React.MouseEvent) => backToSearch(event)}
+          >
+            Retour à la recherche
+          </button>
+        </div>
+      </>
+      )}
+    </>
+  );
+}

@@ -28,6 +28,7 @@ export default function ArticleMarkupForm({
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-6">
+
         <div className="field">
           <label className="label" aria-label="label du champ Titre" htmlFor="title">Titre</label>
           <div className="field">
@@ -71,7 +72,6 @@ export default function ArticleMarkupForm({
           color="white"
           spacings="mt-5 mb-4"
         />
-        { errors.urls && <p className="has-text-danger">{errors.urls.message}</p>}
         <AddUrlsObjects
           urls={urlsToArray}
           updateUrls={updateUrls}

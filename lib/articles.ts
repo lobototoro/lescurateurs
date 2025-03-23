@@ -16,6 +16,12 @@ export async function getArticle(slug: string) {
     .get(slug);
 }
 
+export async function getArticleById(id: number | bigint) {
+  return db
+    .prepare('SELECT * FROM articles WHERE id =?')
+    .get(id);
+}
+
 export async function getSlugs() {
   return db
     .prepare('SELECT * FROM slugs')
@@ -47,4 +53,9 @@ export async function searchArticles(searchTerm: string) {
 export async function deleteArticle(articleId: number | bigint) {
   return db.prepare('DELETE FROM articles WHERE id = ?')
     .run(articleId);
+}
+
+export async function updateArticle(article: Article) {
+  return db.prepare('UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, mainAudioUrl = @mainAudioUrl, urlToMainIllustration = @urlToMainIllustration, createdAt = @createdAt, updatedAt = @updatedAt, publishedAt = @publishedAt, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id')
+  .run(article);
 }

@@ -5,20 +5,23 @@ import React, { useRef } from "react";
 export default function HeaderNode({
   role,
   permissions,
-  setSelection
+  setSelection,
+  selection
 }: {
   role: string;
   permissions: string;
   setSelection: React.Dispatch<React.SetStateAction<string>>;
+  selection: string;
 }) {
   const stringifiedPermissions = JSON.parse(permissions);
   const filteredMenu = stringifiedPermissions.map( (permission: string, index: number) => {
+    // TODO: how do we read articles > is it the same as validate article?
     if (permission === 'read:articles') return;
 
     return (
       <div className="navbar-item" key={ index }>
         <a
-          className="button"
+          className={`button ${(selection === permission.split(':').join('')) ? 'is-active' : ''}`}
           onClick={ () => setSelection(permission.split(':').join('')) }
         >
           {permission.split(':')[0]} {permission.split(':')[1]}

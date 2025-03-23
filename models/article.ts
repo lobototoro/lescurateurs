@@ -7,7 +7,7 @@ export enum UrlsTypes {
 }
 
 export interface Article {
-  id?: number;
+  id?: number | bigint;
   slug: string;
   title: string;
   introduction: string | null;

@@ -14,6 +14,6 @@ export const articleSchema = z.object({
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
   publishedAt: z.string().optional(),
-  validated: z.boolean().optional(),
-  shipped: z.boolean().optional(),
+  validated: z.string().optional(),
+  shipped: z.string().optional(),
 });
