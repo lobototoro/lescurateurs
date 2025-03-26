@@ -24,7 +24,10 @@ export default function SearchArticle({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     if (searchTerm.trim() === '') return;
+    setNotification('');
+    
     const result = await searchForSlugs(searchTerm) as { message: boolean; slugs: Slugs[] };
 
     if (result?.message) {

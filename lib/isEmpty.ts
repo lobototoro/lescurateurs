@@ -1,4 +1,4 @@
-export function isEmpty(obj: Record<string, unknown>) {
+export function isEmpty(obj: any): boolean {
   for (const prop in obj) {
     if (Object.hasOwn(obj, prop)) {
       return false;
