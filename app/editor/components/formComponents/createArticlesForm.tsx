@@ -109,5 +109,6 @@ export default function CreateArticleForm() {
     formSentModal={formSentModal as React.RefObject<HTMLDivElement>}
     state={state}
     closeModal={closeModal}
+    target="create"
   />
 )};

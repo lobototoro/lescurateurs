@@ -46,7 +46,7 @@ export async function createArticleAction(prevState: any, formData: FormData) {
   const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
   const createdAt = new Date().toISOString();
   const updatedAt = new Date().toISOString();
-  const publishedAt = null;
+  const publishedAt = '';
   const validated = 'false';
   const shipped = 'false';
   const slug = slugify(title, { lower: true });
@@ -169,7 +169,8 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
 export async function fetchArticleById(id: number | bigint) {
   try {
     const article = await getArticleById(id);
-
+    console.log(article);
+    
     return {
       message: true,
       article,

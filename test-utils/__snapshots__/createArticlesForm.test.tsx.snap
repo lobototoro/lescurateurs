@@ -147,10 +147,14 @@ exports[`Create article form > should render correctly 1`] = `
         <p
           class="is-size-6 has-text-white has-background-primary p-6"
         />
-        <button
-          aria-label="close modal"
-          class="modal-close is-large"
-        />
+        <footer>
+          <button
+            aria-label="accept button"
+            class="button"
+          >
+            OK
+          </button>
+        </footer>
       </div>
     </div>
     <div

@@ -61,6 +61,7 @@ export function PaginatedArticlesSearchDisplay({
 
                 {['update', 'delete', 'validate', 'ship'].includes(target) && <button
                   className="button mr-4"
+                  data-testid="selection-button"
                   onClick={() => handleReference(slug?.articleId as number)}
                 >
                   Sélectionner

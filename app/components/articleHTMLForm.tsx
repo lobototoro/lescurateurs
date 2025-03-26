@@ -12,7 +12,8 @@ export default function ArticleMarkupForm({
   removeInputs,
   formSentModal,
   state,
-  closeModal
+  closeModal,
+  target
 }: {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   register: any;
@@ -24,15 +25,16 @@ export default function ArticleMarkupForm({
   formSentModal: React.RefObject<HTMLDivElement> | null;
   state: { message: boolean; text: string } | null;
   closeModal: () => void;
+  target: string;
 }) {
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-6">
-
         <div className="field">
           <label className="label" aria-label="label du champ Titre" htmlFor="title">Titre</label>
           <div className="field">
-            <input className="input" type="text" {...register('title')} data-testid="title" required />
+            <input className="input" type="text" {...register('title')} data-testid="title" required disabled={(target === 'update')} />
           </div>
           { errors.title && <p className="has-text-danger">{errors.title.message}</p>}
         </div>
@@ -72,6 +74,7 @@ export default function ArticleMarkupForm({
           color="white"
           spacings="mt-5 mb-4"
         />
+        { errors.urls && <p className="has-text-danger">{errors.urls.message}</p>}
         <AddUrlsObjects
           urls={urlsToArray}
           updateUrls={updateUrls}
@@ -80,13 +83,20 @@ export default function ArticleMarkupForm({
         />
       </div>
     
-      { !isEmpty(errors) && <p className="has-text-danger">Des erreurs existent dans le formulaire</p>}
+      { !isEmpty(errors) && <p className="has-text-danger">Des erreurs existent dans le formulaire { `: ${errors.root.random.message}` }</p>}
       
-      <div className="modal" ref={formSentModal} data-testid="create-article-modal">
+      <div
+        className="modal"
+        ref={formSentModal}
+        data-testid="create-article-modal"
+        onClick={() => closeModal()}
+      >
         <div className="modal-background"></div>
         <div className={state?.message ? 'modal-content is-success' : 'modal-content is-danger'}>
           <p className="is-size-6 has-text-white has-background-primary p-6">{state?.text}</p>
-          <button className="modal-close is-large" aria-label="close modal" onClick={() => closeModal()}></button>
+          <footer>
+            <button className="button" aria-label="accept button" onClick={(e: React.MouseEvent) => { e.preventDefault(); closeModal()}}>OK</button>
+          </footer>
         </div>
       </div>
 

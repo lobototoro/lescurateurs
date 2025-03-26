@@ -1,9 +1,10 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useRef, useState } from "react";
+import { startTransition, Suspense, useActionState, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import{ z } from "zod";
+import * as R from "ramda";
 
 import { fetchArticleById, updateArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from "@/models/article";
@@ -26,6 +27,7 @@ export default function UpdateArticleForm() {
     setValue,
     getValues,
     reset,
+    setError,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
@@ -63,13 +65,29 @@ export default function UpdateArticleForm() {
   const urlsToArray = (getValues('urls') && getValues('urls') !== '') ? JSON.parse(getValues('urls')) : [];
 
   const formSentModal = useRef<HTMLDivElement>(null);
-  const openModal = () => formSentModal.current?.classList.add('is-active'); 
+  const openModal = () => formSentModal.current?.classList.add('is-active');
   const closeModal = () => {
     formSentModal.current?.classList.remove('is-active');
-  };
+    if (state?.message) {
+      setSelectedId(undefined);
+      setCurrentArticle(undefined);
+      reset();
+    }
+  }
 
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
     startTransition(() => {
+      if (R.equals(data, currentArticle) && isEmpty(errors)  ) {
+        setError('root.random', {
+          type: "error",
+          message: ": aucun changement dans les données.",
+        });
+        setTimeout(() => { // find a way to clear this on menu change or page unmount
+          clearErrors('root.random');
+        }, 2400);
+
+        return;
+      }
       const formData = new FormData();
       formData.append('id', data.id as unknown as string);
       formData.append('slug', data.slug as string);
@@ -96,11 +114,11 @@ export default function UpdateArticleForm() {
       if (selectedId === undefined) {
         setCurrentArticle(undefined);
         reset();
-        
+
         return;
       }
       const response = await fetchArticleById(selectedId as number | bigint);
-      
+
       setCurrentArticle(response?.article as z.infer<typeof articleSchema>);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,32 +164,36 @@ export default function UpdateArticleForm() {
 
   return (
     <>
-      {isEmpty(currentArticle) ? (<SearchArticle
-        target="update"
-        setSelection={setSelectedId as React.Dispatch<React.SetStateAction<string | number>>}
-      />) : (
-      <>
-        <ArticleMarkupForm
-          handleSubmit={handleSubmit(onSubmit)}
-          register={register}
-          errors={errors}
-          urlsToArray={urlsToArray}
-          updateUrls={updateUrls}
-          addInputs={addInputs}
-          removeInputs={removeInputs}
-          formSentModal={formSentModal as React.RefObject<HTMLDivElement>}
-          state={state}
-          closeModal={closeModal}
+      {isEmpty(currentArticle) ? (
+        <SearchArticle
+          target="update"
+          setSelection={setSelectedId as React.Dispatch<React.SetStateAction<string | number>>}
         />
-        <div className="is-flex is-justify-content-flex-end">
-          <button
-            className="button is-secondary is-size-6 has-text-white"
-            onClick={(event: React.MouseEvent) => backToSearch(event)}
-          >
-            Retour à la recherche
-          </button>
-        </div>
-      </>
+      ) : (
+        <Suspense fallback={<div>Loading...</div>}>
+          <ArticleMarkupForm
+            handleSubmit={handleSubmit(onSubmit)}
+            register={register}
+            errors={errors}
+            urlsToArray={urlsToArray}
+            updateUrls={updateUrls}
+            addInputs={addInputs}
+            removeInputs={removeInputs}
+            formSentModal={formSentModal as React.RefObject<HTMLDivElement>}
+            state={state}
+            closeModal={closeModal}
+            target="update"
+          />
+          <div className="is-flex is-justify-content-flex-end">
+            <button
+              className="button is-secondary is-size-6 has-text-white"
+              data-testid="back-to-search"
+              onClick={(event: React.MouseEvent) => backToSearch(event)}
+            >
+              Retour à la recherche
+            </button>
+          </div>
+        </Suspense>
       )}
     </>
   );
