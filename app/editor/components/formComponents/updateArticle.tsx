@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, Suspense, useActionState, useEffect, useRef, useState } from "react";
+import { JSX, startTransition, Suspense, useActionState, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import{ z } from "zod";
@@ -11,11 +11,20 @@ import { UrlsTypes } from "@/models/article";
 import { articleSchema } from "@/models/articleSchema";
 import ArticleMarkupForm from "@/app/components/articleHTMLForm";
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
-import { isEmpty } from "@/lib/isEmpty";
+import { isEmpty, urlsToArrayUtil } from "@/lib/utility-functions";
 
-export default function UpdateArticleForm() {
+/**
+ * UpdateArticleForm component for updating an existing article.
+ * 
+ * This component provides functionality to search for an article,
+ * load its details, update the article information, and submit the changes.
+ * It uses React Hook Form for form management and validation.
+ * 
+ * @returns {JSX.Element} The rendered UpdateArticleForm component
+ */
+export default function UpdateArticleForm(): JSX.Element {
   const [state, formAction] = useActionState(updateArticleAction, null);
-  
+
   const [currentArticle, setCurrentArticle] = useState<z.infer<typeof articleSchema>>();
   const [selectedId, setSelectedId] = useState<string | number>();
 
@@ -62,7 +71,7 @@ export default function UpdateArticleForm() {
   register('shipped', { required: true });
 
   register('urls');
-  const urlsToArray = (getValues('urls') && getValues('urls') !== '') ? JSON.parse(getValues('urls')) : [];
+  const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
   const formSentModal = useRef<HTMLDivElement>(null);
   const openModal = () => formSentModal.current?.classList.add('is-active');
@@ -91,12 +100,12 @@ export default function UpdateArticleForm() {
       const formData = new FormData();
       formData.append('id', data.id as unknown as string);
       formData.append('slug', data.slug as string);
-      formData.append('title', data.title);
-      formData.append('introduction', data.introduction);
-      formData.append('main', data.main);
-      formData.append('urls', data.urls);
-      formData.append('mainAudioUrl', data.mainAudioUrl || '');
-      formData.append('urlToMainIllustration', data.urlToMainIllustration);
+      formData.append('title', data.title as string);
+      formData.append('introduction', data.introduction as string);
+      formData.append('main', data.main as string);
+      formData.append('urls', data.urls as string);
+      formData.append('mainAudioUrl', data.mainAudioUrl as string);
+      formData.append('urlToMainIllustration', data.urlToMainIllustration as string);
       formData.append('author', data.author as string);
       formData.append('author_email', data.author_email as string);
       formData.append('createdAt', data.createdAt as string);
@@ -123,7 +132,7 @@ export default function UpdateArticleForm() {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
-  
+
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -134,7 +143,7 @@ export default function UpdateArticleForm() {
 
     return () => subscription.unsubscribe();
   }, [watch, clearErrors]);
-  
+
   const initialUrls = {
       type: 'website' as UrlsTypes,
       url: '',

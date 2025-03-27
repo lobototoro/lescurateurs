@@ -162,7 +162,7 @@ exports[`Create article form > should render correctly 1`] = `
     >
       <input
         class="button is-primary is-size-6 has-text-white"
-        data-testid="submit"
+        data-testid="final-submit"
         type="submit"
         value="Valider"
       />

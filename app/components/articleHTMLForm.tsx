@@ -1,6 +1,6 @@
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { AddUrlsObjects } from '@/app/editor/components/formComponents/addUrlsObjects';
-import { isEmpty } from '@/lib/isEmpty';
+import { isEmpty } from '@/lib/utility-functions';
 
 export default function ArticleMarkupForm({
   handleSubmit,
@@ -101,7 +101,7 @@ export default function ArticleMarkupForm({
       </div>
 
       <div className="field mt-5">
-        <input type="submit" className="button is-primary is-size-6 has-text-white" value="Valider" data-testid="submit" disabled={!isEmpty(errors)} />
+        <input type="submit" className="button is-primary is-size-6 has-text-white" value="Valider" data-testid="final-submit" disabled={!isEmpty(errors)} />
       </div>
     </form>
   );
