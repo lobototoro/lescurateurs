@@ -7,12 +7,11 @@
 :root {
   --titles: 'Alegreya', serif;
   --content: 'Raleway', helvetica, arial, sans-serif;
-  --primary-peri-winkle: rgb(169, 175, 209);
-  --secondary-cool-gray: rgb(125, 129, 155);
-	--secondary--payne-gray: rgb(87, 96, 118);
-  --tertiary-charcoal: rgb(49, 62, 80);
-	--accent-dark-ultra-violet: rgb(79, 81, 125);
-	--accent-tropical-indigo: rgb(169, 151, 223);
+	--primary-blue-tang: #5959a6;
+	--secondary-larkspur: #3d818f;
+	--tertiary-chelsea-cucumber: #8ca659;
+	--accent-bonbon-red: #8f3d65;
+	--accent-byzantium: #732665;
 	--font-small: 1rem;
 	--font-medium: 1.5rem;
 	--font-large: 2rem;
@@ -21,6 +20,10 @@
 	--lh-medium: calc(var(--font-medium) * 1.2);
 	--lh-large: calc(var(--font-large) * 1.2);
 	--lh-extra-large: calc(var(--font-extra-large) * 1.2);
+	/* redefining Bulma basics */
+	--bulma-primary-h: 209.61deg;
+	--bulma-primary-s: 50.33%;
+	--bulma-primary-l: 30%;
 }
 
 /* struct */
@@ -36,7 +39,7 @@
 		margin: 0;
 		padding: 0;
     height: 100vh;
-		background-color: var(--tertiary-charcoal);
+		background-color: var(--tertiary-chelsea-cucumber);
 		/* overflow: hidden; */
 	}
 	
@@ -118,7 +121,7 @@
 .navigation {
 	width: 100vw;
   min-height: 5%;
-  background-color: var(--accent-dark-ultra-violet);
+  background-color: var(--accent-byzantium);
 	overflow: hidden;
 }
 .main {
@@ -128,7 +131,7 @@
 .footer {
 	width: 100vw;
   min-height: 3%;
-  background-color: var(--accent-dark-ultra-violet);
+  background-color: var(--accent-byzantium);
 	overflow: hidden;
 }
 
@@ -150,14 +153,14 @@
 	line-height: var(--lh-extra-large);
 }
 .article-title_white {
-	color: var(--primary-peri-winkle);
+	color: var(--primary-blue-tang);
 }
 .article-title_black {
-	color: var(--tertiary-charcoal);
+	color: var(--tertiary-chelsea-cucumber);
 }
 .article-title_primary {
-	color: var(--accent-tropical-indigo);
+	color: var(--accent-bonbon-red);
 }
 .article-title_secondary {
-	color: var(--accent-dark-ultra-violet);
+	color: var(--accent-byzantium);
 }

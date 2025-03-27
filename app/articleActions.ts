@@ -169,7 +169,6 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
 export async function fetchArticleById(id: number | bigint) {
   try {
     const article = await getArticleById(id);
-    console.log(article);
     
     return {
       message: true,
