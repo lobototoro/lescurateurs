@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UpdateArticle > should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="container"
+  >
+    <form
+      role="search"
+    >
+      <div
+        class="is-flex is-flex-direction-row is-flex-justify-space-between is-flex-align-items-center"
+      >
+        <label
+          class="is-hidden"
+          for="search"
+        >
+          Search
+        </label>
+        <input
+          class="input is-inline-flex"
+          data-testid="search-input"
+          id="search"
+          type="text"
+          value=""
+        />
+        <button
+          class="button is-primary is-inline-flex ml-4 mr-4"
+          data-testid="submit-search"
+          type="submit"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;

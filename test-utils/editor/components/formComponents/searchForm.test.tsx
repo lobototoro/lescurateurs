@@ -2,7 +2,7 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react';
 import { vi, expect, describe, it } from 'vitest';
 
 import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
-import { getMockedSlugs } from './articles-mocked';
+import { getMockedSlugs } from '../../../articles-mocked';
 
 /**
  * Mocks the searchForSlugs function from the searchActions module.

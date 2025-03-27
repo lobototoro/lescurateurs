@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Should render correctly 1`] = `
+<DocumentFragment>
+  <header
+    class="_header-title_f11b8f container"
+  >
+    <div>
+      <h1
+        class="undefined article-title_extra-large article-title_black"
+      >
+        LES CURATEURS
+      </h1>
+    </div>
+  </header>
+</DocumentFragment>
+`;

@@ -2,7 +2,7 @@ import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import UpdateArticleForm from "@/app/editor/components/formComponents/updateArticle";
-import { getAMockedArticle } from './articles-mocked';
+import { getAMockedArticle } from '../../../articles-mocked';
 
 vi.mock('@/app/articleActions', () => ({
   fetchArticleById: vi.fn().mockImplementation(() => {

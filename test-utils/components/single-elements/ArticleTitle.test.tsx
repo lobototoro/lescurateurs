@@ -1,7 +1,7 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import { expect, test } from 'vitest';
 
-import { ArticleTitle } from '../app/components/single-elements/ArticleTitle';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 test('ArticleTitle', () => {
   render(<ArticleTitle text="Article title" level="h1" size="extra-large" color="white" />);
