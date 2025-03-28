@@ -42,7 +42,7 @@ describe('Create article form', () => {
       target: { value: 'https://example.com' }
     });
 
-    fireEvent.click(getByTestId('submit'));
+    fireEvent.click(getByTestId('final-submit'));
 
     await waitFor(() => {
       expect(getByText('Article created')).toBeDefined();
@@ -72,7 +72,7 @@ describe('Create article form', () => {
       target: { value: 'https://example.com' }
     });
 
-    fireEvent.click(getByTestId('submit'));
+    fireEvent.click(getByTestId('final-submit'));
 
     await waitFor(() => {
       const modal = getByTestId('create-article-modal');

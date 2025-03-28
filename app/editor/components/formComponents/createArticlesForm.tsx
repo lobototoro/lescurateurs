@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useEffect, startTransition, useRef } from "react";
+import { useActionState, useEffect, startTransition, useRef, JSX } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import{ z } from "zod"; 
@@ -8,6 +8,7 @@ import { articleSchema } from "@/models/articleSchema";
 import { createArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from '@/models/article';
 import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import { urlsToArrayUtil } from "@/lib/utility-functions";
 
 /**
  * CreateArticleForm is a React component that manages the creation of an article form.
@@ -15,7 +16,7 @@ import ArticleMarkupForm from "@/app/components/articleHTMLForm";
  *
  * @returns {JSX.Element} Returns an ArticleMarkupForm component with all necessary props for creating an article.
  */
-export default function CreateArticleForm() {
+export default function CreateArticleForm(): JSX.Element {
   const [state, formAction] = useActionState(createArticleAction, null);
 
   const {
@@ -40,7 +41,7 @@ export default function CreateArticleForm() {
   });
 
   register('urls');
-  const urlsToArray = getValues('urls') !== '' ? JSON.parse(getValues('urls')) : [];
+  const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
   const formSentModal = useRef<HTMLDivElement>(null);
   const openModal = () => formSentModal.current?.classList.add('is-active'); 

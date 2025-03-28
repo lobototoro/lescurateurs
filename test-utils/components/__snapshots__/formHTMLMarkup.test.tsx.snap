@@ -1,0 +1,334 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should render correct markup 1`] = `
+<DocumentFragment>
+  <form>
+    <div
+      class="mt-6"
+    >
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ Titre"
+          class="label"
+          for="title"
+        >
+          Titre
+        </label>
+        <div
+          class="field"
+        >
+          <input
+            class="input"
+            data-testid="title"
+            required=""
+            type="text"
+          />
+        </div>
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ introduction"
+          class="label"
+          for="introduction"
+        >
+          introduction
+        </label>
+        <textarea
+          class="textarea"
+          data-testid="introduction"
+          required=""
+          rows="5"
+        />
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ Texte"
+          class="label"
+          for="main"
+        >
+          Texte
+        </label>
+        <textarea
+          class="textarea"
+          data-testid="main"
+          required=""
+          rows="10"
+        />
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ lien vers l'illustration"
+          class="label is-inline-flex"
+          for="urlToMainIllustration"
+        >
+          lien vers l'illustration
+        </label>
+        <div
+          class="control"
+        >
+          <input
+            class="input"
+            data-testid="urlToMainIllustration"
+            required=""
+            type="url"
+          />
+        </div>
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ lien audio principal"
+          class="label"
+          for="mainAudioUrl"
+        >
+          lien audio principal
+        </label>
+        <div
+          class="control"
+        >
+          <input
+            class="input"
+            data-testid="mainAudioUrl"
+            required=""
+            type="url"
+          />
+        </div>
+      </div>
+      <div>
+        <h4
+          class="undefined article-title_medium article-title_white mt-5 mb-4"
+        >
+          Ajouter des liens multimédias
+        </h4>
+      </div>
+      <div
+        class="field"
+      >
+        <div
+          class="mt-5"
+        >
+          <div
+            class="button is-primary is-size-6 has-text-white"
+          >
+            +
+          </div>
+          <div
+            class="button is-primary ml-2 is-size-6 has-text-white"
+          >
+            -
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal"
+      data-testid="create-article-modal"
+    >
+      <div
+        class="modal-background"
+      />
+      <div
+        class="modal-content is-danger"
+      >
+        <p
+          class="is-size-6 has-text-white has-background-primary p-6"
+        />
+        <footer>
+          <button
+            aria-label="accept button"
+            class="button"
+          >
+            OK
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div
+      class="field mt-5"
+    >
+      <input
+        class="button is-primary is-size-6 has-text-white"
+        data-testid="final-submit"
+        type="submit"
+        value="Valider"
+      />
+    </div>
+  </form>
+</DocumentFragment>
+`;
+
+exports[`should render correct markup for update 1`] = `
+<DocumentFragment>
+  <form>
+    <div
+      class="mt-6"
+    >
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ Titre"
+          class="label"
+          for="title"
+        >
+          Titre
+        </label>
+        <div
+          class="field"
+        >
+          <input
+            class="input"
+            data-testid="title"
+            disabled=""
+            required=""
+            type="text"
+          />
+        </div>
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ introduction"
+          class="label"
+          for="introduction"
+        >
+          introduction
+        </label>
+        <textarea
+          class="textarea"
+          data-testid="introduction"
+          required=""
+          rows="5"
+        />
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ Texte"
+          class="label"
+          for="main"
+        >
+          Texte
+        </label>
+        <textarea
+          class="textarea"
+          data-testid="main"
+          required=""
+          rows="10"
+        />
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ lien vers l'illustration"
+          class="label is-inline-flex"
+          for="urlToMainIllustration"
+        >
+          lien vers l'illustration
+        </label>
+        <div
+          class="control"
+        >
+          <input
+            class="input"
+            data-testid="urlToMainIllustration"
+            required=""
+            type="url"
+          />
+        </div>
+      </div>
+      <div
+        class="field"
+      >
+        <label
+          aria-label="label du champ lien audio principal"
+          class="label"
+          for="mainAudioUrl"
+        >
+          lien audio principal
+        </label>
+        <div
+          class="control"
+        >
+          <input
+            class="input"
+            data-testid="mainAudioUrl"
+            required=""
+            type="url"
+          />
+        </div>
+      </div>
+      <div>
+        <h4
+          class="undefined article-title_medium article-title_white mt-5 mb-4"
+        >
+          Ajouter des liens multimédias
+        </h4>
+      </div>
+      <div
+        class="field"
+      >
+        <div
+          class="mt-5"
+        >
+          <div
+            class="button is-primary is-size-6 has-text-white"
+          >
+            +
+          </div>
+          <div
+            class="button is-primary ml-2 is-size-6 has-text-white"
+          >
+            -
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal"
+      data-testid="create-article-modal"
+    >
+      <div
+        class="modal-background"
+      />
+      <div
+        class="modal-content is-danger"
+      >
+        <p
+          class="is-size-6 has-text-white has-background-primary p-6"
+        />
+        <footer>
+          <button
+            aria-label="accept button"
+            class="button"
+          >
+            OK
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div
+      class="field mt-5"
+    >
+      <input
+        class="button is-primary is-size-6 has-text-white"
+        data-testid="final-submit"
+        type="submit"
+        value="Valider"
+      />
+    </div>
+  </form>
+</DocumentFragment>
+`;

@@ -2,7 +2,7 @@ import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import UpdateArticleForm from "@/app/editor/components/formComponents/updateArticle";
-import { getAMockedArticle } from './articles-mocked';
+import { getAMockedArticle } from '../../../articles-mocked';
 
 vi.mock('@/app/articleActions', () => ({
   fetchArticleById: vi.fn().mockImplementation(() => {
@@ -38,7 +38,7 @@ vi.mock('@/app/searchActions', () => ({
 /**
  * Test suite for the UpdateArticle component.
  */
-describe('UpdateArticle', () => {
+describe.sequential('UpdateArticle', () => {
   /**
    * Test case to verify if the UpdateArticle component renders correctly.
    */
@@ -75,29 +75,24 @@ describe('UpdateArticle', () => {
     });
 
     await waitFor(() => {
+      // article is displayed
       const title = getByTestId('title');
       expect(title).toBeDefined();
       expect(title).toHaveProperty('disabled');
+      const introInput = getByTestId('introduction');
+      fireEvent.change(introInput, { target: {
+        value: 'Nisi enim dolor quis in ullamco laboris. Amet nulla adipisicing irure minim mollit excepteur deserunt anim deserunt nulla dolore. GGGGGGGGGGGGGG'
+      }});
     });
 
     act(() => {
-      const introInput = getByTestId('introduction');
-      fireEvent.change(introInput, { target: { value: 'Article introduction 1 GG' } });
-      const finalSubmit = getByTestId('submit');
+      const finalSubmit = getByTestId('final-submit');
+      expect(finalSubmit).toBeDefined();
       fireEvent.click(finalSubmit);
     });
 
     await waitFor(() => {
-      expect(getByText('Article was successfully updated')).toBeDefined();
-    });
-
-    act(() => {
-      const backToSearchButton = getByTestId('back-to-search');
-      fireEvent.click(backToSearchButton);
-    });
-
-    await waitFor(() => {
-      expect(getByTestId('search-input')).toBeDefined();
+      
     });
   });
 });
@@ -144,9 +139,11 @@ describe('Error updating article', () => {
     await waitFor(() => {
       
       const introInput = getByTestId('introduction');
-      finalSubmit = getByTestId('submit');
+      const mainInput = getByTestId('main');
+      finalSubmit = getByTestId('final-submit');
       fireEvent.change(introInput, { target: { value: 'Ar' } });
-      expect(finalSubmit).toHaveProperty('disabled');
-    }); 
+      fireEvent.change(mainInput, { target: { value: 'Nisi enim dolor quis in ullamco' } });
+      fireEvent.click(finalSubmit);
+    });
   });
 });

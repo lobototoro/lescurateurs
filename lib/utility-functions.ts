@@ -7,3 +7,7 @@ export function isEmpty(obj: any): boolean {
 
   return true;
 }
+
+export const urlsToArrayUtil = (urls: any[] | any) => (urls && urls !== '')
+? JSON.parse(urls)
+: [];

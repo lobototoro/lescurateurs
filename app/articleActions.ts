@@ -116,7 +116,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
     }
   }
 
-  const id = parseInt(formData.get('id') as string);
+  const id = parseInt(formData.get('id') as string, 10);
   const author = formData.get('author') as string;
   const author_email = formData.get('author_email') as string;
   const slug = formData.get('slug') as string;

@@ -1,0 +1,87 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Should render correctly 1`] = `
+<DocumentFragment>
+  <div>
+    <h2
+      class="undefined article-title_large article-title_black mt-5 mb-5"
+    >
+      ÉDITEUR
+    </h2>
+  </div>
+  <nav
+    aria-label="main navigation"
+    class="navbar box"
+    role="navigation"
+  >
+    <div
+      class="navbar-brand"
+    >
+      <a
+        aria-expanded="false"
+        aria-label="menu"
+        class="navbar-burger"
+        data-target="navbarMenuItems"
+        role="button"
+      >
+        <span
+          aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+        />
+      </a>
+    </div>
+    <div
+      class="navbar-menu is-flex-direction-column"
+      id="navbarMenuItems"
+    >
+      <div
+        class="navbar-start container is-flex-wrap-wrap"
+      >
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
+          >
+            edit articles
+          </a>
+        </div>
+      </div>
+      <div
+        class=""
+      >
+        <div
+          class="navbar-item"
+        >
+          <div
+            class="buttons"
+          >
+            <a
+              class="button is-info"
+              href="/auth/logout"
+            >
+              Log out
+            </a>
+            <span
+              class="tag is-dark"
+            >
+              <strong>
+                Role : admin
+              </strong>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </nav>
+</DocumentFragment>
+`;
