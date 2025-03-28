@@ -2,6 +2,7 @@
 import React from "react";
 
 import { UrlsTypes } from "@/models/article";
+import styles from './urlObjectItem.module.css';
 
 export function UrlObjectItem({
   type,
@@ -26,6 +27,15 @@ export function UrlObjectItem({
     return urls?.some((item) => item.url === url && item.url !== '');
   };
 
+  const blinkClass = styles.blink;
+  const addBlink = (el: HTMLDivElement) => {
+    (el?.parentNode?.lastChild as HTMLElement)?.classList.add(blinkClass);
+  }
+
+  const removeBlink = (el: HTMLDivElement) => {
+    el?.classList.remove(blinkClass);
+  }
+
   return (
     <div className="field is-grouped is-flex is-align-items-center">
       <div className="">
@@ -34,9 +44,13 @@ export function UrlObjectItem({
           <select
             role="combobox"
             aria-label="Selectionnez un type"
+            data-testid="select-type"
             name={`type-${index}`}
             value={selectedValue || UrlsTypes.WEBSITE}
-            onChange={(e) => setSelectedValue(e.target.value as UrlsTypes)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              addBlink(e?.currentTarget?.parentNode?.parentNode as unknown as HTMLDivElement);
+              setSelectedValue(e.target.value as UrlsTypes);
+            }}
           >
             <option value={UrlsTypes.WEBSITE}>website</option>
             <option value={UrlsTypes.VIDEOS}>videos</option>
@@ -52,7 +66,10 @@ export function UrlObjectItem({
           type="url"
           name={`url-${index}`}
           value={givenUrl || ""}
-          onChange={(e) => setGivenUrl(e.target.value)}
+          onChange={(e) => {
+            addBlink(e?.currentTarget?.parentNode as unknown as HTMLDivElement);
+            setGivenUrl(e.target.value)
+          }}
         />
       </div>
       <div className="ml-2">
@@ -61,18 +78,25 @@ export function UrlObjectItem({
           type="text"
           name={`credits-${index}`}
           value={givenCredits || ""}
-          onChange={(e) => setGivenCredits(e.target.value)}
+          onChange={(e) => {
+            addBlink(e?.currentTarget?.parentNode as unknown as HTMLDivElement
+            );
+            setGivenCredits(e.target.value)
+          }}
         />
       </div>
       <div
         className="button ml-2"
-        onClick={() => addUrls && addUrls({
+        data-testid="add-url-button"
+        onClick={(e) => {
+          removeBlink(e?.currentTarget as unknown as HTMLDivElement);
+          addUrls && addUrls({
               type: selectedValue,
               url: givenUrl,
               credits: givenCredits
             },
             index
-          )}
+          )}}
       >
         {
           (isinArray(givenUrl)) ? 'Modifier' : 'Ajouter'
