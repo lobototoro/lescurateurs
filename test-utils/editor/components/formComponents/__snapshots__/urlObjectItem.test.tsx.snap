@@ -18,6 +18,7 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
       >
         <select
           aria-label="Selectionnez un type"
+          data-testid="select-type"
           name="type-0"
           role="combobox"
         >
@@ -80,6 +81,7 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     </div>
     <div
       class="button ml-2"
+      data-testid="add-url-button"
     >
       Ajouter
     </div>

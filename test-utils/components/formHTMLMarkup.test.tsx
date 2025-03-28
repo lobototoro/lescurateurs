@@ -1,5 +1,5 @@
 import ArticleMarkupForm from "@/app/components/articleHTMLForm";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 
 it('should render correct markup', () => {
@@ -67,3 +67,29 @@ it('Should open a modal with the expected text value', () => {
   const { getByText } = render(<ArticleMarkupForm {...mockProps} />);
   expect(getByText('TEST')).toBeDefined();
 });
+
+it('Should display an additionnal link line with blinking validate button while modified', () => {
+  const mockProps = {
+    handleSubmit: vi.fn(),
+    register: vi.fn(),
+    errors: {},
+    urlsToArray: ['type: website, url: https://example.com, credits: test'],
+    updateUrls: vi.fn(),
+    removeUrl: vi.fn(),
+    addUrl: vi.fn(),
+    handleChange: vi.fn(),
+    addInputs: vi.fn(),
+    removeInputs: vi.fn(),
+    formSentModal: null,
+    state: { message: true, text: 'TEST' },
+    closeModal: vi.fn(),
+    target: 'update',
+  };
+  const { getByTestId } = render(<ArticleMarkupForm {...mockProps} />);
+  expect(getByTestId('select-type')).toBeDefined();
+  fireEvent.change(getByTestId('select-type'), { target: { value: 'videos' } });
+  expect(getByTestId('add-url-button')?.classList.toString()).toMatch(/blink/);
+  fireEvent.click(getByTestId('add-url-button'));
+  expect(getByTestId('add-url-button')?.classList.toString()).not.toMatch(/blink/);
+});
+
