@@ -15,7 +15,7 @@ import {
 } from "@/lib/articles";
 
 interface ValidateTypes {
-  id: number | bigint;
+  articleId: number | bigint;
   validation: string;
 }
 
@@ -230,7 +230,6 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
     
     const totalchanges = result[0]?.changes + result[1]?.changes;
     if (totalchanges > 1) {
-      console.log('totalchanges', totalchanges);
       
       return {
         message: true,
@@ -264,13 +263,13 @@ export async function validateArticleAction(prevState: any, formData: FormData) 
   }
 
   const validationArgs: ValidateTypes = {
-    id: parseInt(formData.get('id') as string, 10),
+    articleId: parseInt(formData.get('id') as string, 10),
     validation: formData.get('validation') as string,
   }
 
   try {
     const validation = await validateArticle({
-      articleId: validationArgs.id,
+      articleId: validationArgs.articleId,
       validatedValue: validationArgs.validation
     });
     if (!validation) {

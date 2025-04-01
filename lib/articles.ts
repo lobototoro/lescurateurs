@@ -69,7 +69,8 @@ export const validateArticle = cache(async (validateProps: {
   articleId: number | bigint,
   validatedValue: string
 }) => {
-  return db.prepare('UPDATE articles SET validated = @validatedValue WHERE id = ?')
+
+  return db.prepare('UPDATE articles SET validated = @validatedValue WHERE id = @articleId')
     .run(validateProps);
   }
 );

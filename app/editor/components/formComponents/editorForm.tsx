@@ -8,6 +8,7 @@ import CreateArticleForm from "./createArticles";
 ;
 import UpdateArticleForm from "./updateArticle";
 import DeleteArticleForm from "./deleteArticle";
+import ValidateArticleForm from "./validateArticle";
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -29,6 +30,7 @@ export default function EditorForm({ role, permissions }: {
       { (selection === 'createarticles') && <CreateArticleForm /> }
       { (selection === 'updatearticles') && <UpdateArticleForm /> }
       { (selection === 'deletearticles') && <DeleteArticleForm /> }
+      { (selection === 'validatearticles') && <ValidateArticleForm /> } 
       {/* { (selection === 'validatearticles') && <SearchArticle target="validate" /> } */}
       {/* { (selection === 'shiparticles') && <SearchArticle target="ship" /> } */}
       {/* (selection === 'validatearticles') && <ValidateArticleForm /> }

@@ -13,8 +13,6 @@ export default function DeleteArticleForm(): JSX.Element {
 
   useEffect(() => {
     if (selectedId) {
-      // Perform the delete action here
-      console.log(`Deleting article with ID: ${selectedId}`);
       modalRef.current?.classList.add("is-active");
       
       // Call your delete function or API here
@@ -35,12 +33,11 @@ export default function DeleteArticleForm(): JSX.Element {
     };
   }, [selectedId, state]);
 
-  const handleDelete = () => {
+  const handleValidate = (validation: string) => {
     startTransition(() => {
-      // Implement your delete logic here
-      console.log(`Deleting article with ID: ${selectedId}`);
       const formData = new FormData();
       formData.append("id", String(selectedId));
+      formData.append("validation", validation);
       formAction(formData);
       setSelectedId("");
       closeDeleteModal();
@@ -72,8 +69,11 @@ export default function DeleteArticleForm(): JSX.Element {
         <div className="modal-content">
           Voulez-vous vraiment valider cet article ?
           <div className="buttons">
-            <button className="button is-danger" onClick={() => handleDelete()}>
-              {isPending ? 'Chargement' : 'Supprimer'}
+            <button className="button is-danger" onClick={() => handleValidate('true')}>
+              Valider
+            </button>
+            <button className="button is-danger" onClick={() => handleValidate('false')}>
+              Invalider
             </button>
             <button className="button" onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
