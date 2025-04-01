@@ -10,8 +10,14 @@ import {
   deleteArticle,
   updateArticle,
   getArticleById,
-  deleteSlug
+  deleteSlug,
+  validateArticle
 } from "@/lib/articles";
+
+interface ValidateTypes {
+  id: number | bigint;
+  validation: string;
+}
 
 /**
  * Creates a new article based on the provided form data.
@@ -246,4 +252,44 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
       text: 'une erreur s\'est produite : contactez l\'administrateur'
     }
   };
+}
+
+export async function validateArticleAction(prevState: any, formData: FormData) {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to validate an article'
+    }
+  }
+
+  const validationArgs: ValidateTypes = {
+    id: parseInt(formData.get('id') as string, 10),
+    validation: formData.get('validation') as string,
+  }
+
+  try {
+    const validation = await validateArticle({
+      articleId: validationArgs.id,
+      validatedValue: validationArgs.validation
+    });
+    if (!validation) {
+      return {
+        message: false,
+        text: 'Article not found'
+      }
+    }
+
+    return {
+      message: true,
+      text: `L'article a été ${validationArgs.validation === 'true' ? 'validé' : 'rejeté'} avec succès`
+    }
+  } catch (error) {
+    console.log(error);
+
+    return {
+      message: false,
+      text: 'Error validating article'
+    }
+  }
 }
