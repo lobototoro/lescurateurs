@@ -55,6 +55,11 @@ export const deleteArticle = cache (async(articleId: number | bigint) => {
     .run(articleId);
 });
 
+export const deleteSlug = cache(async (slugId: number | bigint) => {
+  return db.prepare('DELETE FROM slugs WHERE articleId = ?')
+    .run(slugId);
+});
+
 export const updateArticle = cache(async (article: Article) => {
   return db.prepare('UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, mainAudioUrl = @mainAudioUrl, urlToMainIllustration = @urlToMainIllustration, createdAt = @createdAt, updatedAt = @updatedAt, publishedAt = @publishedAt, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id')
   .run(article);

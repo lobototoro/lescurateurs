@@ -1,4 +1,4 @@
-import CreateArticleForm from "@/app/editor/components/formComponents/createArticlesForm";
+import CreateArticleForm from "@/app/editor/components/formComponents/createArticles";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { expect, it, vi, describe } from "vitest";
 
