@@ -1,8 +1,10 @@
 "use server";
-
+import { z } from "zod";
 import slugify from 'slugify';
 
 import { auth0 } from "@/lib/auth0"
+import { articleSchema } from "@/models/articleSchema";
+
 
 import {
   createArticle,
@@ -10,8 +12,15 @@ import {
   deleteArticle,
   updateArticle,
   getArticleById,
-  deleteSlug
+  deleteSlug,
+  validateArticle,
+  shipArticle
 } from "@/lib/articles";
+
+interface ValidateTypes {
+  articleId: number | bigint;
+  validation: string;
+}
 
 /**
  * Creates a new article based on the provided form data.
@@ -224,7 +233,6 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
     
     const totalchanges = result[0]?.changes + result[1]?.changes;
     if (totalchanges > 1) {
-      console.log('totalchanges', totalchanges);
       
       return {
         message: true,
@@ -246,4 +254,88 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
       text: 'une erreur s\'est produite : contactez l\'administrateur'
     }
   };
+}
+
+export async function validateArticleAction(prevState: any, formData: FormData) {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to validate an article'
+    }
+  }
+
+  const validationArgs: ValidateTypes = {
+    articleId: parseInt(formData.get('id') as string, 10),
+    validation: formData.get('validation') as string,
+  }
+
+  try {
+    const validation = await validateArticle({
+      articleId: validationArgs.articleId,
+      validatedValue: validationArgs.validation
+    });
+    if (!validation) {
+      return {
+        message: false,
+        text: 'Article not found'
+      }
+    }
+
+    return {
+      message: true,
+      text: `L'article a été ${validationArgs.validation === 'true' ? 'validé' : 'rejeté'} avec succès`
+    }
+  } catch (error) {
+    console.log(error);
+
+    return {
+      message: false,
+      text: 'Error validating article'
+    }
+  }
+}
+
+export async function shipArticleAction(prevState: any, formData: FormData) {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to ship an article'
+    }
+  }
+
+  const id = parseInt(formData.get('id') as string, 10);
+  const ship = (formData.get('shipped') as string) === 'true' ? true : false;
+
+  // get article to check for validity: 'true' or 'false'
+  const article = await getArticleById(id) as z.infer<typeof articleSchema>;
+  if (!article) {
+    return {
+      message: false,
+      text: 'Article inconnu'
+    }
+  }
+  if (article?.validated === 'false' && ship) {
+    return {
+      message: false,
+      text: "L'article doit être validé avant d'être mis en MeP"
+    }
+  }
+  const shippedValue = ship ? 'true' : 'false';
+  const result = await shipArticle({
+    articleId: id,
+    shippedValue
+  });
+  if (!result) {
+    return {
+      message: false,
+      text: 'Une erreur est survenue lors de la mise en MeP de l\'article'
+    }
+  }
+  
+  return {
+    message: true,
+    text: "L'article a été mis en MeP avec succès"
+  }
 }

@@ -64,3 +64,21 @@ export const updateArticle = cache(async (article: Article) => {
   return db.prepare('UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, mainAudioUrl = @mainAudioUrl, urlToMainIllustration = @urlToMainIllustration, createdAt = @createdAt, updatedAt = @updatedAt, publishedAt = @publishedAt, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id')
   .run(article);
 });
+
+export const validateArticle = cache(async (validateProps: {
+  articleId: number | bigint,
+  validatedValue: string
+}) => {
+
+  return db.prepare('UPDATE articles SET validated = @validatedValue WHERE id = @articleId')
+    .run(validateProps);
+  }
+);
+
+export const shipArticle = cache(async (shipProps: {
+  articleId: number | bigint,
+  shippedValue: string
+}) => {
+  return db.prepare('UPDATE articles SET shipped = @shippedValue WHERE id = @articleId')
+    .run(shipProps);
+});
