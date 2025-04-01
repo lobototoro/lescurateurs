@@ -3,9 +3,11 @@
 import { useState } from "react";
 
 import HeaderNode from "./headerNode";
-import CreateArticleForm from "./createArticlesForm";
-import SearchArticle from "./searchArticle";
+import CreateArticleForm from "./createArticles";
+
+;
 import UpdateArticleForm from "./updateArticle";
+import DeleteArticleForm from "./deleteArticle";
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -26,9 +28,9 @@ export default function EditorForm({ role, permissions }: {
       {/* <p>{ selection }</p> */}
       { (selection === 'createarticles') && <CreateArticleForm /> }
       { (selection === 'updatearticles') && <UpdateArticleForm /> }
-      { (selection === 'deletearticles') && <SearchArticle target="delete" /> }
-      { (selection === 'validatearticles') && <SearchArticle target="validate" /> }
-      { (selection === 'shiparticles') && <SearchArticle target="ship" /> }
+      { (selection === 'deletearticles') && <DeleteArticleForm /> }
+      {/* { (selection === 'validatearticles') && <SearchArticle target="validate" /> } */}
+      {/* { (selection === 'shiparticles') && <SearchArticle target="ship" /> } */}
       {/* (selection === 'validatearticles') && <ValidateArticleForm /> }
       { (selection === 'shiparticles') && <ShipArticleForm /> }
       { (selection === 'createuser') && <CreateUserForm /> }

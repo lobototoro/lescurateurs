@@ -9,9 +9,9 @@ import {
   createSlug,
   deleteArticle,
   updateArticle,
-  getArticleById
+  getArticleById,
+  deleteSlug
 } from "@/lib/articles";
-
 
 /**
  * Creates a new article based on the provided form data.
@@ -184,3 +184,66 @@ export async function fetchArticleById(id: number | bigint) {
   }
 };
 
+/**
+ * Deletes an article based on the provided form data and updates the application state.
+ *
+ * @param prevState - The previous state of the application.
+ * @param formData - A `FormData` object containing the data required to delete the article.
+ *                   Must include an `id` field representing the article's ID.
+ * @returns A promise that resolves to an object containing:
+ *          - `message`: A boolean indicating the success or failure of the operation.
+ *          - `text`: A string message describing the result of the operation.
+ *
+ * @throws Logs any errors encountered during the deletion process to the console.
+ *
+ * The function performs the following steps:
+ * 1. Verifies if the user is logged in using the `auth0.getSession()` method.
+ *    If the user is not logged in, it returns an error message.
+ * 2. Extracts the article ID from the `formData` object and attempts to delete
+ *    the associated slug and article using `deleteSlug` and `deleteArticle` functions.
+ * 3. If both deletions are successful, it checks the total number of changes made.
+ *    - If more than one change is detected, it returns a success message.
+ *    - Otherwise, it returns an error message indicating a failure in the deletion process.
+ * 4. Catches any errors during the process and returns a generic error message.
+ */
+export async function deleteArticleAction(prevState: any, formData: FormData) {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to delete an article'
+    }
+  }
+
+  const id = parseInt(formData.get('id') as string, 10);
+  try {
+    const slugResult = await deleteSlug(id); 
+    const articleResult = await deleteArticle(id);
+
+    const result = await Promise.all([slugResult, articleResult]);
+    
+    const totalchanges = result[0]?.changes + result[1]?.changes;
+    if (totalchanges > 1) {
+      console.log('totalchanges', totalchanges);
+      
+      return {
+        message: true,
+        text: 'L\'article a été supprimé avec succès'
+      }
+    } else {
+
+      return {
+        message: false,
+        text: 'une erreur s\'est produite lors de la suppression de l\'article'
+      }
+    }
+  } catch (error) {
+    // Log the error to the console for debugging purposes
+    console.log(error);
+
+    return {
+      message: false,
+      text: 'une erreur s\'est produite : contactez l\'administrateur'
+    }
+  };
+}
