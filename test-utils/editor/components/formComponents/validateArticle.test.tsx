@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, beforeEach, describe, expect, it, Mock } from "vitest";
 
-import DeleteArticleForm from "./validateArticle";
+import DeleteArticleForm from "../../../../app/editor/components/formComponents/validateArticle";
 import { useActionState } from "react";
 
 // Mock dependencies

@@ -1,8 +1,10 @@
 "use server";
-
+import { z } from "zod";
 import slugify from 'slugify';
 
 import { auth0 } from "@/lib/auth0"
+import { articleSchema } from "@/models/articleSchema";
+
 
 import {
   createArticle,
@@ -11,7 +13,8 @@ import {
   updateArticle,
   getArticleById,
   deleteSlug,
-  validateArticle
+  validateArticle,
+  shipArticle
 } from "@/lib/articles";
 
 interface ValidateTypes {
@@ -290,5 +293,49 @@ export async function validateArticleAction(prevState: any, formData: FormData) 
       message: false,
       text: 'Error validating article'
     }
+  }
+}
+
+export async function shipArticleAction(prevState: any, formData: FormData) {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to ship an article'
+    }
+  }
+
+  const id = parseInt(formData.get('id') as string, 10);
+  const ship = (formData.get('shipped') as string) === 'true' ? true : false;
+
+  // get article to check for validity: 'true' or 'false'
+  const article = await getArticleById(id) as z.infer<typeof articleSchema>;
+  if (!article) {
+    return {
+      message: false,
+      text: 'Article inconnu'
+    }
+  }
+  if (article?.validated === 'false' && ship) {
+    return {
+      message: false,
+      text: "L'article doit être validé avant d'être mis en MeP"
+    }
+  }
+  const shippedValue = ship ? 'true' : 'false';
+  const result = await shipArticle({
+    articleId: id,
+    shippedValue
+  });
+  if (!result) {
+    return {
+      message: false,
+      text: 'Une erreur est survenue lors de la mise en MeP de l\'article'
+    }
+  }
+  
+  return {
+    message: true,
+    text: "L'article a été mis en MeP avec succès"
   }
 }

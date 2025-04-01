@@ -74,3 +74,11 @@ export const validateArticle = cache(async (validateProps: {
     .run(validateProps);
   }
 );
+
+export const shipArticle = cache(async (shipProps: {
+  articleId: number | bigint,
+  shippedValue: string
+}) => {
+  return db.prepare('UPDATE articles SET shipped = @shippedValue WHERE id = @articleId')
+    .run(shipProps);
+});
