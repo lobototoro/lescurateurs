@@ -14,7 +14,6 @@ export default function DeleteArticleForm(): JSX.Element {
   useEffect(() => {
     if (selectedId) {
       // Perform the delete action here
-      console.log(`Deleting article with ID: ${selectedId}`);
       modalRef.current?.classList.add("is-active");
       
       // Call your delete function or API here

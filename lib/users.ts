@@ -1,22 +1,23 @@
 "use server";
-
+import { cache } from 'react';
 import sql from 'better-sqlite3';
 
 import { User } from '../models/user';
 
 const db = sql('lcfr.db');
 
-export async function getUser(email: string) {
+export const  getUser = cache(async (email: string) => {
   return db
     .prepare('SELECT * FROM users WHERE email = ?')
     .get(email);
-}
+});
 
-export async function createUser(user: User) {
+export const createUser = cache(async (user: User) => {
   // mutation for permissions (stringify)
   // mutation for createdAt (date) to string 'yyyy-mm-dd'
   const permissions = JSON.stringify(user.permissions);
   const createdAt = new Date(user.createdAt).toISOString().slice(0, 10);
+  const lastConnectionAt = new Date(user.lastConnectionAt).toISOString().slice(0, 10);
 
   db.prepare(`
     INSERT INTO users (
@@ -25,18 +26,20 @@ export async function createUser(user: User) {
       role,
       permissions,
       createdAt,
+      lastConnectionAt
     )
     VALUES (
       ?,
       ?,
       ?,
       ?,
+      ?,
       ?
     )`)
-    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt);
-}
+    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt, lastConnectionAt);
+});
 
-export async function updateUser(user: User) {
+export const updateUser = cache(async (user: User) =>{
   // mutation for permissions (stringify)
   // mutation for createdAt (date) to string 'yyyy-mm-dd'
   const permissions = JSON.stringify(user.permissions);
@@ -52,15 +55,15 @@ export async function updateUser(user: User) {
       createdAt = ?
     WHERE email = ?`)
     .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt, user.email);
-}
+});
 
-export async function deleteUser(email: string) {
+export const deleteUser = cache(async (email: string) =>{
   db.prepare('DELETE FROM users WHERE email = ?')
     .run(email);
-}
+});
 
-export async function getAllUsers() {
+export const getAllUsers = cache(async () =>{
   return db
     .prepare('SELECT * FROM users')
     .all();
-}
+});

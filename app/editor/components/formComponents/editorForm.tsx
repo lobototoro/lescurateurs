@@ -10,6 +10,7 @@ import UpdateArticleForm from "./updateArticle";
 import DeleteArticleForm from "./deleteArticle";
 import ValidateArticleForm from "./validateArticle";
 import ShipArticle from "./shipArticle";
+import CreateUserForm from "./createUser";
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -33,8 +34,8 @@ export default function EditorForm({ role, permissions }: {
       { (selection === 'deletearticles') && <DeleteArticleForm /> }
       { (selection === 'validatearticles') && <ValidateArticleForm /> }
       { (selection === 'shiparticles') && <ShipArticle /> }
-      
-      {/* { (selection === 'createuser') && <CreateUserForm /> }
+      { (selection === 'createuser') && <CreateUserForm /> }
+      {/* 
       { (selection === 'updateuser') && <UpdateUserForm /> }
       { (selection === 'deleteuser') && <DeleteUserForm /> }
       { (selection === 'enablemaintenance') && <EnableMaintenanceForm /> } */}
