@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import CreateUserForm from "./createUser";
+import CreateUserForm from "../../../../app/editor/components/formComponents/createUser";
 
 vi.mock("@/app/userActions", () => ({
   createUserAction: vi.fn().mockImplementationOnce((prev: any, data: any) => {
