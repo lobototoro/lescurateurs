@@ -8,7 +8,7 @@ export const articleSchema = z.object({
   main: z.string().trim().min(50, 'Le texte principal doit avoir au moins 50 caractères'),
   urls: z.string().trim(),
   mainAudioUrl: z.string().trim().url('L’URL doit avoir un format valide').optional(),
-  urlToMainIllustration: z.string().trim().url('L’URL doit avoir un format valide'),
+  urlToMainIllustration: z.string().trim().min(1, 'Au moins un lien est requis').url('L’URL doit avoir un format valide'),
   author: z.string().trim().optional(),
   author_email: z.string().optional(),
   createdAt: z.string().optional(),

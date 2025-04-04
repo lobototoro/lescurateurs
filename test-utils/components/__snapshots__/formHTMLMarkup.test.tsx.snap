@@ -10,7 +10,7 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ Titre"
+          aria-labelledby="title"
           class="label"
           for="title"
         >
@@ -22,7 +22,7 @@ exports[`should render correct markup 1`] = `
           <input
             class="input"
             data-testid="title"
-            required=""
+            id="title"
             type="text"
           />
         </div>
@@ -31,16 +31,17 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ introduction"
+          aria-labelledby="introduction"
           class="label"
           for="introduction"
         >
           introduction
         </label>
         <textarea
+          aria-label="introduction"
           class="textarea"
           data-testid="introduction"
-          required=""
+          id="introduction"
           rows="5"
         />
       </div>
@@ -48,16 +49,17 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ Texte"
+          aria-label="main"
           class="label"
           for="main"
         >
           Texte
         </label>
         <textarea
+          aria-label="main"
           class="textarea"
           data-testid="main"
-          required=""
+          id="main"
           rows="10"
         />
       </div>
@@ -65,7 +67,7 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ lien vers l'illustration"
+          aria-label="urlToMainIllustration"
           class="label is-inline-flex"
           for="urlToMainIllustration"
         >
@@ -75,9 +77,10 @@ exports[`should render correct markup 1`] = `
           class="control"
         >
           <input
+            aria-label="urlToMainIllustration"
             class="input"
             data-testid="urlToMainIllustration"
-            required=""
+            id="urlToMainIllustration"
             type="url"
           />
         </div>
@@ -86,7 +89,7 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ lien audio principal"
+          aria-label="mainAudioUrl"
           class="label"
           for="mainAudioUrl"
         >
@@ -96,9 +99,10 @@ exports[`should render correct markup 1`] = `
           class="control"
         >
           <input
+            aria-label="mainAudioUrl"
             class="input"
             data-testid="mainAudioUrl"
-            required=""
+            id="mainAudioUrl"
             type="url"
           />
         </div>
@@ -112,17 +116,20 @@ exports[`should render correct markup 1`] = `
       </div>
       <div
         class="field"
+        data-testid="url-inputs-container"
       >
         <div
           class="mt-5"
         >
           <div
             class="button is-primary is-size-6 has-text-white"
+            data-testid="add-url"
           >
             +
           </div>
           <div
             class="button is-primary ml-2 is-size-6 has-text-white"
+            data-testid="remove-url"
           >
             -
           </div>
@@ -176,7 +183,7 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ Titre"
+          aria-labelledby="title"
           class="label"
           for="title"
         >
@@ -189,7 +196,7 @@ exports[`should render correct markup for update 1`] = `
             class="input"
             data-testid="title"
             disabled=""
-            required=""
+            id="title"
             type="text"
           />
         </div>
@@ -198,16 +205,17 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ introduction"
+          aria-labelledby="introduction"
           class="label"
           for="introduction"
         >
           introduction
         </label>
         <textarea
+          aria-label="introduction"
           class="textarea"
           data-testid="introduction"
-          required=""
+          id="introduction"
           rows="5"
         />
       </div>
@@ -215,16 +223,17 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ Texte"
+          aria-label="main"
           class="label"
           for="main"
         >
           Texte
         </label>
         <textarea
+          aria-label="main"
           class="textarea"
           data-testid="main"
-          required=""
+          id="main"
           rows="10"
         />
       </div>
@@ -232,7 +241,7 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ lien vers l'illustration"
+          aria-label="urlToMainIllustration"
           class="label is-inline-flex"
           for="urlToMainIllustration"
         >
@@ -242,9 +251,10 @@ exports[`should render correct markup for update 1`] = `
           class="control"
         >
           <input
+            aria-label="urlToMainIllustration"
             class="input"
             data-testid="urlToMainIllustration"
-            required=""
+            id="urlToMainIllustration"
             type="url"
           />
         </div>
@@ -253,7 +263,7 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="label du champ lien audio principal"
+          aria-label="mainAudioUrl"
           class="label"
           for="mainAudioUrl"
         >
@@ -263,9 +273,10 @@ exports[`should render correct markup for update 1`] = `
           class="control"
         >
           <input
+            aria-label="mainAudioUrl"
             class="input"
             data-testid="mainAudioUrl"
-            required=""
+            id="mainAudioUrl"
             type="url"
           />
         </div>
@@ -279,17 +290,20 @@ exports[`should render correct markup for update 1`] = `
       </div>
       <div
         class="field"
+        data-testid="url-inputs-container"
       >
         <div
           class="mt-5"
         >
           <div
             class="button is-primary is-size-6 has-text-white"
+            data-testid="add-url"
           >
             +
           </div>
           <div
             class="button is-primary ml-2 is-size-6 has-text-white"
+            data-testid="remove-url"
           >
             -
           </div>
