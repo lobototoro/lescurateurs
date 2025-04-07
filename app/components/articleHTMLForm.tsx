@@ -32,37 +32,92 @@ export default function ArticleMarkupForm({
     <form onSubmit={handleSubmit}>
       <div className="mt-6">
         <div className="field">
-          <label className="label" aria-label="label du champ Titre" htmlFor="title">Titre</label>
+          <label
+            className="label"
+            aria-labelledby="title"
+            htmlFor="title">Titre</label>
           <div className="field">
-            <input className="input" type="text" {...register('title')} data-testid="title" required disabled={(target === 'update')} />
+            <input
+              id="title"
+              className="input"
+              type="text"
+              {...register('title')}
+              data-testid="title"
+              disabled={(target === 'update')} />
           </div>
           { errors.title && <p className="has-text-danger">{errors.title.message}</p>}
         </div>
 
         <div className="field">
-          <label className="label" aria-label="label du champ introduction" htmlFor="introduction">introduction</label>
-          <textarea className="textarea" {...register('introduction')} rows={5} data-testid="introduction" required></textarea>
+          <label
+            className="label"
+            aria-labelledby="introduction"
+            htmlFor="introduction"
+          >
+            introduction
+          </label>
+          <textarea
+            id="introduction"
+            aria-label='introduction'
+            className="textarea"
+            {...register('introduction')}
+            rows={5}
+            data-testid="introduction"
+          ></textarea>
           { errors.introduction && <p className="has-text-danger">{errors.introduction.message}</p>}
         </div>
 
         <div className="field">
-          <label className="label" aria-label="label du champ Texte" htmlFor="main">Texte</label>
-          <textarea className="textarea" {...register('main')} rows={10} data-testid="main" required></textarea>
+          <label
+            className="label"
+            aria-label="main"
+            htmlFor="main"
+          >Texte</label>
+          <textarea
+            id="main"
+            aria-label="main"
+            className="textarea"
+            {...register('main')}
+            rows={10}
+            data-testid="main"
+          ></textarea>
           { errors.main && <p className="has-text-danger">{errors.main.message}</p>}
         </div>
 
         <div className="field">
-          <label className="label is-inline-flex" aria-label="label du champ lien vers l'illustration" htmlFor="urlToMainIllustration">lien vers l'illustration</label>
+          <label
+            className="label is-inline-flex"
+            aria-label="urlToMainIllustration"
+            htmlFor="urlToMainIllustration"
+          >lien vers l'illustration</label>
           <div className="control">
-            <input className="input" type="url" {...register('urlToMainIllustration')} data-testid="urlToMainIllustration" required />
+            <input
+              id="urlToMainIllustration"
+              aria-label="urlToMainIllustration"
+              className="input"
+              type="url"
+              {...register('urlToMainIllustration')}
+              data-testid="urlToMainIllustration"
+            />
           </div>
           { errors.urlToMainIllustration && <p className="has-text-danger">{errors.urlToMainIllustration.message}</p>}
         </div>
 
         <div className="field">
-          <label className="label" aria-label="label du champ lien audio principal" htmlFor="mainAudioUrl">lien audio principal</label>
+          <label
+            className="label"
+            aria-label="mainAudioUrl"
+            htmlFor="mainAudioUrl"
+          >lien audio principal</label>
           <div className="control">
-            <input className="input" type="url" {...register('mainAudioUrl')} data-testid="mainAudioUrl" required />
+            <input
+              id="mainAudioUrl"
+              aria-label="mainAudioUrl"
+              className="input"
+              type="url"
+              {...register('mainAudioUrl')}
+              data-testid="mainAudioUrl"
+            />
           </div>
           { errors.mainAudioUrl && <p className="has-text-danger">{errors.mainAudioUrl.message}</p>}
         </div>
@@ -83,7 +138,7 @@ export default function ArticleMarkupForm({
         />
       </div>
     
-      { !isEmpty(errors) && <p className="has-text-danger">Des erreurs existent dans le formulaire { `: ${errors.root.random.message}` }</p>}
+      { !isEmpty(errors) && <p className="has-text-danger">Des erreurs existent dans le formulaire { errors?.root?.random ? `: ${errors?.root?.random?.message}` : '' }</p>}
       
       <div
         className="modal"

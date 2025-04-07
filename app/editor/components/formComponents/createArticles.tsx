@@ -29,6 +29,8 @@ export default function CreateArticleForm(): JSX.Element {
     reset,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: zodResolver(articleSchema),
     defaultValues: {
       title: "",

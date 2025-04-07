@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import ShipArticleForm from "./shipArticle";
+import ShipArticleForm from "@/app/editor/components/formComponents/shipArticle";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 import { useActionState } from "react";
 

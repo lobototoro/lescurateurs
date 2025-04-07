@@ -16,7 +16,7 @@ export function AddUrlsObjects({
 
   return (
     <>
-      <div className="field">
+      <div className="field" data-testid="url-inputs-container">
         {urls?.map(({ type, url, credits }, index: number) => (
           <UrlObjectItem
             key={`add-url-${index}`}
@@ -29,10 +29,18 @@ export function AddUrlsObjects({
           />
         ))}
         <div className="mt-5">
-          <div className="button is-primary is-size-6 has-text-white" onClick={addInputs}>
+          <div
+            className="button is-primary is-size-6 has-text-white"
+            data-testid="add-url"
+            onClick={addInputs}
+          >
             +
           </div>
-          <div className="button is-primary ml-2 is-size-6 has-text-white" onClick={removeInputs}>
+          <div
+            className="button is-primary ml-2 is-size-6 has-text-white"
+            data-testid="remove-url"
+            onClick={removeInputs}
+          >
             -
           </div>
         </div>

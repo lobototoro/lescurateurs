@@ -58,7 +58,7 @@ export async function createArticleAction(prevState: any, formData: FormData) {
   const publishedAt = '';
   const validated = 'false';
   const shipped = 'false';
-  const slug = slugify(title, { lower: true });
+  const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
 
   let articleError;
   try {
