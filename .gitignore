@@ -39,3 +39,10 @@ next-env.d.ts
 initdb.js
 initdb.cjs
 certificates
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
