@@ -9,6 +9,15 @@ export default defineConfig({
       provider: 'istanbul' // or 'v8'
     },
     setupFiles: ['vitest-setup.ts'],
+    exclude: [
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      'tests-e2e/**',
+      'tests-e2e-coverage/**',
+      'tests-e2e-coverage-final/**'
+    ],
   },
   resolve: {
     alias: {

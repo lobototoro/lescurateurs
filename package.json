@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run --coverage",
+    "test:all": "npx playwright test && npm run test",
+    "playwright": "npx playwright test",
     "update-snapshot": "vitest -u",
     "prepare": "husky"
   },

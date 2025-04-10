@@ -36,8 +36,6 @@ export default function DeleteArticleForm(): JSX.Element {
 
   const handleDelete = () => {
     startTransition(() => {
-      // Implement your delete logic here
-      console.log(`Deleting article with ID: ${selectedId}`);
       const formData = new FormData();
       formData.append("id", String(selectedId));
       formAction(formData);
