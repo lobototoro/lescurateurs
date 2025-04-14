@@ -45,7 +45,6 @@ export default function CreateUserForm() {
       formData.append('permissions', data.permissions);
       formData.append('createdAt', data.createdAt);
       formData.append('lastConnectionAt', data.lastConnectionAt);
-      console.info('Form data:', formData);
       formAction(formData);
     });
   };

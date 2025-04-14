@@ -9,8 +9,12 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run --coverage",
+    "test:all": "playwright test && npm run test",
+    "playwright": "playwright test",
     "update-snapshot": "vitest -u",
-    "prepare": "husky"
+    "prepare": "husky",
+    "merge:reports": "npx istanbul-merge --out ./final-coverage/final-coverage.json ./coverage/*.json .playwright-report/*.json",
+    "report:coverage": "npx istanbul report --include ./final-coverage/final-coverage.json text"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.2.1",
@@ -32,6 +36,7 @@
   },
   "devDependencies": {
     "@next/env": "^15.2.2",
+    "@playwright/test": "^1.51.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/better-sqlite3": "^7.6.9",
@@ -48,10 +53,13 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.5",
     "husky": "^9.1.6",
+    "istanbul-merge": "^2.0.0",
     "jsdom": "^26.0.0",
+    "nyc": "^17.1.0",
     "prettier": "^3.5.3",
     "ramda": "^0.30.1",
     "typescript": "^5.8.2",
+    "vite-plugin-istanbul": "^7.0.0",
     "vitest": "^2.1.9"
   },
   "overrides": {
