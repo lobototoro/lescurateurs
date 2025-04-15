@@ -3,6 +3,7 @@ import ShipArticleForm from "@/app/editor/components/formComponents/shipArticle"
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 import { useActionState } from "react";
 
+
 // Mock dependencies
 vi.mock("react", async () => {
   const actual = await vi.importActual("react");
@@ -20,6 +21,14 @@ vi.mock("@/app/editor/components/formComponents/searchArticle", () => ({
       <button onClick={() => setSelection(1)}>Select Article</button>
     </div>
   ),
+}));
+
+vi.mock("@/app/articleActions", () => ({
+  __esModule: true,
+  shipArticleAction: vi.fn().mockImplementation(() => ({
+    message: true,
+    text: "Success message",
+  })),
 }));
 
 describe("ShipArticleForm", () => {
