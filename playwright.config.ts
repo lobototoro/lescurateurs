@@ -14,7 +14,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests-e2e',
 
-  testIgnore: ['test-utils/**'],
+  testIgnore: ['./test-utils/**'],
 
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -80,7 +80,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build && npm run start',
+    command: 'npm run dev',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
     env: {
