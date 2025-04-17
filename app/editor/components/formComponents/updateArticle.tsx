@@ -130,7 +130,6 @@ export default function UpdateArticleForm(): JSX.Element {
 
       setCurrentArticle(response?.article as z.infer<typeof articleSchema>);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId]);
 
 
