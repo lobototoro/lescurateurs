@@ -74,7 +74,6 @@ export default function CreateUserForm() {
 
       subscription.unsubscribe();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, watch, clearErrors]);
 
   return (
