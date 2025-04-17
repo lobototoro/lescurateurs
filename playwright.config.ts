@@ -27,7 +27,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html', { open: 'never' }], ['json', { outputFile: './playwright-report/playwright-report.json' }]],
+  reporter: 'line',
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -81,8 +81,5 @@ export default defineConfig({
     command: 'npm run build && npm run start',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
-    env: {
-      USE_BABEL_PLUGIN_ISTANBUL: '1',
-    },
   },
 });
