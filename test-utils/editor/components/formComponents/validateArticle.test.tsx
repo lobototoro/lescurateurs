@@ -23,6 +23,14 @@ vi.mock("@/app/editor/components/formComponents/searchArticle", () => ({
   ),
 }));
 
+vi.mock("@/app/articleActions", () => ({
+  __esModule: true,
+  validateArticleAction: vi.fn().mockImplementation(() => ({
+    message: "Success",
+    text: "Success message",
+  })),
+}));
+
 describe("DeleteArticleForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
