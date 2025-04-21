@@ -25,6 +25,7 @@ import { isEmpty, urlsToArrayUtil } from "@/lib/utility-functions";
 export default function UpdateArticleForm(): JSX.Element {
   const [state, formAction] = useActionState(updateArticleAction, null);
 
+  const [identicalWarnMessage, setIdenticalWarnMessage] = useState<boolean>(false);
   const [currentArticle, setCurrentArticle] = useState<z.infer<typeof articleSchema>>();
   const [selectedId, setSelectedId] = useState<string | number>();
 
@@ -86,37 +87,42 @@ export default function UpdateArticleForm(): JSX.Element {
       formSentModal.current?.classList.remove('is-active');
   }
 
+  const checkForIdenticalArticle = (data: z.infer<typeof articleSchema>, article: z.infer<typeof articleSchema>) => {
+    if (R.equals(data, article)) {
+      setIdenticalWarnMessage(true);
+      openModal();
+
+      return true;
+    }
+    if (identicalWarnMessage) {
+      setIdenticalWarnMessage(false);
+    }
+    
+    return false;
+  };
+
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
     startTransition(() => {
-      if (R.equals(data, currentArticle) && isEmpty(errors)  ) {
-        setError('root.random', {
-          type: "error",
-          message: ": aucun changement dans les données.",
-        });
-        setTimeout(() => { // find a way to clear this on menu change or page unmount
-          clearErrors('root.random');
-        }, 2400);
-
-        return;
+      if (!checkForIdenticalArticle(data, currentArticle as z.infer<typeof articleSchema>) && isEmpty(errors)) {
+        const formData = new FormData();
+        formData.append('id', data.id as unknown as string);
+        formData.append('slug', data.slug as string);
+        formData.append('title', data.title as string);
+        formData.append('introduction', data.introduction as string);
+        formData.append('main', data.main as string);
+        formData.append('urls', data.urls as string);
+        formData.append('mainAudioUrl', data.mainAudioUrl as string);
+        formData.append('urlToMainIllustration', data.urlToMainIllustration as string);
+        formData.append('author', data.author as string);
+        formData.append('author_email', data.author_email as string);
+        formData.append('createdAt', data.createdAt as string);
+        formData.append('updatedAt', data.updatedAt as string);
+        formData.append('publishedAt', data.publishedAt as string);
+        formData.append('validated', data.validated as string);
+        formData.append('shipped', data.shipped as string);
+        formAction(formData);
+        openModal();
       }
-      const formData = new FormData();
-      formData.append('id', data.id as unknown as string);
-      formData.append('slug', data.slug as string);
-      formData.append('title', data.title as string);
-      formData.append('introduction', data.introduction as string);
-      formData.append('main', data.main as string);
-      formData.append('urls', data.urls as string);
-      formData.append('mainAudioUrl', data.mainAudioUrl as string);
-      formData.append('urlToMainIllustration', data.urlToMainIllustration as string);
-      formData.append('author', data.author as string);
-      formData.append('author_email', data.author_email as string);
-      formData.append('createdAt', data.createdAt as string);
-      formData.append('updatedAt', data.updatedAt as string);
-      formData.append('publishedAt', data.publishedAt as string);
-      formData.append('validated', data.validated as string);
-      formData.append('shipped', data.shipped as string);
-      formAction(formData);
-      openModal();
     });
   };
 
@@ -193,6 +199,7 @@ export default function UpdateArticleForm(): JSX.Element {
             state={state}
             closeModal={closeModal}
             target="update"
+            identicalWarnMessage={identicalWarnMessage}
           />
           <div className="is-flex is-justify-content-flex-end">
             <button
