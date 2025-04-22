@@ -27,7 +27,7 @@ export default function ArticleMarkupForm({
   state: { message: boolean; text: string } | null;
   closeModal: () => void;
   target: string;
-  identicalWarnMessage: boolean;
+  identicalWarnMessage?: boolean;
 }) {
 
   return (

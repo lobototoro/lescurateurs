@@ -97,7 +97,7 @@ export default function UpdateArticleForm(): JSX.Element {
     if (identicalWarnMessage) {
       setIdenticalWarnMessage(false);
     }
-    
+
     return false;
   };
 
@@ -161,6 +161,7 @@ export default function UpdateArticleForm(): JSX.Element {
     const urls = urlsToArray;
     setValue('urls', JSON.stringify([...urls, initialUrls]));
   }
+
   const removeInputs = () => {
     if (urlsToArray.length > 1) {
       setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
