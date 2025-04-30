@@ -9,7 +9,7 @@ import * as R from "ramda";
 import { fetchArticleById, updateArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from "@/models/article";
 import { articleSchema } from "@/models/articleSchema";
-import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
 import { isEmpty, urlsToArrayUtil } from "@/lib/utility-functions";
 
@@ -74,14 +74,16 @@ export default function UpdateArticleForm(): JSX.Element {
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
   const formSentModal = useRef<HTMLDivElement>(null);
-  const openModal = () => formSentModal.current?.classList.add('is-active');
+  const openModal = () =>
+    formSentModal.current && formSentModal.current?.classList.add('is-active');
   const closeModal = () => {
-    formSentModal.current?.classList.remove('is-active');
     if (state?.message) {
       setSelectedId(undefined);
       setCurrentArticle(undefined);
       reset();
     }
+    formSentModal.current &&
+      formSentModal.current?.classList.remove('is-active');
   }
 
   const onSubmit = (data: z.infer<typeof articleSchema>) => {

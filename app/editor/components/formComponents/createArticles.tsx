@@ -7,7 +7,7 @@ import{ z } from "zod";
 import { articleSchema } from "@/models/articleSchema";
 import { createArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from '@/models/article';
-import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import { urlsToArrayUtil } from "@/lib/utility-functions";
 
 /**
@@ -46,12 +46,13 @@ export default function CreateArticleForm(): JSX.Element {
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
   const formSentModal = useRef<HTMLDivElement>(null);
-  const openModal = () => formSentModal.current?.classList.add('is-active'); 
+  const openModal = () =>
+    formSentModal.current && formSentModal.current?.classList.add('is-active'); 
   const closeModal = () => {
     if (state?.message) {
       reset();
     }
-    formSentModal.current?.classList.remove('is-active');
+    formSentModal.current && formSentModal.current?.classList.remove('is-active');
   };
 
   const onSubmit = (data: z.infer<typeof articleSchema>) => {

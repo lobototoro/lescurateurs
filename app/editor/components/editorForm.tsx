@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 
-import HeaderNode from "./headerNode";
-import CreateArticleForm from "./createArticles";
+import HeaderNode from '@/app/editor/components/headerMenu';
+import CreateArticleForm from "@/app/editor/components/formComponents/createArticles";
 
 ;
-import UpdateArticleForm from "./updateArticle";
-import DeleteArticleForm from "./deleteArticle";
-import ValidateArticleForm from "./validateArticle";
-import ShipArticle from "./shipArticle";
-import CreateUserForm from "./createUser";
+import UpdateArticleForm from '@/app/editor/components/formComponents/updateArticle';
+import DeleteArticleForm from '@/app/editor/components/formComponents/deleteArticle';
+import ValidateArticleForm from '@/app/editor/components/formComponents/validateArticle';
+import ShipArticle from '@/app/editor/components/formComponents/shipArticle';
+import CreateUserForm from '@/app/editor/components/formComponents/createUser';
 
 export default function EditorForm({ role, permissions }: {
   role: string;

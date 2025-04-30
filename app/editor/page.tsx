@@ -1,7 +1,7 @@
 import { auth0 } from "@/lib/auth0"
 import { getUser } from "@/lib/users";
 import { User } from "@/models/user";
-import EditorForm from "./components/formComponents/editorForm";
+import EditorForm from "./components/editorForm";
 
 // import Header from "./components/formComponents/headerNode";
 

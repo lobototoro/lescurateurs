@@ -2,7 +2,7 @@
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
 import React, { useRef } from "react";
 
-export default function HeaderNode({
+export default function HeaderMenu({
   role,
   permissions,
   setSelection,

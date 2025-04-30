@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 import { Slugs } from "@/models/slugs";
-import { ArticleTitle } from "./single-elements/ArticleTitle";
+import { ArticleTitle } from "./ArticleTitle";
 
 export function PaginatedArticlesSearchDisplay({
   slugsList,

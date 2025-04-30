@@ -1,4 +1,4 @@
-import HeaderNode from '@/app/editor/components/formComponents/headerNode';
+import HeaderNode from '@/app/editor/components/headerMenu';
 import { render } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 
