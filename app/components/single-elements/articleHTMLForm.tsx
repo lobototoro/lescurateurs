@@ -31,7 +31,7 @@ export default function ArticleMarkupForm({
 }) {
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} data-testid="article-form">
       <div className="mt-6">
         <div className="field">
           <label className="label" aria-labelledby="title" htmlFor="title">
