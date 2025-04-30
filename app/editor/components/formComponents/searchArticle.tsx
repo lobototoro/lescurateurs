@@ -4,7 +4,7 @@ import { useState } from "react";
 import { searchForSlugs } from "@/app/searchActions";
 import { Slugs } from "@/models/slugs";
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
-import { PaginatedArticlesSearchDisplay } from "@/app/components/PaginatedArticlesSearch";
+import { PaginatedArticlesSearchDisplay } from "@/app/components/single-elements/paginatedArticlesSearch";
 
 type TargetTypes = 'search' | 'update' | 'delete' | 'validate' | 'ship';
 

@@ -1,4 +1,4 @@
-import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import { fireEvent, render } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 

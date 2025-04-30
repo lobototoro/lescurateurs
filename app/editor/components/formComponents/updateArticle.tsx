@@ -9,7 +9,7 @@ import * as R from "ramda";
 import { fetchArticleById, updateArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from "@/models/article";
 import { articleSchema } from "@/models/articleSchema";
-import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
 import { isEmpty, urlsToArrayUtil } from "@/lib/utility-functions";
 

@@ -7,7 +7,7 @@ import{ z } from "zod";
 import { articleSchema } from "@/models/articleSchema";
 import { createArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from '@/models/article';
-import ArticleMarkupForm from "@/app/components/articleHTMLForm";
+import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import { urlsToArrayUtil } from "@/lib/utility-functions";
 
 /**
