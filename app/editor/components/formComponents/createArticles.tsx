@@ -46,12 +46,13 @@ export default function CreateArticleForm(): JSX.Element {
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
   const formSentModal = useRef<HTMLDivElement>(null);
-  const openModal = () => formSentModal.current?.classList.add('is-active'); 
+  const openModal = () =>
+    formSentModal.current && formSentModal.current?.classList.add('is-active'); 
   const closeModal = () => {
     if (state?.message) {
       reset();
     }
-    formSentModal.current?.classList.remove('is-active');
+    formSentModal.current && formSentModal.current?.classList.remove('is-active');
   };
 
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
