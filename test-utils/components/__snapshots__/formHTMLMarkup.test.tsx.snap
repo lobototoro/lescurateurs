@@ -2,7 +2,9 @@
 
 exports[`should render correct markup 1`] = `
 <DocumentFragment>
-  <form>
+  <form
+    data-testid="article-form"
+  >
     <div
       class="mt-6"
     >
@@ -175,7 +177,9 @@ exports[`should render correct markup 1`] = `
 
 exports[`should render correct markup for update 1`] = `
 <DocumentFragment>
-  <form>
+  <form
+    data-testid="article-form"
+  >
     <div
       class="mt-6"
     >
