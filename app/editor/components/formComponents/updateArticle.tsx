@@ -102,7 +102,6 @@ export default function UpdateArticleForm(): JSX.Element {
 
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
     startTransition(() => {
-      console.log("data", data, currentArticle);
       if (!checkForIdenticalArticle(data, currentArticle as z.infer<typeof articleSchema>) && isEmpty(errors)) {
         const formData = new FormData();
         formData.append('id', data.id as unknown as string);
@@ -178,8 +177,6 @@ export default function UpdateArticleForm(): JSX.Element {
     event.preventDefault();
     setSelectedId(undefined);
   };
-
-  console.log('errors ', getValues('introduction'));
 
   return (
     <>

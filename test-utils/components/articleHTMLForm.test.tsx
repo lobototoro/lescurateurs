@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import ArticleMarkupForm from '@/app/components/articleHTMLForm';
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('ArticleMarkupForm', () => {
