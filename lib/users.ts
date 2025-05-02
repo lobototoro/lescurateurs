@@ -43,7 +43,6 @@ export const updateUser = cache(async (user: User) =>{
   // mutation for permissions (stringify)
   // mutation for createdAt (date) to string 'yyyy-mm-dd'
   const permissions = JSON.stringify(user.permissions);
-  const createdAt = new Date(user.createdAt).toISOString().slice(0, 10);
 
   db.prepare(`
     UPDATE users
@@ -52,9 +51,8 @@ export const updateUser = cache(async (user: User) =>{
       tiersServiceIdent = ?,
       role = ?,
       permissions = ?,
-      createdAt = ?
     WHERE email = ?`)
-    .run(user.email, user.tiersServiceIdent, user.role, permissions, createdAt, user.email);
+    .run(user.email, user.tiersServiceIdent, user.role, permissions);
 });
 
 export const deleteUser = cache(async (email: string) =>{
