@@ -169,4 +169,81 @@ describe("PaginatedSearchDisplay", () => {
     const nextButton = screen.getByTestId("next-button");
     expect(nextButton).property("disabled", true);
   });
+
+  it("calls handleSelectedUser with correct arguments for 'update' action", () => {
+    const mockHandleSelectedUser = vi.fn();
+
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockUsers}
+        defaultPage={1}
+        defaultLimit={2}
+        target="search"
+        context="user"
+        handleSelectedUser={mockHandleSelectedUser}
+      />
+    );
+
+    const updateButton = screen.getAllByText("udpate")[0];
+    fireEvent.click(updateButton);
+
+    expect(mockHandleSelectedUser).toHaveBeenCalledWith(mockUsers[0], "update");
+  });
+
+  it("calls handleSelectedUser with correct arguments for 'delete' action", () => {
+    const mockHandleSelectedUser = vi.fn();
+
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockUsers}
+        defaultPage={1}
+        defaultLimit={2}
+        target="search"
+        context="user"
+        handleSelectedUser={mockHandleSelectedUser}
+      />
+    );
+
+    const deleteButton = screen.getAllByText("delete")[0];
+    fireEvent.click(deleteButton);
+
+    expect(mockHandleSelectedUser).toHaveBeenCalledWith(mockUsers[0], "delete");
+  });
+
+  it("renders correct pagination links", () => {
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockSlugs}
+        defaultPage={1}
+        defaultLimit={2}
+        target="search"
+        context="article"
+        handleReference={mockHandleReference}
+      />
+    );
+
+    const paginationLinks = screen.getAllByRole("button", { name: /Goto page/i });
+    expect(paginationLinks.length).toBe(2); // Two pages
+    expect(paginationLinks[0]).toHaveTextContent('1');
+    expect(paginationLinks[1]).toHaveTextContent("2");
+  });
+
+  it("changes page when a pagination link is clicked", () => {
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockSlugs}
+        defaultPage={1}
+        defaultLimit={2}
+        target="search"
+        context="article"
+        handleReference={mockHandleReference}
+      />
+    );
+
+    const page2Link = screen.getByRole("button", { name: "Goto page 2" });
+    fireEvent.click(page2Link);
+
+    expect(screen.getByText("slug-3")).toBeDefined();
+    expect(screen.queryByText("slug-1")).toBeNull();
+  });
 });

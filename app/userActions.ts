@@ -1,6 +1,6 @@
 "use server";
 import { auth0 } from "@/lib/auth0";
-import { createUser, updateUser } from '@/lib/users';
+import { createUser, updateUser, getAllUsers } from '@/lib/users';
 import { User } from "@/models/user";
 
 export async function createUserAction(preState: any, formData: FormData) {
@@ -76,5 +76,31 @@ export async function updateUserAction(preState: any, formData: FormData) {
   return {
     message: true,
     text: 'L’utilisateur a été créé avec succès',
+  }
+}
+
+export async function getUsersList() {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to create an article'
+    }
+  }
+
+  try {
+    const usersList = await getAllUsers() as unknown as User[];
+
+    return {
+      message: true,
+      usersList,
+    }
+  } catch (error) {
+    console.error('[!] while getting all users ', error);
+
+    return {
+      message: false,
+      text: 'Une erreur est survenue lors de la récupération de la liste des  utilisateurs'
+    }
   }
 }

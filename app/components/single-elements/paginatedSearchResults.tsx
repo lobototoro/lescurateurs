@@ -13,32 +13,38 @@ export function PaginatedSearchDisplay({
   target,
   context,
   handleReference,
+  handleSelectedUser,
 }: {
-  itemList: Slugs[] | z.infer<typeof userSchema>[],
-  defaultPage: number,
-  defaultLimit: number,
-  target: string,
-  context: 'article' | 'user',
-  handleReference: (id: number, itemName?: string) => void,
+  itemList: Slugs[] | z.infer<typeof userSchema>[];
+  defaultPage: number;
+  defaultLimit: number;
+  target: string;
+  context: 'article' | 'user';
+  handleReference?: (id: number, itemName?: string) => void;
+  handleSelectedUser?: (user: z.infer<typeof userSchema>, action: 'update' | 'delete') => void;
 }) {
-  const [activePage, setActivePage] = useState<number>(Number(defaultPage))
-  const totalPages = Math.ceil(itemList.length / Number(defaultLimit))
-  const offset = Number(defaultLimit) * (activePage - 1)
-  const paginatedItems = itemList.slice(offset, Number(defaultLimit) * activePage)
+  const [activePage, setActivePage] = useState<number>(Number(defaultPage));
+  const totalPages = Math.ceil(itemList.length / Number(defaultLimit));
+  const offset = Number(defaultLimit) * (activePage - 1);
+  const paginatedItems = itemList.slice(
+    offset,
+    Number(defaultLimit) * activePage
+  );
 
   const handleChangePage = (page: number) => {
-    setActivePage(page)
-  }
+    setActivePage(page);
+  };
 
   const swapValue = (item: Slugs | z.infer<typeof userSchema>) => {
-    const result = context === 'article' && 'slug' in item
-                        ? item.slug
-                        : 'email' in item
-                        ? item.email
-                        : '';
+    const result =
+      context === 'article' && 'slug' in item
+        ? item.slug
+        : 'email' in item
+          ? item.email
+          : '';
 
     return result;
-  }
+  };
 
   return (
     <section className="section">
@@ -56,7 +62,7 @@ export function PaginatedSearchDisplay({
         <tbody>
           {paginatedItems.map((item: Slugs | z.infer<typeof userSchema>) => {
             return (
-              <tr key={`slug-${item?.id}`}>
+              <tr key={`item-${item?.id}`}>
                 <td>{item?.id}</td>
                 <td>
                   <ArticleTitle
@@ -68,30 +74,67 @@ export function PaginatedSearchDisplay({
                 </td>
                 <td>{item?.createdAt}</td>
                 <td>
-                  {['search'].includes(target) && (
+                  {context === 'article' && ['search'].includes(target) && (
                     <button
                       className="button is-size-6"
-                      onClick={() => handleReference(0, swapValue(item))}
+                      onClick={() =>
+                        handleReference && handleReference(0, swapValue(item))
+                      }
                     >
                       validez
                     </button>
                   )}
 
-                  {['update', 'delete', 'validate', 'ship'].includes(
-                    target
-                  ) && (
+                  {context === 'article' &&
+                    ['update', 'delete', 'validate', 'ship'].includes(
+                      target
+                    ) && (
+                      <button
+                        className="button mr-4"
+                        data-testid="selection-button"
+                        onClick={() => {
+                          if ('articleId' in item) {
+                            handleReference &&
+                              handleReference(item.articleId as number);
+                          } else if ('id' in item) {
+                            handleReference &&
+                              handleReference(item.id as number);
+                          }
+                        }}
+                      >
+                        Sélectionner
+                      </button>
+                    )}
+
+                    {context === 'user' && (
+                      <button
+                        className="button mr-4"
+                        data-testid="selection-button"
+                        onClick={() => {
+                          if ('id' in item) {
+                            handleSelectedUser &&
+                              handleSelectedUser(item as z.infer<typeof userSchema>, 'update');
+                          }
+                        }}
+                      >
+                        udpate
+                      </button>
+                    )}
+                  {context === 'user' && (
                     <button
                       className="button mr-4"
                       data-testid="selection-button"
                       onClick={() => {
-                        if ('articleId' in item) {
-                          handleReference(item.articleId as number);
-                        } else if ('id' in item) {
-                          handleReference(item.id as number);
+                        if ('id' in item) {
+                          handleSelectedUser &&
+                            handleSelectedUser(
+                              item as z.infer<typeof userSchema>,
+                              'delete'
+                            );
                         }
                       }}
                     >
-                      Sélectionner
+                      delete
                     </button>
                   )}
                 </td>

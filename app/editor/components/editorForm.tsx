@@ -11,6 +11,7 @@ import DeleteArticleForm from '@/app/editor/components/formComponents/deleteArti
 import ValidateArticleForm from '@/app/editor/components/formComponents/validateArticle';
 import ShipArticle from '@/app/editor/components/formComponents/shipArticle';
 import CreateUserForm from '@/app/editor/components/formComponents/createUser';
+import UpdateUserForm from "./formComponents/updateUser";
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -28,14 +29,14 @@ export default function EditorForm({ role, permissions }: {
       />
       {/* <SearchArticle target="search" /> */}
       {/* <p>{ selection }</p> */}
-      { (selection === 'createarticles') && <CreateArticleForm /> }
-      { (selection === 'updatearticles') && <UpdateArticleForm /> }
-      { (selection === 'deletearticles') && <DeleteArticleForm /> }
-      { (selection === 'validatearticles') && <ValidateArticleForm /> }
-      { (selection === 'shiparticles') && <ShipArticle /> }
-      { (selection === 'createuser') && <CreateUserForm /> }
+      {selection === 'createarticles' && <CreateArticleForm />}
+      {selection === 'updatearticles' && <UpdateArticleForm />}
+      {selection === 'deletearticles' && <DeleteArticleForm />}
+      {selection === 'validatearticles' && <ValidateArticleForm />}
+      {selection === 'shiparticles' && <ShipArticle />}
+      {selection === 'createuser' && <CreateUserForm />}
+      {selection === 'updateuser' && <UpdateUserForm />}
       {/* 
-      { (selection === 'updateuser') && <UpdateUserForm /> }
       { (selection === 'deleteuser') && <DeleteUserForm /> }
       { (selection === 'enablemaintenance') && <EnableMaintenanceForm /> } */}
     </>
