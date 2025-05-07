@@ -62,6 +62,24 @@ describe('ArticleMarkupForm', () => {
     expect(mockHandleSubmit).toHaveBeenCalled();
   });
 
+  it('renders the modal with the correct state message', () => {
+    const state = { message: true, text: 'Form submitted successfully' };
+
+    render(<ArticleMarkupForm {...defaultProps} state={state} />);
+
+    expect(screen.getByText('Form submitted successfully')).toBeDefined();
+  });
+
+  // it('calls closeModal when the modal is clicked', () => {
+  //   const formSentModal = { current: document.createElement('div') };
+
+  //   render(<ArticleMarkupForm {...defaultProps} formSentModal={formSentModal} />);
+
+  //   fireEvent.click(screen.getByTestId('create-article-modal'));
+
+  //   expect(mockCloseModal).toHaveBeenCalled();
+  // });
+
   it('disables the submit button when there are errors', () => {
     const errors = { title: { message: 'Title is required' } };
 

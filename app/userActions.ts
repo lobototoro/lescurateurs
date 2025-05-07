@@ -1,6 +1,6 @@
 "use server";
 import { auth0 } from "@/lib/auth0";
-import { createUser, updateUser, getAllUsers } from '@/lib/users';
+import { createUser, updateUser, getAllUsers, deleteUser } from '@/lib/users';
 import { User } from "@/models/user";
 
 export async function createUserAction(preState: any, formData: FormData) {
@@ -102,5 +102,37 @@ export async function getUsersList() {
       message: false,
       text: 'Une erreur est survenue lors de la récupération de la liste des  utilisateurs'
     }
+  }
+}
+
+export async function deleteUserAction(preState: any, formData: FormData) {
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    return {
+      message: false,
+      text: 'You must be logged in to create an article'
+    }
+  }
+
+  const email = formData.get('email');
+
+  let usererror;
+  try {
+    await deleteUser(email as string);
+  } catch (error) {
+    usererror = error;
+  }
+  if (usererror) {
+    console.error('[!] while deleting new user ', usererror);
+
+    return {
+      message: false,
+      text: 'Une erreur est survenue lors de la suppression de l’utilisateur'
+    }
+  }
+
+  return {
+    message: true,
+    text: 'L’utilisateur a été supprimé avec succès',
   }
 }
