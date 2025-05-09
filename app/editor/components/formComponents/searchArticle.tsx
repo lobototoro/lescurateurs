@@ -66,6 +66,13 @@ export default function SearchArticle({
 
   return (
     <div className="container">
+      <ArticleTitle
+        size="medium"
+        level="h2"
+        color="secondary"
+        text={target}
+        spacings="mt-3 mb-5"
+      />
       <form onSubmit={handleSubmit} role="search">
         <div className="is-flex is-flex-direction-row is-flex-justify-space-between is-flex-align-items-center">
           <label htmlFor="search" className="is-hidden">Search</label>

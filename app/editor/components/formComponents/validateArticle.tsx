@@ -5,6 +5,7 @@ import { JSX, startTransition, useActionState, useEffect, useRef, useState } fro
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
 import { validateArticleAction } from "@/app/articleActions";
 import ModalWithCTA from "@/app/components/single-elements/modalWithCTA";
+import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
 
 export default function ValidateArticleForm(): JSX.Element {
   const [state, formAction, isPending] = useActionState(validateArticleAction, null);
@@ -54,15 +55,8 @@ export default function ValidateArticleForm(): JSX.Element {
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${state?.message ? "is-success" : "is-danger"}`}>
-          <p className="content">
-            {notification}<br />
-            <span>Cette notification se fermera d'elle-même</span>
-          </p>
-        </div>
-      )}
-      {!notification && <SearchArticle target="delete" setSelection={setSelectedId} />}
+      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {!notification && <SearchArticle target="validate" setSelection={setSelectedId} />}
       <ModalWithCTA
         modalRef={modalRef as React.RefObject<HTMLDivElement>}
         title="Validation de l'article"
