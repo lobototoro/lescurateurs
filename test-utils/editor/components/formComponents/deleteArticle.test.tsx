@@ -1,32 +1,10 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-
 import DeleteArticleForm from "@/app/editor/components/formComponents/deleteArticle";
 import { deleteArticleAction } from "@/app/articleActions";
+import { describe, expect, it, vi } from "vitest";
 
-// Mock dependencies
 vi.mock("@/app/articleActions", () => ({
-  deleteArticleAction: vi.fn().mockImplementationOnce(() => {
-    return {
-      message: true,
-      text: "L'article a été supprimé avec succès",
-    };
-  }).mockImplementationOnce(() => {
-    return {
-      message: false,
-      text: "Erreur lors de la suppression de l'article",
-    };
-  }).mockImplementationOnce(() => {
-    return {
-      message: true,
-      text: "Cette notification se fermera d'elle-même",
-    };
-  }).mockImplementationOnce(() => {
-    return {
-      message: false,
-      text: "Erreur lors de la suppression de l'article",
-    };
-  })
+  deleteArticleAction: vi.fn(),
 }));
 
 vi.mock("@/app/editor/components/formComponents/searchArticle", () => ({
@@ -38,61 +16,80 @@ vi.mock("@/app/editor/components/formComponents/searchArticle", () => ({
   ),
 }));
 
+vi.mock("@/app/components/single-elements/modalWithCTA", () => ({
+  __esModule: true,
+  default: ({
+    modalRef,
+    ctaAction,
+    cancelAction,
+  }: {
+    modalRef: React.RefObject<HTMLDivElement>;
+    ctaAction: () => void;
+    cancelAction: () => void;
+  }) => (
+    <div ref={modalRef} data-testid="modal">
+      <button onClick={ctaAction}>Confirm Delete</button>
+      <button onClick={cancelAction}>Cancel</button>
+    </div>
+  ),
+}));
+
 describe("DeleteArticleForm", () => {
-  it("renders the component correctly", () => {
+  it("renders the search article component initially", () => {
     render(<DeleteArticleForm />);
     expect(screen.getByTestId("search-article")).toBeDefined();
   });
 
   it("opens the modal when an article is selected", async () => {
-    render(<DeleteArticleForm />);
-    const selectButton = screen.getByText("Select Article");
-    fireEvent.click(selectButton);
+    const { getByTestId } = render(<DeleteArticleForm />);
+    fireEvent.click(screen.getByText("Select Article"));
 
     await waitFor(() => {
-      const modal = screen.getByText("Voulez-vous vraiment supprimer cet article ?");
-      expect(modal).toBeDefined();
+      expect(getByTestId("modal").classList.contains("is-active")).toBe(true);
     });
   });
 
-  it("closes the modal when cancel button is clicked", async () => {
-    render(<DeleteArticleForm />);
-    const selectButton = screen.getByText("Select Article");
-    fireEvent.click(selectButton);
+  it("calls the delete action when confirm delete is clicked", async () => {
+    vi.mocked(deleteArticleAction).mockResolvedValue({ message: true, text: "Mocked success message" });
 
-    const cancelButton = await screen.findByText("Annuler");
-    fireEvent.click(cancelButton);
+    const { getByTestId } = render(<DeleteArticleForm />);
+    fireEvent.click(screen.getByText("Select Article"));
 
     await waitFor(() => {
-      const modal = screen.getByTestId("delete-article-modal");
-      expect(modal?.classList.contains("is-active")).toBe(false);
+      expect(getByTestId("modal").classList.contains("is-active")).toBe(true);
     });
-  });
 
-  it("calls the delete action when delete button is clicked", async () => {
-    render(<DeleteArticleForm />);
-    const selectButton = screen.getByText("Select Article");
-    fireEvent.click(selectButton);
-
-    const deleteButton = await screen.findByText("Supprimer");
-    fireEvent.click(deleteButton);
+    fireEvent.click(screen.getByText("Confirm Delete"));
 
     await waitFor(() => {
       expect(deleteArticleAction).toHaveBeenCalled();
     });
   });
 
-  it("displays a notification after performing an action", async () => {
-    render(<DeleteArticleForm />);
-    const selectButton = screen.getByText("Select Article");
-    fireEvent.click(selectButton);
-
-    const deleteButton = await screen.findByText("Supprimer");
-    fireEvent.click(deleteButton);
+  it("closes the modal when cancel is clicked", async () => {
+    const { getByTestId } = render(<DeleteArticleForm />);
+    fireEvent.click(screen.getByText("Select Article"));
 
     await waitFor(() => {
-      const notification = screen.getByText(/Cette notification se fermera d'elle-même/);
-      expect(notification).toBeDefined();
+      expect(getByTestId("modal").classList.contains("is-active")).toBe(true);
+    });
+
+    fireEvent.click(screen.getByText("Cancel"));
+
+    await waitFor(() => {
+      expect(getByTestId("modal").classList.contains("is-active")).toBe(false);
+    });
+  });
+
+  it("displays a notification after the delete action", async () => {
+    vi.mocked(deleteArticleAction).mockResolvedValue({ text: "Article deleted successfully", message: true });
+
+    render(<DeleteArticleForm />);
+    fireEvent.click(screen.getByText("Select Article"));
+    fireEvent.click(screen.getByText("Confirm Delete"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Article deleted successfully")).toBeDefined();
     });
   });
 });

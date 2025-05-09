@@ -336,6 +336,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   
   return {
     message: true,
-    text: "L'article a été mis en MeP avec succès"
+    text: ship ? "L'article a été mis en MeP avec succès"
+      : "L'article a été mis offline avec succès"
   }
 }
