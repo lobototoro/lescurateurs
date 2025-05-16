@@ -4,6 +4,8 @@ import { JSX, startTransition, useActionState, useEffect, useRef, useState } fro
 
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
 import { deleteArticleAction } from "@/app/articleActions";
+import ModalWithCTA from "@/app/components/single-elements/modalWithCTA";
+import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
 
 export default function DeleteArticleForm(): JSX.Element {
   const [state, formAction, isPending] = useActionState(deleteArticleAction, null);
@@ -39,12 +41,12 @@ export default function DeleteArticleForm(): JSX.Element {
       const formData = new FormData();
       formData.append("id", String(selectedId));
       formAction(formData);
-      setSelectedId("");
-      closeDeleteModal();
+      handleCancel();
     });
   };
 
-  const closeDeleteModal = () => {
+  const handleCancel = () => {
+    setSelectedId('');
     if (modalRef.current) {
       modalRef.current.classList.remove("is-active");
     }
@@ -52,38 +54,20 @@ export default function DeleteArticleForm(): JSX.Element {
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${state?.message ? "is-success" : "is-danger"}`}>
-          <p className="content">
-            {notification}<br />
-            <span>Cette notification se fermera d'elle-même</span>
-          </p>
-        </div>
+      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {!notification && (
+        <SearchArticle target="delete" setSelection={setSelectedId} />
       )}
-      {!notification && <SearchArticle target="delete" setSelection={setSelectedId} />}
-      <div className="modal" ref={modalRef} data-testid="delete-article-modal">
-        <div className="modal-background" onClick={(e: React.MouseEvent) => {
-          e.preventDefault();
-          closeDeleteModal()
-        }}></div>
-        <div className="modal-content">
-          Voulez-vous vraiment supprimer cet article ?
-          <div className="buttons">
-            <button className="button is-danger" onClick={() => handleDelete()}>
-              {isPending ? 'Chargement' : 'Supprimer'}
-            </button>
-            <button className="button" onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                setSelectedId("");
-                closeDeleteModal();
-              }}
-              disabled={isPending}
-            >
-              Annuler
-            </button>
-          </div>
-        </div>
-      </div>
+      <ModalWithCTA
+        modalRef={modalRef as React.RefObject<HTMLDivElement>}
+        title="Supprimer un article"
+        description="Voulez-vous vraiment supprimer cet article ?"
+        ctaText={isPending ? 'Chargement' : 'Supprimer'}
+        ctaAction={handleDelete}
+        cancelAction={handleCancel}
+        cancelText="Annuler"
+        onClose={handleCancel}
+      />
     </>
   );
 };

@@ -139,29 +139,6 @@ exports[`should render correct markup 1`] = `
       </div>
     </div>
     <div
-      class="modal"
-      data-testid="create-article-modal"
-    >
-      <div
-        class="modal-background"
-      />
-      <div
-        class="modal-content is-danger"
-      >
-        <p
-          class="is-size-6 has-text-white has-background-primary p-6"
-        />
-        <footer>
-          <button
-            aria-label="accept button"
-            class="button"
-          >
-            OK
-          </button>
-        </footer>
-      </div>
-    </div>
-    <div
       class="field mt-5"
     >
       <input
@@ -312,29 +289,6 @@ exports[`should render correct markup for update 1`] = `
             -
           </div>
         </div>
-      </div>
-    </div>
-    <div
-      class="modal"
-      data-testid="create-article-modal"
-    >
-      <div
-        class="modal-background"
-      />
-      <div
-        class="modal-content is-danger"
-      >
-        <p
-          class="is-size-6 has-text-white has-background-primary p-6"
-        />
-        <footer>
-          <button
-            aria-label="accept button"
-            class="button"
-          >
-            OK
-          </button>
-        </footer>
       </div>
     </div>
     <div

@@ -4,8 +4,10 @@ import { JSX, startTransition, useActionState, useEffect, useRef, useState } fro
 
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
 import { validateArticleAction } from "@/app/articleActions";
+import ModalWithCTA from "@/app/components/single-elements/modalWithCTA";
+import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
 
-export default function DeleteArticleForm(): JSX.Element {
+export default function ValidateArticleForm(): JSX.Element {
   const [state, formAction, isPending] = useActionState(validateArticleAction, null);
   const [selectedId, setSelectedId] = useState<number | string>("");
   const [notification, setNotification] = useState<string>("");
@@ -45,6 +47,7 @@ export default function DeleteArticleForm(): JSX.Element {
   };
 
   const closeDeleteModal = () => {
+    setSelectedId('');
     if (modalRef.current) {
       modalRef.current.classList.remove("is-active");
     }
@@ -52,41 +55,20 @@ export default function DeleteArticleForm(): JSX.Element {
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${state?.message ? "is-success" : "is-danger"}`}>
-          <p className="content">
-            {notification}<br />
-            <span>Cette notification se fermera d'elle-même</span>
-          </p>
-        </div>
-      )}
-      {!notification && <SearchArticle target="delete" setSelection={setSelectedId} />}
-      <div className="modal" ref={modalRef} data-testid="delete-article-modal">
-        <div className="modal-background" onClick={(e: React.MouseEvent) => {
-          e.preventDefault();
-          closeDeleteModal()
-        }}></div>
-        <div className="modal-content">
-          Voulez-vous vraiment valider cet article ?
-          <div className="buttons">
-            <button className="button is-danger" onClick={() => handleValidate('true')}>
-              Valider
-            </button>
-            <button className="button is-danger" onClick={() => handleValidate('false')}>
-              Invalider
-            </button>
-            <button className="button" onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                setSelectedId("");
-                closeDeleteModal();
-              }}
-              disabled={isPending}
-            >
-              Annuler
-            </button>
-          </div>
-        </div>
-      </div>
+      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {!notification && <SearchArticle target="validate" setSelection={setSelectedId} />}
+      <ModalWithCTA
+        modalRef={modalRef as React.RefObject<HTMLDivElement>}
+        title="Validation de l'article"
+        description="Voulez-vous vraiment valider cet article ?"
+        ctaText="Valider"
+        ctaAction={() => handleValidate('true')}
+        cancelAction={() => handleValidate('false')}
+        cancelText="Invalider"
+        onClose={() => {
+          closeDeleteModal();
+        }}
+      />
     </>
   );
 };

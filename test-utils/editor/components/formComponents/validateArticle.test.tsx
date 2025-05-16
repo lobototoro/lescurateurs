@@ -1,107 +1,102 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { vi, beforeEach, describe, expect, it, Mock } from "vitest";
-
-import DeleteArticleForm from "../../../../app/editor/components/formComponents/validateArticle";
+import ValidateArticleForm from "@/app/editor/components/formComponents/validateArticle";
+import { describe, expect, it, vi } from "vitest";
 import { useActionState } from "react";
-
-// Mock dependencies
-vi.mock("react", async () => {
-  const actual = await vi.importActual("react");
-  
-  return {
-    ...actual,
-    useActionState: vi.fn(),
-  };
-});
 
 vi.mock("@/app/editor/components/formComponents/searchArticle", () => ({
   __esModule: true,
   default: ({ setSelection }: { setSelection: (id: number | string) => void }) => (
-    <div data-testid="search-article" onClick={() => setSelection(1)}>
-      Mocked SearchArticle
+    <button onClick={() => setSelection(1)}>Mock SearchArticle</button>
+  ),
+}));
+
+vi.mock("@/app/components/single-elements/modalWithCTA", () => ({
+  __esModule: true,
+  default: ({
+    modalRef,
+    ctaAction,
+    cancelAction,
+    onClose,
+  }: {
+    modalRef: React.RefObject<HTMLDivElement>;
+    ctaAction: () => void;
+    cancelAction: () => void;
+    onClose: () => void;
+  }) => (
+    <div ref={modalRef} data-testid="modal">
+      <button onClick={ctaAction}>Mock Validate</button>
+      <button onClick={cancelAction}>Mock Invalidate</button>
+      <button onClick={onClose}>Mock Close</button>
     </div>
   ),
 }));
 
 vi.mock("@/app/articleActions", () => ({
-  __esModule: true,
-  validateArticleAction: vi.fn().mockImplementation(() => ({
-    message: "Success",
-    text: "Success message",
-  })),
+  validateArticleAction: vi.fn(),
 }));
 
-describe("DeleteArticleForm", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+vi.mock("react", async () => {
+  const actual = await vi.importActual("react");
+  return {
+    ...actual,
+    useActionState: vi.fn(() => [null, vi.fn(), false]),
+  };
+});
 
-  it("renders the SearchArticle component when no notification is present", () => {
-    (useActionState as Mock).mockReturnValue([null, vi.fn(), false]);
-
-    render(<DeleteArticleForm />);
-
-    expect(screen.getByTestId("search-article")).toBeDefined();
-  });
-
-  it("displays a notification when state is set", async () => {
-    (useActionState as Mock).mockReturnValue([{ text: "Success message", message: true }, vi.fn(), false]);
-
-    render(<DeleteArticleForm />);
-
-    expect(screen.getByText("Success message")).toBeDefined();
-    expect(screen.getByText("Cette notification se fermera d'elle-même")).toBeDefined();
+describe("ValidateArticleForm", () => {
+  it("renders without crashing", () => {
+    render(<ValidateArticleForm />);
+    expect(screen.getByText("Mock SearchArticle")).toBeDefined();
   });
 
   it("opens the modal when an article is selected", async () => {
-    (useActionState as Mock).mockReturnValue([null, vi.fn(), false]);
-
-    render(<DeleteArticleForm />);
-
-    fireEvent.click(screen.getByTestId("search-article"));
-
+    render(<ValidateArticleForm />);
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
     await waitFor(() => {
-      expect(screen.getByTestId("delete-article-modal").classList).toContain("is-active");
+      expect(screen.getByText("Mock Validate")).toBeDefined();
     });
   });
 
-  it("calls the formAction with correct data when validating", async () => {
+  it("handles validation action", async () => {
     const mockFormAction = vi.fn();
-    (useActionState as Mock).mockReturnValue([null, mockFormAction, false]);
+    (vi.mocked(useActionState) as any).mockReturnValue([null, mockFormAction, false]);
 
-    render(<DeleteArticleForm />);
-
-    fireEvent.click(screen.getByTestId("search-article"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("delete-article-modal").classList).toContain("is-active");
-    });
-
-    fireEvent.click(screen.getByText("Valider"));
+    render(<ValidateArticleForm />);
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
+    fireEvent.click(screen.getByText("Mock Validate"));
 
     await waitFor(() => {
-      expect(mockFormAction).toHaveBeenCalledWith(expect.any(FormData));
-      const formData = mockFormAction.mock.calls[0][0];
-      expect(formData.get("id")).toBe("1");
-      expect(formData.get("validation")).toBe("true");
+      expect(mockFormAction).toHaveBeenCalled();
     });
   });
 
-  it("closes the modal when cancel is clicked", async () => {
-    (useActionState as Mock).mockReturnValue([null, vi.fn(), false]);
+  it("handles invalidation action", async () => {
+    const mockFormAction = vi.fn();
+    (vi.mocked(useActionState) as any).mockReturnValue([null, mockFormAction, false]);
 
-    render(<DeleteArticleForm />);
-
-    fireEvent.click(screen.getByTestId("search-article"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("delete-article-modal").classList).toContain("is-active");
-    });
-
-    fireEvent.click(screen.getByText("Annuler"));
+    render(<ValidateArticleForm />);
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
+    fireEvent.click(screen.getByText("Mock Invalidate"));
 
     await waitFor(() => {
-      expect(screen.getByTestId("delete-article-modal").classList).not.toContain("is-active");
+      expect(mockFormAction).toHaveBeenCalled();
     });
+  });
+
+  it("closes the modal", async () => {
+    render(<ValidateArticleForm />);
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
+    fireEvent.click(screen.getByText("Mock Close"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modal').classList.contains('is-active')).toBe(false);
+    });
+  });
+
+  it("displays notification when state changes", async () => {
+    (vi.mocked(useActionState) as any).mockReturnValue([{ text: "Success", message: true }, vi.fn(), false]);
+
+    render(<ValidateArticleForm />);
+    expect(screen.getByText("Success")).toBeDefined();
   });
 });

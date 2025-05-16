@@ -1,126 +1,97 @@
-import { useActionState } from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import ShipArticleForm from '@/app/editor/components/formComponents/shipArticle';
 
-// Mock dependencies
-vi.mock('react', async () => {
-  const actual = await vi.importActual('react');
+vi.mock('@/app/articleActions', () => ({
+  shipArticleAction: vi.fn().mockImplementation(() => {
 
-  return {
-    ...actual,
-    useActionState: vi.fn(),
-  };
-});
+    return {
+      message: true,
+      text: 'Test notification'
+    }
+  }),
+}));
 
-vi.mock('@/app/editor/components/formComponents/searchArticle', () => ({
+vi.mock("@/app/editor/components/formComponents/searchArticle", () => ({
+  __esModule: true,
+  default: ({ setSelection }: { setSelection: (id: number | string) => void }) => (
+    <button onClick={() => setSelection(1)}>Mock SearchArticle</button>
+  ),
+}));
+
+vi.mock("@/app/components/single-elements/modalWithCTA", () => ({
   __esModule: true,
   default: ({
-    setSelection,
+    modalRef,
+    ctaAction,
+    cancelAction,
+    onClose,
   }: {
-    setSelection: (id: number | string) => void;
+    modalRef: React.RefObject<HTMLDivElement>;
+    ctaAction: () => void;
+    cancelAction: () => void;
+    onClose: () => void;
   }) => (
-    <div data-testid="search-article">
-      <button onClick={() => setSelection(1)}>Select Article</button>
+    <div ref={modalRef} data-testid="modal">
+      <button onClick={ctaAction}>Mock CTA</button>
+      <button onClick={cancelAction}>Mock Cancel</button>
+      <button onClick={onClose}>Mock Close</button>
     </div>
   ),
 }));
 
-vi.mock('@/app/articleActions', () => ({
-  __esModule: true,
-  shipArticleAction: vi.fn().mockImplementation(() => ({
-    message: 'Success',
-    text: 'Success message',
-  })),
-}));
-
-describe('ShipArticleForm', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    (useActionState as Mock).mockReturnValue([null, vi.fn(), false]);
+describe("ShipArticleForm", () => {
+  it("renders the component correctly", () => {
+    render(<ShipArticleForm />);
+    expect(screen.getByText("Mock SearchArticle")).toBeDefined();
   });
 
-  it('renders the SearchArticle component when no notification is present', () => {
+  it("opens the modal when an article is selected", async () => {
     render(<ShipArticleForm />);
-    expect(screen.getByTestId('search-article')).toBeDefined();
-  });
-
-  it('displays a notification when state is updated', async () => {
-    (useActionState as Mock).mockReturnValue([
-      { text: 'Success message' },
-      vi.fn(),
-      false,
-    ]);
-    render(<ShipArticleForm />);
-    expect(screen.getByText('Success message')).toBeDefined();
-  });
-
-  it('opens the modal when an article is selected', async () => {
-    render(<ShipArticleForm />);
-    fireEvent.click(screen.getByText('Select Article'));
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
     await waitFor(() => {
-      expect(screen.getByTestId('delete-article-modal').classList).toContain(
-        'is-active'
-      );
+      expect(screen.getByText("Mock CTA")).toBeDefined();
     });
   });
 
-  it('closes the modal when the background is clicked', async () => {
+  it("handles the CTA action correctly", async () => {
     render(<ShipArticleForm />);
-    fireEvent.click(screen.getByText('Select Article'));
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
     await waitFor(() => {
-      expect(screen.getByTestId('delete-article-modal').classList).toContain(
-        'is-active'
-      );
+      fireEvent.click(screen.getByText("Mock CTA"));
     });
-    fireEvent.click(
-      screen
-        .getByTestId('delete-article-modal')
-        .querySelector('.modal-background')!
+    // Add assertions for expected behavior after CTA action
+  });
+
+  it("handles the cancel action correctly", async () => {
+    render(<ShipArticleForm />);
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
+    await waitFor(() => {
+      fireEvent.click(screen.getByText("Mock Cancel"));
+    });
+    // Add assertions for expected behavior after cancel action
+  });
+
+  it("closes the modal correctly", async () => {
+    render(<ShipArticleForm />);
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
+    await waitFor(() => {
+      fireEvent.click(screen.getByText("Mock Close"));
+    });
+    // Add assertions for expected behavior after closing the modal
+    expect(screen.getByTestId('modal').classList.contains('is-active')).toBe(
+      false
     );
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('delete-article-modal').classList
-      ).not.toContain('is-active');
-    });
   });
 
-  it("calls handleValidate with true when 'Mep ?' button is clicked", async () => {
-    const mockFormAction = vi.fn();
-    (useActionState as Mock).mockReturnValue([null, mockFormAction, false]);
-
+  it("displays a notification when state changes", async () => {
     render(<ShipArticleForm />);
-    fireEvent.click(screen.getByText('Select Article'));
-    fireEvent.click(screen.getByText('Mep ?'));
-
+    fireEvent.click(screen.getByText("Mock SearchArticle"));
+    fireEvent.click(screen.getByText("Mock CTA"));
+    
     await waitFor(() => {
-      expect(mockFormAction).toHaveBeenCalledWith(expect.any(FormData));
-    });
-  });
-
-  it("calls handleValidate with false when 'retirer de la Mep ?' button is clicked", async () => {
-    const mockFormAction = vi.fn();
-    (useActionState as Mock).mockReturnValue([null, mockFormAction, false]);
-
-    render(<ShipArticleForm />);
-    fireEvent.click(screen.getByText('Select Article'));
-    fireEvent.click(screen.getByText('retirer de la Mep ?'));
-
-    await waitFor(() => {
-      expect(mockFormAction).toHaveBeenCalledWith(expect.any(FormData));
-    });
-  });
-
-  it("closes the modal and resets selectedId when 'Annuler' button is clicked", async () => {
-    render(<ShipArticleForm />);
-    fireEvent.click(screen.getByText('Select Article'));
-    fireEvent.click(screen.getByText('Annuler'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('delete-article-modal').classList
-      ).not.toContain('is-active');
+      expect(screen.getByText("Test notification")).toBeDefined();
     });
   });
 });

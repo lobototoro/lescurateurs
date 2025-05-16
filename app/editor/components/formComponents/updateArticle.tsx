@@ -12,6 +12,7 @@ import { articleSchema } from "@/models/articleSchema";
 import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import SearchArticle from "@/app/editor/components/formComponents/searchArticle";
 import { isEmpty, urlsToArrayUtil } from "@/lib/utility-functions";
+import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -28,6 +29,7 @@ export default function UpdateArticleForm(): JSX.Element {
   const [identicalWarnMessage, setIdenticalWarnMessage] = useState<boolean>(false);
   const [currentArticle, setCurrentArticle] = useState<z.infer<typeof articleSchema>>();
   const [selectedId, setSelectedId] = useState<string | number>();
+  const [notification, setNotification] = useState<string>('');
 
   const {
     register,
@@ -73,23 +75,9 @@ export default function UpdateArticleForm(): JSX.Element {
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
-  const formSentModal = useRef<HTMLDivElement>(null);
-  const openModal = () =>
-    formSentModal.current && formSentModal.current?.classList.add('is-active');
-  const closeModal = () => {
-    if (state?.message) {
-      setSelectedId(undefined);
-      setCurrentArticle(undefined);
-      reset();
-    }
-    formSentModal.current &&
-      formSentModal.current?.classList.remove('is-active');
-  }
-
   const checkForIdenticalArticle = (data: z.infer<typeof articleSchema>, article: z.infer<typeof articleSchema>) => {
     if (R.equals(data, article)) {
       setIdenticalWarnMessage(true);
-      openModal();
 
       return true;
     }
@@ -120,7 +108,6 @@ export default function UpdateArticleForm(): JSX.Element {
         formData.append('validated', data.validated as string);
         formData.append('shipped', data.shipped as string);
         formAction(formData);
-        openModal();
       }
     });
   };
@@ -146,9 +133,24 @@ export default function UpdateArticleForm(): JSX.Element {
         clearErrors(name);
       }
     });
+    let notifTimeout: NodeJS.Timeout | undefined;
+    if (state) {
+      setNotification(state?.text);
+      notifTimeout = setTimeout(() => {
+        setSelectedId(undefined);
+        setCurrentArticle(undefined);
+        reset();
+        setNotification('');
+      }, 6000);
+    }
 
-    return () => subscription.unsubscribe();
-  }, [watch, clearErrors]);
+    return () => {
+      subscription.unsubscribe();
+      if (notifTimeout) {
+        clearTimeout(notifTimeout);
+      }
+    }
+  }, [watch, clearErrors, state]);
 
   const initialUrls = {
       type: 'website' as UrlsTypes,
@@ -180,6 +182,13 @@ export default function UpdateArticleForm(): JSX.Element {
 
   return (
     <>
+      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {identicalWarnMessage && (
+        <div className="notification is-warning">
+          <button className="delete" onClick={() => setIdenticalWarnMessage(false)}></button>
+          Aucune modification n'a été apportée à l'article.
+        </div>
+      )}
       {isEmpty(currentArticle) ? (
         <SearchArticle
           target="update"
@@ -195,11 +204,7 @@ export default function UpdateArticleForm(): JSX.Element {
             updateUrls={updateUrls}
             addInputs={addInputs}
             removeInputs={removeInputs}
-            formSentModal={formSentModal as React.RefObject<HTMLDivElement>}
-            state={state}
-            closeModal={closeModal}
-            target="update"
-            identicalWarnMessage={identicalWarnMessage}
+            target="update"            
           />
           <div className="is-flex is-justify-content-flex-end">
             <button

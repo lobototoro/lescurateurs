@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useEffect, startTransition, useRef, JSX } from "react";
+import { useActionState, useEffect, startTransition, useRef, JSX, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import{ z } from "zod"; 
@@ -9,6 +9,7 @@ import { createArticleAction } from "@/app/articleActions";
 import { UrlsTypes } from '@/models/article';
 import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
 import { urlsToArrayUtil } from "@/lib/utility-functions";
+import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
 
 /**
  * CreateArticleForm is a React component that manages the creation of an article form.
@@ -18,6 +19,7 @@ import { urlsToArrayUtil } from "@/lib/utility-functions";
  */
 export default function CreateArticleForm(): JSX.Element {
   const [state, formAction] = useActionState(createArticleAction, null);
+  const [notification, setNotification] = useState<string>("");
 
   const {
     register,
@@ -45,27 +47,9 @@ export default function CreateArticleForm(): JSX.Element {
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
-  const formSentModal = useRef<HTMLDivElement>(null);
-  const openModal = () =>
-    formSentModal.current && formSentModal.current?.classList.add('is-active'); 
-  const closeModal = () => {
-    if (state?.message) {
-      reset();
-    }
-    formSentModal.current && formSentModal.current?.classList.remove('is-active');
-  };
-
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
     startTransition(() => {
-      const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('introduction', data.introduction);
-      formData.append('main', data.main);
-      formData.append('urls', data.urls);
-      formData.append('mainAudioUrl', data.mainAudioUrl || '');
-      formData.append('urlToMainIllustration', data.urlToMainIllustration);
-      formAction(formData);
-      openModal();
+      formAction(data);
     });
   };
 
@@ -75,9 +59,22 @@ export default function CreateArticleForm(): JSX.Element {
         clearErrors(name);
       }
     });
+    let notifTimeout: NodeJS.Timeout | undefined;
+    if (state) {
+      setNotification(state?.text);
+      notifTimeout = setTimeout(() => {
+        reset();
+        setNotification('');
+      }, 6000);
+    }
 
-    return () => subscription.unsubscribe();
-  }, [watch, clearErrors]);
+    return () => {
+      subscription.unsubscribe();
+      if (notifTimeout) {
+        clearTimeout(notifTimeout);
+      }
+    }
+  }, [watch, clearErrors, state]);
 
   const initialUrls = {
       type: 'website' as UrlsTypes,
@@ -102,17 +99,17 @@ export default function CreateArticleForm(): JSX.Element {
   };
 
   return (
-  <ArticleMarkupForm
-    handleSubmit={handleSubmit(onSubmit)}
-    register={register}
-    errors={errors}
-    urlsToArray={urlsToArray}
-    updateUrls={updateUrls}
-    addInputs={addInputs}
-    removeInputs={removeInputs}
-    formSentModal={formSentModal as React.RefObject<HTMLDivElement>}
-    state={state}
-    closeModal={closeModal}
-    target="create"
-  />
-)};
+    <>
+      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      <ArticleMarkupForm
+        handleSubmit={handleSubmit(onSubmit)}
+        register={register}
+        errors={errors}
+        urlsToArray={urlsToArray}
+        updateUrls={updateUrls}
+        addInputs={addInputs}
+        removeInputs={removeInputs}
+        target="create"
+      />
+    </>
+  );};

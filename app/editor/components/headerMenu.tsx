@@ -13,22 +13,34 @@ export default function HeaderMenu({
   setSelection: React.Dispatch<React.SetStateAction<string>>;
   selection: string;
 }) {
-  const stringifiedPermissions = JSON.parse(permissions);
-  const filteredMenu = stringifiedPermissions.map( (permission: string, index: number) => {
-    // TODO: how do we read articles > is it the same as validate article?
-    if (permission === 'read:articles') return;
+  // NEX-50: whikle working on modal and notif, we simplify BO menu
+  const stringifiedPermissions =
+    role === 'admin'
+      ? JSON.parse(permissions).filter(
+          (permission: string) =>
+            permission !== 'update:user' && permission !== 'delete:user'
+        )
+      : JSON.parse(permissions);
+  if (role === 'admin') {
+    stringifiedPermissions.splice(-1, 0, 'manage:user');
+  }
+  const filteredMenu = stringifiedPermissions.map(
+    (permission: string, index: number) => {
+      // TODO: how do we read articles > is it the same as validate article?
+      if (permission === 'read:articles') return;
 
-    return (
-      <div className="navbar-item" key={ index }>
-        <a
-          className={`button ${(selection === permission.split(':').join('')) ? 'is-active' : ''}`}
-          onClick={ () => setSelection(permission.split(':').join('')) }
-        >
-          {permission.split(':')[0]} {permission.split(':')[1]}
-        </a>
-      </div>
-    );
-  });
+      return (
+        <div className="navbar-item" key={index}>
+          <a
+            className={`button ${selection === permission.split(':').join('') ? 'is-active' : ''}`}
+            onClick={() => setSelection(permission.split(':').join(''))}
+          >
+            {permission.split(':')[0]} {permission.split(':')[1]}
+          </a>
+        </div>
+      );
+    }
+  );
   const toggledMenu = useRef<HTMLDivElement>(null);
   const toggleMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -48,7 +60,11 @@ export default function HeaderMenu({
         color="black"
         spacings="mt-5 mb-5"
       />
-      <nav className="navbar box" role="navigation" aria-label="main navigation">
+      <nav
+        className="navbar box"
+        role="navigation"
+        aria-label="main navigation"
+      >
         <div className="navbar-brand">
           <a
             role="button"
@@ -64,10 +80,14 @@ export default function HeaderMenu({
             <span aria-hidden="true"></span>
           </a>
         </div>
-      
-        <div id="navbarMenuItems" className="navbar-menu is-flex-direction-column" ref={toggledMenu}>
+
+        <div
+          id="navbarMenuItems"
+          className="navbar-menu is-flex-direction-column"
+          ref={toggledMenu}
+        >
           <div className="navbar-start container is-flex-wrap-wrap">
-            { filteredMenu }
+            {filteredMenu}
           </div>
 
           <div className="">

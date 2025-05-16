@@ -47,27 +47,6 @@ it('should render correct markup for update', () => {
   expect(getByTestId('title')).toHaveProperty('disabled', true);
 });
 
-it('Should open a modal with the expected text value', () => {
-  const mockProps = {
-    handleSubmit: vi.fn(),
-    register: vi.fn(),
-    errors: {},
-    urlsToArray: [],
-    updateUrls: vi.fn(),
-    removeUrl: vi.fn(),
-    addUrl: vi.fn(),
-    handleChange: vi.fn(),
-    addInputs: vi.fn(),
-    removeInputs: vi.fn(),
-    formSentModal: null,
-    state: { message: true, text: 'TEST' },
-    closeModal: vi.fn(),
-    target: 'update',
-  };
-  const { getByText } = render(<ArticleMarkupForm {...mockProps} />);
-  expect(getByText('TEST')).toBeDefined();
-});
-
 it('Should display an additionnal link line with blinking validate button while modified', () => {
   const mockProps = {
     handleSubmit: vi.fn(),
