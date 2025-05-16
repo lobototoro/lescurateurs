@@ -48,18 +48,9 @@ export default function CreateArticleForm(): JSX.Element {
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
-    // startTransition(() => {
-      // const formData = new FormData();
-      // formData.append('title', data.title);
-      // formData.append('introduction', data.introduction);
-      // formData.append('main', data.main);
-      // formData.append('urls', data.urls);
-      // formData.append('mainAudioUrl', data.mainAudioUrl || '');
-      // formData.append('urlToMainIllustration', data.urlToMainIllustration);
-      console.log('formData', data);
+    startTransition(() => {
       formAction(data);
-    
-      // });
+    });
   };
 
   useEffect(() => {

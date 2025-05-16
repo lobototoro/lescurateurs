@@ -16,7 +16,6 @@ export default function EditorForm({ role, permissions }: {
   role: string;
   permissions: string;
 }) {
-  // const [selection, setSelection] = useState<string>('');
   const [selection, setSelection] = useState<string>('');
 
   return (
