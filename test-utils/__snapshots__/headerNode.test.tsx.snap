@@ -51,6 +51,15 @@ exports[`Should render correctly 1`] = `
           <a
             class="button "
           >
+            manage user
+          </a>
+        </div>
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
+          >
             edit articles
           </a>
         </div>
