@@ -36,7 +36,7 @@ interface ValidateTypes {
  *          text provides a description of the operation result.
  * @throws Will log any errors that occur during the article creation process.
  */
-export async function createArticleAction(prevState: any, formData: FormData) {
+export async function createArticleAction(prevState: any, data: any) {
   const session = await auth0.getSession();
   if (!session?.user) {
     return {
@@ -47,12 +47,19 @@ export async function createArticleAction(prevState: any, formData: FormData) {
 
   const author = session?.user.nickname;
   const author_email = session?.user.email;
-  const title = formData.get('title') as string;
-  const introduction = formData.get('introduction') as string;
-  const main = formData.get('main') as string;
-  const urls = formData.get('urls') as string;
-  const mainAudioUrl = formData.get('mainAudioUrl') as string;
-  const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
+  
+  // const title = formData.get('title') as string;
+  // const introduction = formData.get('introduction') as string;
+  // const main = formData.get('main') as string;
+  // const urls = formData.get('urls') as string;
+  // const mainAudioUrl = formData.get('mainAudioUrl') as string;
+  // const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
+  const title = data.title as string;
+  const introduction = data.introduction as string;
+  const main = data.main as string;
+  const urls = data.urls as string;
+  const mainAudioUrl = data.mainAudioUrl as string;
+  const urlToMainIllustration = data.urlToMainIllustration as string;
   const createdAt = new Date().toISOString();
   const updatedAt = new Date().toISOString();
   const publishedAt = '';

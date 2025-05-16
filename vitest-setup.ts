@@ -1,5 +1,5 @@
-import { cleanup } from "@testing-library/react"
-import { afterEach, vi } from "vitest"
+import { cleanup } from '@testing-library/react';
+import { afterEach, vi, vitest } from 'vitest';
 
 vi.mock('next/font/google', () => ({
   Alegreya: () => ({
@@ -11,9 +11,9 @@ vi.mock('next/font/google', () => ({
     style: {
       fontFamily: 'mocked',
     },
-  })
+  }),
 }));
 
 afterEach(() => {
-  cleanup()
+  cleanup();
 });
