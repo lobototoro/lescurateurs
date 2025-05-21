@@ -55,8 +55,10 @@ export async function updateUserAction(preState: any, formData: FormData) {
     email: formData.get('email'),
     tiersServiceIdent: formData.get('tiersServiceIdent'),
     role: formData.get('role'),
-    permissions: formData.get('permissions')
+    permissions: JSON.stringify(formData.get('permissions')),
   };
+
+  console.log('userCandidate', userCandidate);
 
   let usererror;
   try {
@@ -65,17 +67,17 @@ export async function updateUserAction(preState: any, formData: FormData) {
     usererror = error;
   }
   if (usererror) {
-    console.error('[!] while creating new user ', usererror);
+    console.error('[!] while modifying new user ', usererror);
 
     return {
       message: false,
-      text: 'Une erreur est survenue lors de la création de l’utilisateur'
+      text: 'Une erreur est survenue lors de la modification de l’utilisateur'
     }
   }
 
   return {
     message: true,
-    text: 'L’utilisateur a été créé avec succès',
+    text: 'L’utilisateur a été modifié avec succès',
   }
 }
 

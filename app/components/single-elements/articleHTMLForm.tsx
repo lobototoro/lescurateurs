@@ -154,56 +154,6 @@ export default function ArticleMarkupForm({
           Des erreurs existent dans le formulaire.
         </p>
       )}
-
-      {/* <div
-        className="modal"
-        ref={formSentModal}
-        data-testid="create-article-modal"
-        onClick={(e: React.MouseEvent) => {
-          e.preventDefault();
-          closeModal();
-        }}
-      >
-        <div className="modal-background"></div>
-        <div
-          className={
-            state?.message
-              ? 'modal-content is-success'
-              : 'modal-content is-danger'
-          }
-        >
-          <p className="is-size-6 has-text-white has-background-primary p-6">
-            {state?.text}
-          </p>
-          {identicalWarnMessage && (
-            <div className="modal-content is-warning">
-              <p className="is-size-6 has-text-white has-background-primary p-6">
-                Aucune modification détectée sur l'article.
-              </p>
-            </div>
-          )}
-          <footer>
-            <button
-              className="button"
-              aria-label="accept button"
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                closeModal();
-              }}
-            >
-              OK
-            </button>
-          </footer>
-        </div>
-      </div> */}
-      <ModalComponent
-        formSentModal={formSentModal}
-        closeModal={closeModal}
-        title={target}
-        identicalWarnMessage={identicalWarnMessage}
-        textContent={state}
-      />
-
       <div className="field mt-5">
         <input
           type="submit"

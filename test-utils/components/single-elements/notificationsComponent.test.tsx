@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import NotificationsComponent from "./notificationsComponent";
+import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
 import { describe, expect, it } from "vitest";
 
 describe("NotificationsComponent", () => {

@@ -4,14 +4,12 @@ import { useState } from "react";
 
 import HeaderNode from '@/app/editor/components/headerMenu';
 import CreateArticleForm from "@/app/editor/components/formComponents/createArticles";
-
-;
 import UpdateArticleForm from '@/app/editor/components/formComponents/updateArticle';
 import DeleteArticleForm from '@/app/editor/components/formComponents/deleteArticle';
 import ValidateArticleForm from '@/app/editor/components/formComponents/validateArticle';
 import ShipArticle from '@/app/editor/components/formComponents/shipArticle';
 import CreateUserForm from '@/app/editor/components/formComponents/createUser';
-import UpdateUserForm from "./formComponents/updateUser";
+import ManageUserForm from './formComponents/manageUser';
 
 export default function EditorForm({ role, permissions }: {
   role: string;
@@ -35,10 +33,10 @@ export default function EditorForm({ role, permissions }: {
       {selection === 'validatearticles' && <ValidateArticleForm />}
       {selection === 'shiparticles' && <ShipArticle />}
       {selection === 'createuser' && <CreateUserForm />}
-      {selection === 'updateuser' && <UpdateUserForm />}
+      {selection === 'manageuser' && <ManageUserForm />}
       {/* 
-      { (selection === 'deleteuser') && <DeleteUserForm /> }
-      { (selection === 'enablemaintenance') && <EnableMaintenanceForm /> } */}
+      { (selection === 'enablemaintenance') && <EnableMaintenanceForm /> }
+      */}
     </>
   );
 }

@@ -40,19 +40,16 @@ export const createUser = cache(async (user: User) => {
 });
 
 export const updateUser = cache(async (user: User) =>{
-  // mutation for permissions (stringify)
-  // mutation for createdAt (date) to string 'yyyy-mm-dd'
-  const permissions = JSON.stringify(user.permissions);
-
+  console.log('update user orm side ', user);
   db.prepare(`
     UPDATE users
     SET
-      email = ?,
-      tiersServiceIdent = ?,
-      role = ?,
-      permissions = ?,
-    WHERE email = ?`)
-    .run(user.email, user.tiersServiceIdent, user.role, permissions);
+      email = @email,
+      tiersServiceIdent = @tiersServiceIdent,
+      role = @role,
+      permissions = @permissions,
+    WHERE email = @email`)
+    .run(user);
 });
 
 export const deleteUser = cache(async (email: string) =>{

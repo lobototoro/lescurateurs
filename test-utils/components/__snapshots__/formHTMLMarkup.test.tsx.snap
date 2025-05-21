@@ -139,46 +139,6 @@ exports[`should render correct markup 1`] = `
       </div>
     </div>
     <div
-      aria-hidden="true"
-      class="modal"
-      data-testid="modal"
-    >
-      <div
-        class="modal-background"
-      />
-      <div
-        class="
-          modal-card  
-          modal-content is-danger
-        "
-      >
-        <header
-          class="modal-card-head"
-        >
-          <p
-            class="modal-card-title"
-          >
-            create
-          </p>
-        </header>
-        <section
-          class="modal-card-body"
-        >
-          <p
-            class="is-size-6 has-text-white has-background-primary p-6"
-          />
-          <footer>
-            <button
-              aria-label="accept button"
-              class="button"
-            >
-              OK
-            </button>
-          </footer>
-        </section>
-      </div>
-    </div>
-    <div
       class="field mt-5"
     >
       <input
@@ -329,46 +289,6 @@ exports[`should render correct markup for update 1`] = `
             -
           </div>
         </div>
-      </div>
-    </div>
-    <div
-      aria-hidden="true"
-      class="modal"
-      data-testid="modal"
-    >
-      <div
-        class="modal-background"
-      />
-      <div
-        class="
-          modal-card  
-          modal-content is-danger
-        "
-      >
-        <header
-          class="modal-card-head"
-        >
-          <p
-            class="modal-card-title"
-          >
-            update
-          </p>
-        </header>
-        <section
-          class="modal-card-body"
-        >
-          <p
-            class="is-size-6 has-text-white has-background-primary p-6"
-          />
-          <footer>
-            <button
-              aria-label="accept button"
-              class="button"
-            >
-              OK
-            </button>
-          </footer>
-        </section>
       </div>
     </div>
     <div
