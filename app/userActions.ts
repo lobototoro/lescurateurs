@@ -52,13 +52,12 @@ export async function updateUserAction(preState: any, formData: FormData) {
   }
 
   const userCandidate = {
+    id: parseInt(formData.get('id') as string, 10),
     email: formData.get('email'),
     tiersServiceIdent: formData.get('tiersServiceIdent'),
     role: formData.get('role'),
-    permissions: JSON.stringify(formData.get('permissions')),
+    permissions: formData.get('permissions')
   };
-
-  console.log('userCandidate', userCandidate);
 
   let usererror;
   try {
@@ -67,7 +66,7 @@ export async function updateUserAction(preState: any, formData: FormData) {
     usererror = error;
   }
   if (usererror) {
-    console.error('[!] while modifying new user ', usererror);
+    console.error('[!] while modifying new user ', usererror.toString());
 
     return {
       message: false,

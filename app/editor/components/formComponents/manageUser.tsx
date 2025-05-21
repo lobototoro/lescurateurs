@@ -36,8 +36,6 @@ export default function ManageUserForm() {
     handleSubmit,
     setValue,
     reset,
-    watch,
-    clearErrors,
     formState: { errors }
   } = useForm<z.infer<typeof userSchema>>({
     mode: 'onChange',
@@ -54,6 +52,15 @@ export default function ManageUserForm() {
     values: selectedUser || undefined
   });
 
+  const performedAttheEnd = () => {
+    setNotification("");
+    setUsersList([]);
+    setSelectedUser(null);
+    setUserToBeDeleted(null);
+    window.location.reload();
+  }
+
+
   const getAllUsers = async () => {
     const usersListResponse = await getUsersList();
     if (usersListResponse.message) {
@@ -67,9 +74,9 @@ export default function ManageUserForm() {
     }
   }
 
-  const setTimer = (setNotif: React.Dispatch<React.SetStateAction<string>>) => {
+  const setTimer = () => {
     return setTimeout(() => {
-      setNotif("");
+      performedAttheEnd();
     }, 6000);
   }
 
@@ -85,16 +92,15 @@ export default function ManageUserForm() {
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(state?.text);
-      notifTimeout = setTimer(setNotification);
+      notifTimeout = setTimer();
     }
     if (secondState) {
       setNotification(secondState?.text);
-      notifTimeout = setTimer(setNotification);
+      notifTimeout = setTimer();
     }
 
     return () => {
       if (notifTimeout) {
-        setNotification("");
         clearTimeout(notifTimeout);
       }
     }
@@ -122,9 +128,6 @@ export default function ManageUserForm() {
         deleteAction(formData);
         setSelectedUser(null);
         modalRef.current?.classList.remove('is-active');
-        reset();
-        setUserToBeDeleted(null);
-        setUsersList([]);
       });
     }
   };
@@ -137,9 +140,10 @@ export default function ManageUserForm() {
   };
 
   const onSubmit = (data: z.infer<typeof userSchema>) => {
-    console.info('on submit user data', data);
+    console.log('data', data);
     startTransition(() => {
       const formData = new FormData();
+      formData.append('id', data.id !== undefined ? String(data.id) : '');
       formData.append('email', data.email);
       formData.append('tiersServiceIdent', data.tiersServiceIdent);
       formData.append('role', data.role);
@@ -147,9 +151,6 @@ export default function ManageUserForm() {
       formData.append('createdAt', data.createdAt);
       formData.append('lastConnectionAt', data.lastConnectionAt);
       updateAction(formData);
-      reset();
-      setSelectedUser(null);
-      setUsersList([]);
     });
   };
 

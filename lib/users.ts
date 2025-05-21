@@ -40,15 +40,7 @@ export const createUser = cache(async (user: User) => {
 });
 
 export const updateUser = cache(async (user: User) =>{
-  console.log('update user orm side ', user);
-  db.prepare(`
-    UPDATE users
-    SET
-      email = @email,
-      tiersServiceIdent = @tiersServiceIdent,
-      role = @role,
-      permissions = @permissions,
-    WHERE email = @email`)
+  db.prepare(`UPDATE users SET email = @email, tiersServiceIdent = @tiersServiceIdent, role = @role, permissions = @permissions WHERE id = @id`)
     .run(user);
 });
 
