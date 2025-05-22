@@ -17,7 +17,6 @@ import UserPermissionsCheckboxes from '@/app/components/single-elements/userPerm
 import { isEmpty } from '@/lib/utility-functions';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
-import { set } from 'ramda';
 
 export default function ManageUserForm() {
   const [state, updateAction, isPending] = useActionState(updateUserAction, null);
@@ -53,11 +52,13 @@ export default function ManageUserForm() {
   });
 
   const performedAttheEnd = () => {
-    setNotification("");
-    setUsersList([]);
+    setNotification('');
     setSelectedUser(null);
     setUserToBeDeleted(null);
-    window.location.reload();
+    setUsersList([]);
+    startTransition(() => {
+      fetchUsers();
+    });
   }
 
 
@@ -80,11 +81,14 @@ export default function ManageUserForm() {
     }, 6000);
   }
 
+  const fetchUsers = async () => {
+    const usersList = await getAllUsers();
+    setUsersList(usersList);
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      const usersList = await getAllUsers();
-      setUsersList(usersList);
-    };
+
+    //performed only once when page is first displayed
     fetchUsers();
   }, []);
 
@@ -126,7 +130,6 @@ export default function ManageUserForm() {
         const formData = new FormData();
         formData.append('email', usertoBeDeleted);
         deleteAction(formData);
-        setSelectedUser(null);
         modalRef.current?.classList.remove('is-active');
       });
     }
@@ -140,7 +143,6 @@ export default function ManageUserForm() {
   };
 
   const onSubmit = (data: z.infer<typeof userSchema>) => {
-    console.log('data', data);
     startTransition(() => {
       const formData = new FormData();
       formData.append('id', data.id !== undefined ? String(data.id) : '');
@@ -166,8 +168,18 @@ export default function ManageUserForm() {
         cancelText="Annuler"
         onClose={cancelDeletion}
       />
-      {notification && state && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
-      {notification && secondState && <NotificationsComponent notification={notification} state={secondState as { message: boolean, text: string }} />}
+      {notification && state && (
+        <NotificationsComponent
+          notification={notification}
+          state={state as { message: boolean; text: string }}
+        />
+      )}
+      {notification && secondState && (
+        <NotificationsComponent
+          notification={notification}
+          state={secondState as { message: boolean; text: string }}
+        />
+      )}
       {usersList?.length > 0 && isEmpty(selectedUser) && (
         <div className="box">
           <ArticleTitle
@@ -275,20 +287,34 @@ export default function ManageUserForm() {
                 </div>
                 <div className="cell">
                   {userRole && (
-                    <UserPermissionsCheckboxes role={[userRole] as unknown as UserRole[] | null} />
+                    <UserPermissionsCheckboxes
+                      role={[userRole] as unknown as UserRole[] | null}
+                    />
                   )}
                 </div>
               </div>
             </div>
 
-            <button
-              role="button"
-              data-testid="final-submit"
-              type="submit"
-              className="button is-primary is-size-6 has-text-white mt-5"
-            >
-              {isPending ? 'Chargement...' : "Modifier l'utilisateur"}
-            </button>
+            <div className="buttons is-flex is-flex-direction-row is-justify-content-space-between mt-6">
+              <button
+                role="button"
+                data-testid="final-submit"
+                type="submit"
+                className="button is-primary is-size-6 has-text-white"
+              >
+                {isPending ? 'Chargement...' : "Modifier l'utilisateur"}
+              </button>
+              <button
+                className="button is-secondary is-size-6 has-text-white"
+                data-testid="back-to-search"
+                onClick={(event: React.MouseEvent) => {
+                  event.preventDefault();
+                  setSelectedUser(null);
+                }}
+              >
+                Retour à la recherche
+              </button>
+            </div>
           </form>
         </div>
       )}
