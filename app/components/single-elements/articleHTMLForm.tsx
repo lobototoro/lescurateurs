@@ -1,6 +1,7 @@
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { AddUrlsObjects } from '@/app/editor/components/formComponents/addUrlsObjects';
 import { isEmpty } from '@/lib/utility-functions';
+import ModalComponent from './modalComponent';
 
 export default function ArticleMarkupForm({
   handleSubmit,
@@ -153,7 +154,6 @@ export default function ArticleMarkupForm({
           Des erreurs existent dans le formulaire.
         </p>
       )}
-
       <div className="field mt-5">
         <input
           type="submit"
