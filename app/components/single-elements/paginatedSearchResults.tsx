@@ -14,6 +14,7 @@ export function PaginatedSearchDisplay({
   context,
   handleReference,
   handleSelectedUser,
+  manageActions,
 }: {
   itemList: Slugs[] | z.infer<typeof userSchema>[];
   defaultPage: number;
@@ -22,6 +23,7 @@ export function PaginatedSearchDisplay({
   context: 'article' | 'user';
   handleReference?: (id: number, itemName?: string) => void;
   handleSelectedUser?: (user: z.infer<typeof userSchema>, action: 'update' | 'delete') => void;
+  manageActions?: (id: number, actionName: 'delete' | 'validate' | 'ship') => void;
 }) {
   const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const totalPages = Math.ceil(itemList.length / Number(defaultLimit));
@@ -74,7 +76,7 @@ export function PaginatedSearchDisplay({
                 </td>
                 <td>{item?.createdAt}</td>
                 <td>
-                  {context === 'article' && ['search'].includes(target) && (
+                  {(context === 'article') && (target === 'search') && (
                     <button
                       className="button is-size-6"
                       onClick={() =>
@@ -85,9 +87,8 @@ export function PaginatedSearchDisplay({
                     </button>
                   )}
 
-                  {context === 'article' &&
-                    ['update', 'delete', 'validate', 'ship'].includes(
-                      target
+                  {(context === 'article') &&
+                    (target === 'update'
                     ) && (
                       <button
                         className="button mr-4"
@@ -106,6 +107,43 @@ export function PaginatedSearchDisplay({
                       </button>
                     )}
 
+                  {(context === 'article') && (target === 'manage') && (
+                    <div className="buttons">
+                      <button
+                        className="button is-size-6"
+                        onClick={() => {
+                          if ('articleId' in item) {
+                            manageActions &&
+                              manageActions(item?.articleId as number, 'delete');
+                          }
+                        }}
+                      >
+                        Effacer
+                      </button>
+                      <button
+                        className="button is-size-6"
+                        onClick={() => {
+                          if ('articleId' in item) {
+                            manageActions &&
+                              manageActions(item?.articleId as number, 'validate');
+                          }
+                        }}
+                      >
+                        Valider / Invalider
+                      </button>
+                      <button
+                        className="button is-size-6"
+                        onClick={() => {
+                          if ('articleId' in item) {
+                            manageActions &&
+                              manageActions(item?.articleId as number, 'ship');
+                          }
+                        }}
+                      >
+                        Online / Offline
+                      </button>
+                    </div>
+                  )}
                     {context === 'user' && (
                       <button
                         className="button mr-4"
