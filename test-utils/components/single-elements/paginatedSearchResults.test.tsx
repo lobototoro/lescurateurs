@@ -284,7 +284,6 @@ describe("PaginatedSearchDisplay", () => {
         context="article"
       />
     );
-    screen.debug();
     expect(document.querySelectorAll("table>tbody>tr").length).toBe(0);
   });
 
