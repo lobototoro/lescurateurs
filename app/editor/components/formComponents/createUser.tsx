@@ -12,7 +12,7 @@ import { createUserAction } from "@/app/userActions";
 export default function CreateUserForm() {
   const [state, formAction, isPending] = useActionState(createUserAction, null);
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(userRoles[1] as unknown as keyof typeof UserRole);
-  const [notification, setNotification] = useState<string>();
+  const [notification, setNotification] = useState<boolean>(false);
 
   const {
     register,
@@ -60,10 +60,10 @@ export default function CreateUserForm() {
 
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
-      setNotification(state?.text);
+      setNotification(true);
       reset();
       notifTimeout = setTimeout(() => {
-        setNotification("");
+        setNotification(false);
       }, 6000);
     }
 

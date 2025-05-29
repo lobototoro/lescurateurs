@@ -27,15 +27,8 @@ export default function EditorForm({ role, permissions }: {
         setSelection={setSelection}
         selection={selection}
       />
-
-      {/* <SearchArticle target="search" /> */}
-      {/* <p>{ selection }</p> */}
       {selection === 'createarticles' && <CreateArticleForm />}
       {selection === 'updatearticles' && <UpdateArticleForm />}
-
-      {/* {selection === 'deletearticles' && <DeleteArticleForm />}
-      {selection === 'validatearticles' && <ValidateArticleForm />}
-      {selection === 'shiparticles' && <ShipArticle />} */}
       {selection === 'managearticles' && <ManageArticleForm />}
       {selection === 'createuser' && <CreateUserForm />}
       {selection === 'manageuser' && <ManageUserForm />}

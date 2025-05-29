@@ -29,7 +29,7 @@ export default function UpdateArticleForm(): JSX.Element {
   const [identicalWarnMessage, setIdenticalWarnMessage] = useState<boolean>(false);
   const [currentArticle, setCurrentArticle] = useState<z.infer<typeof articleSchema>>();
   const [selectedId, setSelectedId] = useState<string | number>();
-  const [notification, setNotification] = useState<string>('');
+  const [notification, setNotification] = useState<boolean>(false);
 
   const {
     register,
@@ -135,12 +135,12 @@ export default function UpdateArticleForm(): JSX.Element {
     });
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
-      setNotification(state?.text);
+      setNotification(true);
       notifTimeout = setTimeout(() => {
         setSelectedId(undefined);
         setCurrentArticle(undefined);
         reset();
-        setNotification('');
+        setNotification(false);
       }, 6000);
     }
 
@@ -182,7 +182,7 @@ export default function UpdateArticleForm(): JSX.Element {
 
   return (
     <>
-      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {notification && <NotificationsComponent state={state as { message: boolean, text: string }} />}
       {identicalWarnMessage && (
         <div className="notification is-warning">
           <button className="delete" onClick={() => setIdenticalWarnMessage(false)}></button>

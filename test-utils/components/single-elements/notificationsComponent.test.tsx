@@ -6,7 +6,6 @@ describe("NotificationsComponent", () => {
   it("renders the notification with success state", () => {
     render(
       <NotificationsComponent
-        notification="Success notification"
         state={{ message: true, text: "Success" }}
       />
     );
@@ -19,7 +18,6 @@ describe("NotificationsComponent", () => {
   it("renders the notification with danger state", () => {
     render(
       <NotificationsComponent
-        notification="Error notification"
         state={{ message: false, text: "Error" }}
       />
     );
@@ -32,7 +30,6 @@ describe("NotificationsComponent", () => {
   it("renders the static message", () => {
     render(
       <NotificationsComponent
-        notification="Static message test"
         state={{ message: true, text: "Static" }}
       />
     );

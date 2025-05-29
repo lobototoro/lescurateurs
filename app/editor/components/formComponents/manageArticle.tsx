@@ -14,7 +14,7 @@ import ModalWithCTA from "@/app/components/single-elements/modalWithCTA";
 
 
 const sendAction = (action: string, id: string | number, actionMethod: any, choice?: string) => {
-  console.info(`Action: ${action}, ID: ${id} and Method: ${actionMethod}`);
+  // console.info(`Action: ${action}, ID: ${id} and Method: ${actionMethod}`);
   startTransition(() => {
     const formData = new FormData();
     formData.append("id", String(id));

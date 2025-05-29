@@ -26,7 +26,7 @@ export default function ManageUserForm() {
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
   );
-  const [notification, setNotification] = useState<string>("");
+  const [notification, setNotification] = useState<boolean>(false);
   const [usertoBeDeleted, setUserToBeDeleted] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +52,7 @@ export default function ManageUserForm() {
   });
 
   const performedAttheEnd = () => {
-    setNotification('');
+    setNotification(false);
     setSelectedUser(null);
     setUserToBeDeleted(null);
     setUsersList([]);
@@ -95,11 +95,11 @@ export default function ManageUserForm() {
   useEffect(() => {
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
-      setNotification(state?.text);
+      setNotification(true);
       notifTimeout = setTimer();
     }
     if (secondState) {
-      setNotification(secondState?.text);
+      setNotification(true);
       notifTimeout = setTimer();
     }
 
@@ -170,13 +170,11 @@ export default function ManageUserForm() {
       />
       {notification && state && (
         <NotificationsComponent
-          notification={notification}
           state={state as { message: boolean; text: string }}
         />
       )}
       {notification && secondState && (
         <NotificationsComponent
-          notification={notification}
           state={secondState as { message: boolean; text: string }}
         />
       )}

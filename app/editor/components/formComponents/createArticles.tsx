@@ -19,7 +19,7 @@ import NotificationsComponent from "@/app/components/single-elements/notificatio
  */
 export default function CreateArticleForm(): JSX.Element {
   const [state, formAction] = useActionState(createArticleAction, null);
-  const [notification, setNotification] = useState<string>("");
+  const [notification, setNotification] = useState<boolean>(false);
 
   const {
     register,
@@ -61,10 +61,10 @@ export default function CreateArticleForm(): JSX.Element {
     });
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
-      setNotification(state?.text);
+      setNotification(true);
       notifTimeout = setTimeout(() => {
         reset();
-        setNotification('');
+        setNotification(false);
       }, 6000);
     }
 
@@ -100,7 +100,7 @@ export default function CreateArticleForm(): JSX.Element {
 
   return (
     <>
-      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {notification && <NotificationsComponent state={state as { message: boolean, text: string }} />}
       <ArticleMarkupForm
         handleSubmit={handleSubmit(onSubmit)}
         register={register}
