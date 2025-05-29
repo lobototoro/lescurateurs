@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Slugs } from "@/models/slugs";
 import { userSchema } from '@/models/userSchema';
 import { ArticleTitle } from "./ArticleTitle";
+import styles from './paginatedSearchResults.module.css';
 
 export function PaginatedSearchDisplay({
   itemList,
@@ -14,16 +15,14 @@ export function PaginatedSearchDisplay({
   context,
   handleReference,
   handleSelectedUser,
-  manageActions,
 }: {
   itemList: Slugs[] | z.infer<typeof userSchema>[];
   defaultPage: number;
   defaultLimit: number;
   target: string;
   context: 'article' | 'user';
-  handleReference?: (id: number, itemName?: string) => void;
+  handleReference?: (id: number, itemName?: string, actionName?: string) => void;
   handleSelectedUser?: (user: z.infer<typeof userSchema>, action: 'update' | 'delete') => void;
-  manageActions?: (id: number, actionName: 'delete' | 'validate' | 'ship') => void;
 }) {
   const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const totalPages = Math.ceil(itemList.length / Number(defaultLimit));
@@ -50,15 +49,15 @@ export function PaginatedSearchDisplay({
 
   return (
     <section className="section">
-      <table className="table container slugs-list">
+      <table className="table container slugs-list" data-testid="paginated-search">
         <thead>
           <tr>
-            <th>
-              <abbr title="identifiant">ID</abbr>
+            <th className={styles['id-cell']}>
+              <abbr title={styles['id-cell']}>#</abbr> <abbr title={styles.identifiant}>ID</abbr>
             </th>
-            <th>Slug</th>
-            <th>Créé le</th>
-            <th>Actions</th>
+            <th className={styles['slug-cell']}>Slug</th>
+            <th className={styles['date-cell']}>Créé le</th>
+            <th className={styles['actions-cell']}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +75,7 @@ export function PaginatedSearchDisplay({
                 </td>
                 <td>{item?.createdAt}</td>
                 <td>
-                  {(context === 'article') && (target === 'search') && (
+                  {context === 'article' && target === 'search' && (
                     <button
                       className="button is-size-6"
                       onClick={() =>
@@ -87,34 +86,35 @@ export function PaginatedSearchDisplay({
                     </button>
                   )}
 
-                  {(context === 'article') &&
-                    (target === 'update'
-                    ) && (
-                      <button
-                        className="button mr-4"
-                        data-testid="selection-button"
-                        onClick={() => {
-                          if ('articleId' in item) {
-                            handleReference &&
-                              handleReference(item.articleId as number);
-                          } else if ('id' in item) {
-                            handleReference &&
-                              handleReference(item.id as number);
-                          }
-                        }}
-                      >
-                        Sélectionner
-                      </button>
-                    )}
+                  {context === 'article' && target === 'update' && (
+                    <button
+                      className="button mr-4"
+                      data-testid="selection-button"
+                      onClick={() => {
+                        if ('articleId' in item) {
+                          handleReference &&
+                            handleReference(item.articleId as number);
+                        } else if ('id' in item) {
+                          handleReference && handleReference(item.id as number);
+                        }
+                      }}
+                    >
+                      Sélectionner
+                    </button>
+                  )}
 
-                  {(context === 'article') && (target === 'manage') && (
-                    <div className="buttons">
+                  {context === 'article' && target === 'manage' && (
+                    <div className="buttons is-flex is-flex-direction-row is-justify-content-start">
                       <button
                         className="button is-size-6"
                         onClick={() => {
                           if ('articleId' in item) {
-                            manageActions &&
-                              manageActions(item?.articleId as number, 'delete');
+                            handleReference &&
+                              handleReference(
+                                item?.articleId as number,
+                                '',
+                                'delete'
+                              );
                           }
                         }}
                       >
@@ -124,8 +124,12 @@ export function PaginatedSearchDisplay({
                         className="button is-size-6"
                         onClick={() => {
                           if ('articleId' in item) {
-                            manageActions &&
-                              manageActions(item?.articleId as number, 'validate');
+                            handleReference &&
+                              handleReference(
+                                item?.articleId as number,
+                                '',
+                                'validate'
+                              );
                           }
                         }}
                       >
@@ -135,8 +139,12 @@ export function PaginatedSearchDisplay({
                         className="button is-size-6"
                         onClick={() => {
                           if ('articleId' in item) {
-                            manageActions &&
-                              manageActions(item?.articleId as number, 'ship');
+                            handleReference &&
+                              handleReference(
+                                item?.articleId as number,
+                                '',
+                                'ship'
+                              );
                           }
                         }}
                       >
@@ -144,20 +152,23 @@ export function PaginatedSearchDisplay({
                       </button>
                     </div>
                   )}
-                    {context === 'user' && (
-                      <button
-                        className="button mr-4"
-                        data-testid="selection-button"
-                        onClick={() => {
-                          if ('id' in item) {
-                            handleSelectedUser &&
-                              handleSelectedUser(item as z.infer<typeof userSchema>, 'update');
-                          }
-                        }}
-                      >
-                        udpate
-                      </button>
-                    )}
+                  {context === 'user' && (
+                    <button
+                      className="button mr-4"
+                      data-testid="selection-button"
+                      onClick={() => {
+                        if ('id' in item) {
+                          handleSelectedUser &&
+                            handleSelectedUser(
+                              item as z.infer<typeof userSchema>,
+                              'update'
+                            );
+                        }
+                      }}
+                    >
+                      udpate
+                    </button>
+                  )}
                   {context === 'user' && (
                     <button
                       className="button mr-4"

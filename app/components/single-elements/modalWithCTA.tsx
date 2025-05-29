@@ -57,7 +57,7 @@ export default function ModalWithCTA({
                 cancelAction();
               }}
             >
-              Annuler
+              { cancelText }
             </button>
           </div>
         </footer>
