@@ -257,21 +257,21 @@ describe("PaginatedSearchDisplay", () => {
         defaultLimit={2}
         target="manage"
         context="article"
-        manageActions={mockManageActions}
+        handleReference={mockManageActions}
       />
     );
 
     const effacerButton = screen.getAllByText("Effacer")[0];
     fireEvent.click(effacerButton);
-    expect(mockManageActions).toHaveBeenCalledWith(1, "delete");
+    expect(mockManageActions).toHaveBeenCalledWith(1, "", "delete");
 
     const validerButton = screen.getAllByText("Valider / Invalider")[0];
     fireEvent.click(validerButton);
-    expect(mockManageActions).toHaveBeenCalledWith(1, "validate");
+    expect(mockManageActions).toHaveBeenCalledWith(1, "", "validate");
 
     const shipButton = screen.getAllByText("Online / Offline")[0];
     fireEvent.click(shipButton);
-    expect(mockManageActions).toHaveBeenCalledWith(1, "ship");
+    expect(mockManageActions).toHaveBeenCalledWith(1, "", "ship");
   });
 
   it("renders nothing if itemList is empty", () => {

@@ -10,7 +10,7 @@ describe("NotificationsComponent", () => {
       />
     );
 
-    const notificationElement = screen.getByText("Success notification");
+    const notificationElement = screen.getByText("Success");
     expect(notificationElement).toBeDefined();
     expect(notificationElement.closest(".notification")?.classList).toContainEqual("is-success");
   });
@@ -22,7 +22,7 @@ describe("NotificationsComponent", () => {
       />
     );
 
-    const notificationElement = screen.getByText("Error notification");
+    const notificationElement = screen.getByText("Error");
     expect(notificationElement).toBeDefined();
     expect(notificationElement.closest(".notification")?.classList).toContainEqual("is-danger");
   });
