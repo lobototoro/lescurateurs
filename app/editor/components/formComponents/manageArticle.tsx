@@ -39,6 +39,7 @@ export default function ManageArticleForm(): JSX.Element {
   const [action, setAction] = useState<Record<string, any>>({});
   const [modalInfos, setModalInfos] = useState<Record<string, any>>({});
   const modalRef = useRef<HTMLDivElement>(null);
+  const [cancelSearchDisplay, setCancelSearchDisplay] = useState<boolean>(false);
 
   const onclose = () => {
     if (modalRef.current) {
@@ -110,19 +111,28 @@ export default function ManageArticleForm(): JSX.Element {
 
   useEffect(() => {
     let notifTimeout: NodeJS.Timeout | undefined;
+    let cancelDisplayTimeout: NodeJS.Timeout | undefined;
     if (deleteState?.message || validateState?.message || shipState?.message) {
       setNotification(true);
       notifTimeout = setTimeout(() => {
         setNotification(false);
       }, 6000);
     }
+    if (cancelSearchDisplay) {
+      cancelDisplayTimeout = setTimeout(() => {
+        setCancelSearchDisplay(false);
+      }, 1000);
+    }
 
     return () => {
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
+      if (cancelDisplayTimeout) {
+        clearTimeout(cancelDisplayTimeout);
+      }
     };
-  }, [deleteState, validateState, shipState]);
+  }, [deleteState, validateState, shipState, cancelSearchDisplay]);
   
   return (
     <>
@@ -153,13 +163,17 @@ export default function ManageArticleForm(): JSX.Element {
       )}
       {!notification && (
         <>
-          <SearchArticle target="manage" manageSelection={setAction} />
+          <SearchArticle target="manage" cancelSearchDisplay={cancelSearchDisplay} manageSelection={setAction} />
           <div className="is-flex is-justify-content-flex-end">
             <button
-              className="button is-secondary is-size-6 has-text-white mt-6 mb-5"
+              className="button is-secondary is-size-6 has-text-white mt-2 mb-2"
               data-testid="back-to-search"
               onClick={(event: React.MouseEvent) => {
                 event.preventDefault();
+
+                // probably flush states from all useActionState methods
+                // setNotification(false);
+                setCancelSearchDisplay(true);
               }}
             >
               Retour à la recherche

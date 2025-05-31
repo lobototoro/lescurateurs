@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { searchForSlugs } from "@/app/searchActions";
 import { Slugs } from "@/models/slugs";
@@ -13,10 +13,12 @@ const DEFAULT_LIMIT = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || 10;
 
 export default function SearchArticle({
   target,
+  cancelSearchDisplay,
   setSelection,
-  manageSelection
+  manageSelection,
 }: {
   target: TargetTypes;
+  cancelSearchDisplay?: boolean;
   setSelection?: React.Dispatch<React.SetStateAction<number | string>>;
   manageSelection?: React.Dispatch<React.SetStateAction<Record<string, any>>>;
 }) {
@@ -24,13 +26,24 @@ export default function SearchArticle({
   const [slugs, setSlugs] = useState<Slugs[]>([]);
   const [notification, setNotification] = useState<string>('');
 
+  useEffect(() => {
+    if (cancelSearchDisplay) {
+      setSearchTerm('');
+      setSlugs([]);
+      setNotification('');
+    }
+  }, [cancelSearchDisplay]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (searchTerm.trim() === '') return;
     setNotification('');
-    
-    const result = await searchForSlugs(searchTerm) as { message: boolean; slugs: Slugs[] };
+
+    const result = (await searchForSlugs(searchTerm)) as {
+      message: boolean;
+      slugs: Slugs[];
+    };
 
     if (result?.message) {
       setSlugs(result?.slugs);
@@ -40,13 +53,13 @@ export default function SearchArticle({
 
       return;
     }
-  }
+  };
 
   const handleReference = (id: number, slug?: string, actionName?: string) => {
-    switch(target) {
+    switch (target) {
       case 'search':
         if (slug !== undefined && setSelection) {
-        setSelection(`/article/${slug}`); // super with slugs instead of id
+          setSelection(`/article/${slug}`); // super with slugs instead of id
         }
         break;
       case 'update':
@@ -54,7 +67,7 @@ export default function SearchArticle({
           setSelection(id);
         }
         break;
-      case'manage':
+      case 'manage':
         if (id !== undefined && manageSelection) {
           manageSelection({ id, actionName });
         }
@@ -62,11 +75,11 @@ export default function SearchArticle({
       default:
         return;
     }
-  }
+  };
 
   const clearNotification = () => {
     setNotification('');
-  }
+  };
 
   return (
     <div className="container">
