@@ -47,7 +47,8 @@ export default function ManageArticleForm(): JSX.Element {
     }
   };
 
-  useEffect(() => {
+  const handleAction = (action: Record<string, any>) => {
+    console.log('handleAction passed ', action);
     switch (action.actionName) {
       case "delete":
         setModalInfos({
@@ -104,9 +105,20 @@ export default function ManageArticleForm(): JSX.Element {
         modalRef.current?.classList.add("is-active");
         break;
       default:
-        console.warn("Unknown action:", action.actionName);
+        
+        // console.warn("Unknown action:", action.actionName);
         break;
     }
+  };
+
+  useEffect(() => {
+    console.log("ManageArticleForm mounted", action);
+    if (action?.actionName === undefined) {
+      return;
+    } else {
+      handleAction(action);
+    }
+    
   }, [action]);
 
   useEffect(() => {

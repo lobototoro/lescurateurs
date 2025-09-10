@@ -11,6 +11,7 @@ export default function NotificationsComponent({
   return (
     <div
       className={`notification ${state?.message ? 'is-success' : 'is-danger'}`}
+      data-testid="notification"
     >
       <p className="content">
         {state?.text && (

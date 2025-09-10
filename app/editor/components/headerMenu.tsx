@@ -23,13 +23,19 @@ export default function HeaderMenu({
             permission !== 'update:user' && permission !== 'delete:user' && permission !== 'delete:articles' && permission !== 'validate:articles' && permission !== 'ship:articles'
         )
       : JSON.parse(permissions);
-  
+
   if (role === 'admin') {
     definitivePermissions = stringifiedPermissions.toSpliced(3, 0, 'manage:articles').toSpliced(-1, 0, 'manage:user');
+  } else {
+    definitivePermissions = stringifiedPermissions.toSpliced(
+      2,
+      2,
+      'manage:articles'
+    );
   }
+  
   const filteredMenu = definitivePermissions.map(
     (permission: string, index: number) => {
-      
       // TODO: how do we read articles > is it the same as validate article?
       if (permission === 'read:articles') return;
 
@@ -45,6 +51,7 @@ export default function HeaderMenu({
       );
     }
   );
+
   const toggledMenu = useRef<HTMLDivElement>(null);
   const toggleMenu = (e: React.MouseEvent) => {
     e.preventDefault();
