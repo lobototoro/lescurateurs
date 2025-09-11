@@ -6,12 +6,11 @@ describe("NotificationsComponent", () => {
   it("renders the notification with success state", () => {
     render(
       <NotificationsComponent
-        notification="Success notification"
         state={{ message: true, text: "Success" }}
       />
     );
 
-    const notificationElement = screen.getByText("Success notification");
+    const notificationElement = screen.getByText("Success");
     expect(notificationElement).toBeDefined();
     expect(notificationElement.closest(".notification")?.classList).toContainEqual("is-success");
   });
@@ -19,12 +18,11 @@ describe("NotificationsComponent", () => {
   it("renders the notification with danger state", () => {
     render(
       <NotificationsComponent
-        notification="Error notification"
         state={{ message: false, text: "Error" }}
       />
     );
 
-    const notificationElement = screen.getByText("Error notification");
+    const notificationElement = screen.getByText("Error");
     expect(notificationElement).toBeDefined();
     expect(notificationElement.closest(".notification")?.classList).toContainEqual("is-danger");
   });
@@ -32,7 +30,6 @@ describe("NotificationsComponent", () => {
   it("renders the static message", () => {
     render(
       <NotificationsComponent
-        notification="Static message test"
         state={{ message: true, text: "Static" }}
       />
     );

@@ -1,34 +1,49 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { searchForSlugs } from "@/app/searchActions";
 import { Slugs } from "@/models/slugs";
 import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
 import { PaginatedSearchDisplay } from '@/app/components/single-elements/paginatedSearchResults';
 
-type TargetTypes = 'search' | 'update' | 'delete' | 'validate' | 'ship';
+type TargetTypes = 'search' | 'update' | 'manage';
 
 const DEFAULT_PAGE = process.env.NEXT_PUBLIC_DEFAULT_PAGE || 1;
 const DEFAULT_LIMIT = process.env.NEXT_PUBLIC_DEFAULT_LIMIT || 10;
 
 export default function SearchArticle({
   target,
-  setSelection 
+  cancelSearchDisplay,
+  setSelection,
+  manageSelection,
 }: {
-  target: TargetTypes,
-  setSelection?: React.Dispatch<React.SetStateAction<number | string>>
+  target: TargetTypes;
+  cancelSearchDisplay?: boolean;
+  setSelection?: React.Dispatch<React.SetStateAction<number | string>>;
+  manageSelection?: React.Dispatch<React.SetStateAction<Record<string, any>>>;
 }) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [slugs, setSlugs] = useState<Slugs[]>([]);
   const [notification, setNotification] = useState<string>('');
 
+  useEffect(() => {
+    if (cancelSearchDisplay) {
+      setSearchTerm('');
+      setSlugs([]);
+      setNotification('');
+    }
+  }, [cancelSearchDisplay]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (searchTerm.trim() === '') return;
     setNotification('');
-    
-    const result = await searchForSlugs(searchTerm) as { message: boolean; slugs: Slugs[] };
+
+    const result = (await searchForSlugs(searchTerm)) as {
+      message: boolean;
+      slugs: Slugs[];
+    };
 
     if (result?.message) {
       setSlugs(result?.slugs);
@@ -38,31 +53,33 @@ export default function SearchArticle({
 
       return;
     }
-  }
+  };
 
-  const handleReference = (id: number, slug?: string) => {
-    switch(target) {
+  const handleReference = (id: number, slug?: string, actionName?: string) => {
+    switch (target) {
       case 'search':
         if (slug !== undefined && setSelection) {
-        setSelection(`/article/${slug}`); // super with slugs instead of id
+          setSelection(`/article/${slug}`); // super with slugs instead of id
         }
         break;
       case 'update':
-      case 'delete':
-      case 'validate':
-      case'ship':
         if (id !== undefined && setSelection) {
           setSelection(id);
+        }
+        break;
+      case 'manage':
+        if (id !== undefined && manageSelection) {
+          manageSelection({ id, actionName });
         }
         break;
       default:
         return;
     }
-  }
+  };
 
   const clearNotification = () => {
     setNotification('');
-  }
+  };
 
   return (
     <div className="container">

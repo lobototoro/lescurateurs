@@ -57,7 +57,7 @@ describe("ModalWithCTA Component", () => {
   it("calls cancelAction when the cancel button is clicked", () => {
     render(<ModalWithCTA {...defaultProps} />);
 
-    const cancelButton = screen.getByText("Annuler");
+    const cancelButton = screen.getByText('Cancel');
     fireEvent.click(cancelButton);
 
     expect(mockCancelAction).toHaveBeenCalled();

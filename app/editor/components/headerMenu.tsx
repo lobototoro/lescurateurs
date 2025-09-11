@@ -14,17 +14,27 @@ export default function HeaderMenu({
   selection: string;
 }) {
   // NEX-50: whikle working on modal and notif, we simplify BO menu
+  let definitivePermissions = [];
+  
   const stringifiedPermissions =
     role === 'admin'
       ? JSON.parse(permissions).filter(
           (permission: string) =>
-            permission !== 'update:user' && permission !== 'delete:user'
+            permission !== 'update:user' && permission !== 'delete:user' && permission !== 'delete:articles' && permission !== 'validate:articles' && permission !== 'ship:articles'
         )
       : JSON.parse(permissions);
+
   if (role === 'admin') {
-    stringifiedPermissions.splice(-1, 0, 'manage:user');
+    definitivePermissions = stringifiedPermissions.toSpliced(3, 0, 'manage:articles').toSpliced(-1, 0, 'manage:user');
+  } else {
+    definitivePermissions = stringifiedPermissions.toSpliced(
+      2,
+      2,
+      'manage:articles'
+    );
   }
-  const filteredMenu = stringifiedPermissions.map(
+  
+  const filteredMenu = definitivePermissions.map(
     (permission: string, index: number) => {
       // TODO: how do we read articles > is it the same as validate article?
       if (permission === 'read:articles') return;
@@ -41,6 +51,7 @@ export default function HeaderMenu({
       );
     }
   );
+
   const toggledMenu = useRef<HTMLDivElement>(null);
   const toggleMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -83,14 +94,14 @@ export default function HeaderMenu({
 
         <div
           id="navbarMenuItems"
-          className="navbar-menu is-flex-direction-column"
+          className="navbar-menu is-flex-direction-row"
           ref={toggledMenu}
         >
-          <div className="navbar-start container is-flex-wrap-wrap">
+          <div className="navbar-start is-flex-wrap-wrap">
             {filteredMenu}
           </div>
 
-          <div className="">
+          <div className="is-flex">
             <div className="navbar-item">
               <div className="buttons">
                 <a className="button is-info" href="/auth/logout">

@@ -1,0 +1,12 @@
+table .id-cell {
+  width: 5%;
+}
+table .slug-cell {
+  width: 50%;
+}
+table .date-cell {
+  width: 15%;
+}
+table .actions-cell {
+  width: 30%;
+}

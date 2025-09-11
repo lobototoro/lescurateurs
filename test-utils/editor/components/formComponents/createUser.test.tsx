@@ -4,13 +4,11 @@ import CreateUserForm from "../../../../app/editor/components/formComponents/cre
 
 vi.mock("@/app/userActions", () => ({
   createUserAction: vi.fn().mockImplementationOnce((prev: any, data: any) => {
-    console.log("Mocked createUserAction called with data:", data);
 
     return new Promise((resolve) => {
       resolve({ message: true, text: "User created successfully" });
     });
   }).mockImplementationOnce((prev: any, data: any) => {
-    console.log("Mocked createUserAction called with data:", data);
 
     return new Promise((resolve) => {
       resolve({ message: false, text: "Failed to create user" });

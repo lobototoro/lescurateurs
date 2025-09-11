@@ -1,8 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const userSchema = z.object({
   id: z.number().optional(),
-  email: z.string().min(1, { message: 'Email requis' }).email({ message: 'Mauvais format d\'email' }).trim(),
+  email: z
+    .email({ message: 'Adresse email invalide' })
+    .min(1, { message: 'Email requis' })
+    .trim(),
   tiersServiceIdent: z.string().min(1, { message: 'Champ requis' }).trim(),
   role: z.enum(['admin', 'contributor']),
   createdAt: z.string().trim(),

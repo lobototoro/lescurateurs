@@ -246,4 +246,83 @@ describe("PaginatedSearchDisplay", () => {
     expect(screen.getByText("slug-3")).toBeDefined();
     expect(screen.queryByText("slug-1")).toBeNull();
   });
+
+  it("calls manageActions with correct arguments for 'manage' target", () => {
+    const mockManageActions = vi.fn();
+
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockSlugs}
+        defaultPage={1}
+        defaultLimit={2}
+        target="manage"
+        context="article"
+        handleReference={mockManageActions}
+      />
+    );
+
+    const effacerButton = screen.getAllByText("Effacer")[0];
+    fireEvent.click(effacerButton);
+    expect(mockManageActions).toHaveBeenCalledWith(1, "", "delete");
+
+    const validerButton = screen.getAllByText("Valider / Invalider")[0];
+    fireEvent.click(validerButton);
+    expect(mockManageActions).toHaveBeenCalledWith(1, "", "validate");
+
+    const shipButton = screen.getAllByText("Online / Offline")[0];
+    fireEvent.click(shipButton);
+    expect(mockManageActions).toHaveBeenCalledWith(1, "", "ship");
+  });
+
+  it("renders nothing if itemList is empty", () => {
+    render(
+      <PaginatedSearchDisplay
+        itemList={[]}
+        defaultPage={1}
+        defaultLimit={2}
+        target="search"
+        context="article"
+      />
+    );
+    expect(document.querySelectorAll("table>tbody>tr").length).toBe(0);
+  });
+
+  it("shows correct items after changing page multiple times", () => {
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockSlugs}
+        defaultPage={1}
+        defaultLimit={1}
+        target="search"
+        context="article"
+        handleReference={mockHandleReference}
+      />
+    );
+    // Page 1
+    expect(screen.getByText("slug-1")).toBeDefined();
+    // Go to page 2
+    const nextButton = screen.getByTestId("next-button");
+    fireEvent.click(nextButton);
+    expect(screen.getByText("slug-2")).toBeDefined();
+    expect(screen.queryByText("slug-1")).toBeNull();
+    // Go to page 3
+    fireEvent.click(nextButton);
+    expect(screen.getByText("slug-3")).toBeDefined();
+    expect(screen.queryByText("slug-2")).toBeNull();
+  });
+
+  it("highlights the current page in pagination", () => {
+    render(
+      <PaginatedSearchDisplay
+        itemList={mockSlugs}
+        defaultPage={2}
+        defaultLimit={1}
+        target="search"
+        context="article"
+        handleReference={mockHandleReference}
+      />
+    );
+    const currentPage = screen.getByRole("button", { name: "Goto page 2" });
+    expect(currentPage.className).toContain("is-current");
+  });
 });

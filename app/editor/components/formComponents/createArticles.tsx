@@ -1,15 +1,23 @@
-"use client";
-import { useActionState, useEffect, startTransition, useRef, JSX, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import{ z } from "zod"; 
+'use client';
+import {
+  useActionState,
+  useEffect,
+  startTransition,
+  useRef,
+  JSX,
+  useState,
+} from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { articleSchema } from "@/models/articleSchema";
-import { createArticleAction } from "@/app/articleActions";
+import { articleSchema } from '@/models/articleSchema';
+import { createArticleAction } from '@/app/articleActions';
 import { UrlsTypes } from '@/models/article';
-import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
-import { urlsToArrayUtil } from "@/lib/utility-functions";
-import NotificationsComponent from "@/app/components/single-elements/notificationsComponent";
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
+import { urlsToArrayUtil } from '@/lib/utility-functions';
+import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 
 /**
  * CreateArticleForm is a React component that manages the creation of an article form.
@@ -19,7 +27,7 @@ import NotificationsComponent from "@/app/components/single-elements/notificatio
  */
 export default function CreateArticleForm(): JSX.Element {
   const [state, formAction] = useActionState(createArticleAction, null);
-  const [notification, setNotification] = useState<string>("");
+  const [notification, setNotification] = useState<boolean>(false);
 
   const {
     register,
@@ -33,15 +41,15 @@ export default function CreateArticleForm(): JSX.Element {
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
     reValidateMode: 'onChange',
-    resolver: zodResolver(articleSchema),
+    resolver: customResolver(articleSchema) as any,
     defaultValues: {
-      title: "",
-      introduction: "",
-      main: "",
-      mainAudioUrl: "",
-      urlToMainIllustration: "",
-      urls: "",
-    }
+      title: '',
+      introduction: '',
+      main: '',
+      mainAudioUrl: '',
+      urlToMainIllustration: '',
+      urls: '',
+    },
   });
 
   register('urls');
@@ -61,10 +69,10 @@ export default function CreateArticleForm(): JSX.Element {
     });
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
-      setNotification(state?.text);
+      setNotification(true);
       notifTimeout = setTimeout(() => {
         reset();
-        setNotification('');
+        setNotification(false);
       }, 6000);
     }
 
@@ -73,26 +81,29 @@ export default function CreateArticleForm(): JSX.Element {
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
-    }
+    };
   }, [watch, clearErrors, state]);
 
   const initialUrls = {
-      type: 'website' as UrlsTypes,
-      url: '',
-      credits: '',
+    type: 'website' as UrlsTypes,
+    url: '',
+    credits: '',
   };
 
   const addInputs = () => {
     const urls = urlsToArray;
     setValue('urls', JSON.stringify([...urls, initialUrls]));
-  }
+  };
   const removeInputs = () => {
     if (urlsToArray.length > 1) {
       setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
     }
-  }
+  };
 
-  const updateUrls = (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => {
+  const updateUrls = (
+    newUrl: { type: UrlsTypes; url: string; credits?: string },
+    index: number
+  ) => {
     const newUrls = urlsToArray;
     newUrls[index] = newUrl;
     setValue('urls', JSON.stringify(newUrls));
@@ -100,7 +111,11 @@ export default function CreateArticleForm(): JSX.Element {
 
   return (
     <>
-      {notification && <NotificationsComponent notification={notification} state={state as { message: boolean, text: string }} />}
+      {notification && (
+        <NotificationsComponent
+          state={state as { message: boolean; text: string }}
+        />
+      )}
       <ArticleMarkupForm
         handleSubmit={handleSubmit(onSubmit)}
         register={register}
@@ -112,4 +127,5 @@ export default function CreateArticleForm(): JSX.Element {
         target="create"
       />
     </>
-  );};
+  );
+}

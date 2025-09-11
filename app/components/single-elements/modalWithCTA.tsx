@@ -47,17 +47,22 @@ export default function ModalWithCTA({
         </section>
         <footer className="modal-card-foot">
           <div className="buttons ">
-            <button className="button is-danger" onClick={() => ctaAction()}>
-              { ctaText }
+            <button
+              data-testid="cta-action"
+              className="button is-danger"
+              onClick={() => ctaAction()}
+            >
+              {ctaText}
             </button>
             <button
+              data-testid="cancel-action"
               className="button"
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
                 cancelAction();
               }}
             >
-              Annuler
+              {cancelText}
             </button>
           </div>
         </footer>

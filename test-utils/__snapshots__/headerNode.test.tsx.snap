@@ -39,12 +39,21 @@ exports[`Should render correctly 1`] = `
       </a>
     </div>
     <div
-      class="navbar-menu is-flex-direction-column"
+      class="navbar-menu is-flex-direction-row"
       id="navbarMenuItems"
     >
       <div
-        class="navbar-start container is-flex-wrap-wrap"
+        class="navbar-start is-flex-wrap-wrap"
       >
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
+          >
+            edit articles
+          </a>
+        </div>
         <div
           class="navbar-item"
         >
@@ -60,12 +69,12 @@ exports[`Should render correctly 1`] = `
           <a
             class="button "
           >
-            edit articles
+            manage articles
           </a>
         </div>
       </div>
       <div
-        class=""
+        class="is-flex"
       >
         <div
           class="navbar-item"
