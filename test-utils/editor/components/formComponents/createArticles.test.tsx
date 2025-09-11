@@ -40,58 +40,58 @@ describe('CreateArticleForm', () => {
     expect(screen.getByTestId('final-submit')).toBeInTheDocument();
   });
 
-  //   it('submits the form with correct data', async () => {
-  //     const mockCreateAction = vi.fn();
-  //     vi.spyOn(React, 'useActionState').mockReturnValue([
-  //       null,
-  //       mockCreateAction,
-  //       false,
-  //     ]);
+  // it('submits the form with correct data', async () => {
+  //   const mockCreateAction = vi.fn();
+  //   vi.spyOn(React, 'useActionState').mockReturnValue([
+  //     null,
+  //     mockCreateAction,
+  //     false,
+  //   ]);
 
-  //     render(<CreateArticleForm />);
+  //   render(<CreateArticleForm />);
 
-  //     // Fill in the form
-  //     fireEvent.change(screen.getByLabelText(/titre/i), {
-  //       target: { value: 'Test Title' },
-  //     });
-  //     fireEvent.change(screen.getByLabelText(/introduction/i), {
-  //       target: {
-  //         value:
-  //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum odio a tellus vehicula blandit. Etiam blandit pretium pellentesque. Ut porta elementum dolor faucibus tincidunt. Sed vel metus eu erat viverra interdum euismod vel urna. Aenean scelerisque purus auctor cursus congue. Integer dignissim a diam a sollicitudin. Morbi ut sapien sit amet erat volutpat pretium.',
-  //       },
-  //     });
-  //     fireEvent.change(screen.getByLabelText(/Texte/i), {
-  //       target: {
-  //         value:
-  //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum odio a tellus vehicula blandit. Etiam blandit pretium pellentesque. Ut porta elementum dolor faucibus tincidunt. Sed vel metus eu erat viverra interdum euismod vel urna. Aenean scelerisque purus auctor cursus congue. Integer dignissim a diam a sollicitudin. Morbi ut sapien sit amet erat volutpat pretium.\n\nUt rutrum, erat vel volutpat condimentum, arcu enim commodo ligula, ac commodo nibh tellus porttitor purus. Integer bibendum nulla et volutpat commodo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur luctus at lacus id posuere. Sed ante ipsum, sollicitudin nec eros nec, bibendum convallis tellus. In hac habitasse platea dictumst. Quisque in mauris lectus. Donec non blandit erat. Aliquam erat volutpat. Sed non metus id odio sagittis tempus.',
-  //       },
-  //     });
-  //     fireEvent.change(screen.getByLabelText(/lien audio principal/i), {
-  //       target: { value: 'https://example.com/audio' },
-  //     });
-  //     fireEvent.change(screen.getByLabelText(/lien vers l'illustration/i), {
-  //       target: { value: 'https://example.com/image' },
-  //     });
-
-  //     // Submit the form
-  //     fireEvent.click(screen.getByTestId('final-submit'));
-
-  //     await waitFor(() => {
-  //       expect(mockCreateAction).toHaveBeenCalled();
-  //     });
+  //   // Fill in the form
+  //   fireEvent.change(screen.getByLabelText(/titre/i), {
+  //     target: { value: 'Test Title' },
+  //   });
+  //   fireEvent.change(screen.getByLabelText(/introduction/i), {
+  //     target: {
+  //       value:
+  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum odio a tellus vehicula blandit. Etiam blandit pretium pellentesque. Ut porta elementum dolor faucibus tincidunt. Sed vel metus eu erat viverra interdum euismod vel urna. Aenean scelerisque purus auctor cursus congue. Integer dignissim a diam a sollicitudin. Morbi ut sapien sit amet erat volutpat pretium.',
+  //     },
+  //   });
+  //   fireEvent.change(screen.getByLabelText(/Texte/i), {
+  //     target: {
+  //       value:
+  //         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum odio a tellus vehicula blandit. Etiam blandit pretium pellentesque. Ut porta elementum dolor faucibus tincidunt. Sed vel metus eu erat viverra interdum euismod vel urna. Aenean scelerisque purus auctor cursus congue. Integer dignissim a diam a sollicitudin. Morbi ut sapien sit amet erat volutpat pretium.\n\nUt rutrum, erat vel volutpat condimentum, arcu enim commodo ligula, ac commodo nibh tellus porttitor purus. Integer bibendum nulla et volutpat commodo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Curabitur luctus at lacus id posuere. Sed ante ipsum, sollicitudin nec eros nec, bibendum convallis tellus. In hac habitasse platea dictumst. Quisque in mauris lectus. Donec non blandit erat. Aliquam erat volutpat. Sed non metus id odio sagittis tempus.',
+  //     },
+  //   });
+  //   fireEvent.change(screen.getByLabelText(/lien audio principal/i), {
+  //     target: { value: 'https://example.com/audio' },
+  //   });
+  //   fireEvent.change(screen.getByLabelText(/lien vers l'illustration/i), {
+  //     target: { value: 'https://example.com/image' },
   //   });
 
-  //   it('shows notification when state is returned', async () => {
-  //     vi.spyOn(React, 'useActionState').mockReturnValue([
-  //       { message: true, text: 'Article created successfully' },
-  //       vi.fn(),
-  //       false,
-  //     ]);
+  //   // Submit the form
+  //   fireEvent.click(screen.getByTestId('final-submit'));
 
-  //     render(<CreateArticleForm />);
-
-  //     expect(
-  //       screen.getByText(/article created successfully/i)
-  //     ).toBeInTheDocument();
+  //   await waitFor(() => {
+  //     expect(mockCreateAction).toHaveBeenCalled();
   //   });
+  // });
+
+  // it('shows notification when state is returned', async () => {
+  //   vi.spyOn(React, 'useActionState').mockReturnValue([
+  //     { message: true, text: 'Article created successfully' },
+  //     vi.fn(),
+  //     false,
+  //   ]);
+
+  //   render(<CreateArticleForm />);
+
+  //   expect(
+  //     screen.getByText(/article created successfully/i)
+  //   ).toBeInTheDocument();
+  // });
 });
