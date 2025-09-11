@@ -1,9 +1,9 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client';
+import { useEffect, useState } from 'react';
 
-import { searchForSlugs } from "@/app/searchActions";
-import { Slugs } from "@/models/slugs";
-import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
+import { searchForSlugs } from '@/app/searchActions';
+import { Slugs } from '@/models/slugs';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { PaginatedSearchDisplay } from '@/app/components/single-elements/paginatedSearchResults';
 
 type TargetTypes = 'search' | 'update' | 'manage';
@@ -105,7 +105,7 @@ export default function SearchArticle({
           />
           <button
             type="submit"
-            className="button is-primary is-inline-flex ml-4 mr-4"
+            className="button is-inline-flex ml-4 mr-4"
             data-testid="submit-search"
           >
             Search
