@@ -18,6 +18,7 @@ import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm'
 import { urlsToArrayUtil } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 /**
  * CreateArticleForm is a React component that manages the creation of an article form.
@@ -26,7 +27,10 @@ import { customResolver } from '@/app/editor/components/resolvers/customResolver
  * @returns {JSX.Element} Returns an ArticleMarkupForm component with all necessary props for creating an article.
  */
 export default function CreateArticleForm(): JSX.Element {
-  const [state, formAction] = useActionState(createArticleAction, null);
+  const [state, formAction, isPending] = useActionState(
+    createArticleAction,
+    null
+  );
   const [notification, setNotification] = useState<boolean>(false);
 
   const {
@@ -111,6 +115,13 @@ export default function CreateArticleForm(): JSX.Element {
 
   return (
     <>
+      <ArticleTitle
+        text="Créer un article"
+        level="h2"
+        size="large"
+        color="white"
+        spacings="mt-6 mb-4"
+      />
       {notification && (
         <NotificationsComponent
           state={state as { message: boolean; text: string }}
@@ -125,6 +136,7 @@ export default function CreateArticleForm(): JSX.Element {
         addInputs={addInputs}
         removeInputs={removeInputs}
         target="create"
+        isPending={isPending}
       />
     </>
   );

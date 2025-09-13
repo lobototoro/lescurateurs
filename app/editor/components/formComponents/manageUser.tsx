@@ -1,11 +1,20 @@
-import { startTransition, useActionState, useEffect, useRef, useState } from 'react';
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { userSchema } from '@/models/userSchema';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
-import { updateUserAction, getUsersList, deleteUserAction } from '@/app/userActions';
+import {
+  updateUserAction,
+  getUsersList,
+  deleteUserAction,
+} from '@/app/userActions';
 import { PaginatedSearchDisplay } from '@/app/components/single-elements/paginatedSearchResults';
 import {
   adminPermissions,
@@ -17,12 +26,22 @@ import UserPermissionsCheckboxes from '@/app/components/single-elements/userPerm
 import { isEmpty } from '@/lib/utility-functions';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+import { customResolver } from '../resolvers/customResolver';
+import { custom } from 'zod/v3';
 
 export default function ManageUserForm() {
-  const [state, updateAction, isPending] = useActionState(updateUserAction, null);
-  const [secondState, deleteAction, isDeletePending] = useActionState(deleteUserAction, null);
+  const [state, updateAction, isPending] = useActionState(
+    updateUserAction,
+    null
+  );
+  const [secondState, deleteAction, isDeletePending] = useActionState(
+    deleteUserAction,
+    null
+  );
   const [usersList, setUsersList] = useState<z.infer<typeof userSchema>[]>([]);
-  const [selectedUser, setSelectedUser] = useState<z.infer<typeof userSchema> | null>(null);
+  const [selectedUser, setSelectedUser] = useState<z.infer<
+    typeof userSchema
+  > | null>(null);
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
   );
@@ -35,11 +54,11 @@ export default function ManageUserForm() {
     handleSubmit,
     setValue,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<z.infer<typeof userSchema>>({
     mode: 'onChange',
     reValidateMode: 'onBlur',
-    resolver: zodResolver(userSchema),
+    resolver: customResolver(userSchema),
     defaultValues: {
       email: '',
       tiersServiceIdent: '',
@@ -48,7 +67,7 @@ export default function ManageUserForm() {
       lastConnectionAt: new Date().toISOString(),
       permissions: JSON.stringify(contributorPermissions),
     },
-    values: selectedUser || undefined
+    values: selectedUser || undefined,
   });
 
   const performedAttheEnd = () => {
@@ -59,27 +78,28 @@ export default function ManageUserForm() {
     startTransition(() => {
       fetchUsers();
     });
-  }
-
+  };
 
   const getAllUsers = async () => {
     const usersListResponse = await getUsersList();
     if (usersListResponse.message) {
-      const usersList = usersListResponse?.usersList as z.infer<typeof userSchema>[];
+      const usersList = usersListResponse?.usersList as z.infer<
+        typeof userSchema
+      >[];
 
       return usersList;
     } else {
       console.error('[!] while fetching users list ', usersListResponse.text);
-      
+
       return [];
     }
-  }
+  };
 
   const setTimer = () => {
     return setTimeout(() => {
       performedAttheEnd();
     }, 6000);
-  }
+  };
 
   const fetchUsers = async () => {
     const usersList = await getAllUsers();
@@ -87,7 +107,6 @@ export default function ManageUserForm() {
   };
 
   useEffect(() => {
-
     //performed only once when page is first displayed
     fetchUsers();
   }, []);
@@ -107,11 +126,15 @@ export default function ManageUserForm() {
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
-    }
+    };
   }, [state, secondState]);
 
-  const handleSelectedUser = (user: z.infer<typeof userSchema>, action: string) => {
-    if (user?.id !== undefined && action === 'update') { // test for a valid user
+  const handleSelectedUser = (
+    user: z.infer<typeof userSchema>,
+    action: string
+  ) => {
+    if (user?.id !== undefined && action === 'update') {
+      // test for a valid user
       setSelectedUser(user);
       setUserRole(user?.role as keyof typeof UserRole);
     }
@@ -122,7 +145,7 @@ export default function ManageUserForm() {
         modalRef.current?.classList.add('is-active');
       }
     }
-  }
+  };
 
   const confirmDeletion = () => {
     if (usertoBeDeleted !== null) {
@@ -298,9 +321,15 @@ export default function ManageUserForm() {
                 role="button"
                 data-testid="final-submit"
                 type="submit"
-                className="button is-primary is-size-6 has-text-white"
+                className={
+                  isPending || isDeletePending
+                    ? 'button is-primary is-size-6 has-text-white is-loading'
+                    : 'button is-primary is-size-6 has-text-white'
+                }
               >
-                {isPending ? 'Chargement...' : "Modifier l'utilisateur"}
+                {isPending || isDeletePending
+                  ? 'Chargement...'
+                  : "Modifier l'utilisateur"}
               </button>
               <button
                 className="button is-secondary is-size-6 has-text-white"
@@ -318,4 +347,4 @@ export default function ManageUserForm() {
       )}
     </section>
   );
-};
+}

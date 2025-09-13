@@ -201,7 +201,11 @@ export default function CreateUserForm() {
           role="button"
           data-testid="final-submit"
           type="submit"
-          className="button is-primary is-size-6 has-text-white mt-5"
+          className={
+            isPending
+              ? 'button is-primary is-size-6 has-text-white mt-5 is-loading'
+              : 'button is-primary is-size-6 has-text-white mt-5'
+          }
         >
           {isPending ? 'Chargement...' : "Créer l'utilisateur"}
         </button>

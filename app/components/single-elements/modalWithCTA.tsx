@@ -1,4 +1,5 @@
-import { JSX } from "react";
+import { JSX } from 'react';
+import { is } from 'zod/v4/locales';
 
 export default function ModalWithCTA({
   modalRef,
@@ -8,7 +9,8 @@ export default function ModalWithCTA({
   ctaAction,
   cancelAction,
   cancelText,
-  onClose
+  onClose,
+  isPending,
 }: {
   modalRef: React.RefObject<HTMLDivElement>;
   title: string;
@@ -18,6 +20,7 @@ export default function ModalWithCTA({
   cancelAction: () => void;
   cancelText: string;
   onClose: () => void;
+  isPending?: unknown;
 }): JSX.Element {
   return (
     <div className="modal" ref={modalRef} data-testid="article-modal">
@@ -49,14 +52,14 @@ export default function ModalWithCTA({
           <div className="buttons ">
             <button
               data-testid="cta-action"
-              className="button is-danger"
+              className={isPending ? 'button is-loading' : 'button'}
               onClick={() => ctaAction()}
             >
               {ctaText}
             </button>
             <button
               data-testid="cancel-action"
-              className="button"
+              className={isPending ? 'button is-loading' : 'button'}
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
                 cancelAction();
@@ -69,4 +72,4 @@ export default function ModalWithCTA({
       </div>
     </div>
   );
-};
+}
