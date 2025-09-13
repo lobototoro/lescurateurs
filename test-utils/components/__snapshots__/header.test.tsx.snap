@@ -3,7 +3,7 @@
 exports[`Should render correctly 1`] = `
 <DocumentFragment>
   <header
-    class="_header-title_f11b8f container"
+    class="_header-title_15d375 container"
   >
     <div>
       <h1
