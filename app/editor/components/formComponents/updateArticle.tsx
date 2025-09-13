@@ -21,6 +21,7 @@ import SearchArticle from '@/app/editor/components/formComponents/searchArticle'
 import { isEmpty, urlsToArrayUtil } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -206,6 +207,13 @@ export default function UpdateArticleForm(): JSX.Element {
 
   return (
     <>
+      <ArticleTitle
+        text="Mettre à jour un article"
+        level="h2"
+        size="large"
+        color="white"
+        spacings="mt-6 mb-4"
+      />
       {notification && (
         <NotificationsComponent
           state={state as { message: boolean; text: string }}

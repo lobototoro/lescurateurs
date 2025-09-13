@@ -84,11 +84,11 @@ export default function SearchArticle({
   return (
     <div className="container">
       <ArticleTitle
-        size="medium"
-        level="h2"
-        color="secondary"
         text={target}
-        spacings="mt-3 mb-5"
+        level="h2"
+        size="large"
+        color="white"
+        spacings="mt-6 mb-4"
       />
       <form onSubmit={handleSubmit} role="search">
         <div className="is-flex is-flex-direction-row is-flex-justify-space-between is-flex-align-items-center">
