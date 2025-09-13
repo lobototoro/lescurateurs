@@ -1,7 +1,6 @@
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { AddUrlsObjects } from '@/app/editor/components/formComponents/addUrlsObjects';
 import { isEmpty } from '@/lib/utility-functions';
-import ModalComponent from './modalComponent';
 
 export default function ArticleMarkupForm({
   handleSubmit,
