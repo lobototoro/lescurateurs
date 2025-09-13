@@ -54,6 +54,7 @@ export default function SearchArticle({
     if (result?.slugs.length === 0) {
       setNotification('No slug results found');
       setPendingSearch(false);
+
       return;
     }
     setPendingSearch(false);
