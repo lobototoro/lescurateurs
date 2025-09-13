@@ -61,6 +61,12 @@ export default function ManageArticleForm(): JSX.Element {
   const modalRef = useRef<HTMLDivElement>(null);
   const [cancelSearchDisplay, setCancelSearchDisplay] =
     useState<boolean>(false);
+  const [pendingFrom, setPendingFrom] = useState<
+    | typeof isDeletePending
+    | typeof isValidatePending
+    | typeof isShipPending
+    | null
+  >(null);
 
   const onclose = () => {
     if (modalRef.current) {
@@ -86,6 +92,7 @@ export default function ManageArticleForm(): JSX.Element {
           cancelText: 'Annuler',
           onClose: onclose,
         });
+        setPendingFrom(isDeletePending);
         modalRef.current?.classList.add('is-active');
         break;
       case 'validate':
@@ -104,6 +111,7 @@ export default function ManageArticleForm(): JSX.Element {
           cancelText: 'Invalider',
           onClose: onclose,
         });
+        setPendingFrom(isValidatePending);
         modalRef.current?.classList.add('is-active');
         break;
       case 'ship':
@@ -122,6 +130,7 @@ export default function ManageArticleForm(): JSX.Element {
           cancelText: 'OFFLINE',
           onClose: onclose,
         });
+        setPendingFrom(isShipPending);
         modalRef.current?.classList.add('is-active');
         break;
       default:
@@ -189,6 +198,7 @@ export default function ManageArticleForm(): JSX.Element {
         cancelAction={modalInfos.cancelAction}
         cancelText={modalInfos.cancelText}
         onClose={modalInfos.onClose}
+        isPending={pendingFrom}
       />
       {deleteNotification && deleteState?.message && (
         <NotificationsComponent

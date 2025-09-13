@@ -25,6 +25,7 @@ export default function SearchArticle({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [slugs, setSlugs] = useState<Slugs[]>([]);
   const [notification, setNotification] = useState<string>('');
+  const [pendingSearch, setPendingSearch] = useState<boolean>(false);
 
   useEffect(() => {
     if (cancelSearchDisplay) {
@@ -40,6 +41,8 @@ export default function SearchArticle({
     if (searchTerm.trim() === '') return;
     setNotification('');
 
+    setPendingSearch(true);
+
     const result = (await searchForSlugs(searchTerm)) as {
       message: boolean;
       slugs: Slugs[];
@@ -50,9 +53,10 @@ export default function SearchArticle({
     }
     if (result?.slugs.length === 0) {
       setNotification('No slug results found');
-
+      setPendingSearch(false);
       return;
     }
+    setPendingSearch(false);
   };
 
   const handleReference = (id: number, slug?: string, actionName?: string) => {
@@ -105,7 +109,11 @@ export default function SearchArticle({
           />
           <button
             type="submit"
-            className="button is-inline-flex ml-4 mr-4"
+            className={
+              pendingSearch
+                ? 'button is-inline-flex ml-4 mr-4 is-loading'
+                : 'button is-inline-flex ml-4 mr-4'
+            }
             data-testid="submit-search"
           >
             Search

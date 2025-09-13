@@ -10,7 +10,8 @@ export default function ArticleMarkupForm({
   updateUrls,
   addInputs,
   removeInputs,
-  target
+  target,
+  isPending,
 }: {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   register: any;
@@ -20,8 +21,8 @@ export default function ArticleMarkupForm({
   addInputs: () => void;
   removeInputs: () => void;
   target: string;
+  isPending?: boolean;
 }) {
-
   return (
     <form onSubmit={handleSubmit} data-testid="article-form">
       <div className="mt-6">
@@ -156,7 +157,11 @@ export default function ArticleMarkupForm({
       <div className="field mt-5">
         <input
           type="submit"
-          className="button is-primary is-size-6 has-text-white"
+          className={
+            isPending
+              ? 'is-loading'
+              : 'button is-primary is-size-6 has-text-white'
+          }
           value="Valider"
           data-testid="final-submit"
           disabled={!isEmpty(errors)}

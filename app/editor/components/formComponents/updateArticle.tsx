@@ -33,7 +33,10 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
  * @returns {JSX.Element} The rendered UpdateArticleForm component
  */
 export default function UpdateArticleForm(): JSX.Element {
-  const [state, formAction] = useActionState(updateArticleAction, null);
+  const [state, formAction, isPending] = useActionState(
+    updateArticleAction,
+    null
+  );
 
   const [identicalWarnMessage, setIdenticalWarnMessage] =
     useState<boolean>(false);
@@ -248,6 +251,7 @@ export default function UpdateArticleForm(): JSX.Element {
             addInputs={addInputs}
             removeInputs={removeInputs}
             target="update"
+            isPending={isPending}
           />
           <div className="is-flex is-justify-content-flex-end">
             <button

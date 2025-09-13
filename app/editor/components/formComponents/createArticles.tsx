@@ -27,7 +27,10 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
  * @returns {JSX.Element} Returns an ArticleMarkupForm component with all necessary props for creating an article.
  */
 export default function CreateArticleForm(): JSX.Element {
-  const [state, formAction] = useActionState(createArticleAction, null);
+  const [state, formAction, isPending] = useActionState(
+    createArticleAction,
+    null
+  );
   const [notification, setNotification] = useState<boolean>(false);
 
   const {
@@ -133,6 +136,7 @@ export default function CreateArticleForm(): JSX.Element {
         addInputs={addInputs}
         removeInputs={removeInputs}
         target="create"
+        isPending={isPending}
       />
     </>
   );
