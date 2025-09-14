@@ -48,13 +48,15 @@ vi.mock('@/lib/utility-functions', () => ({
   },
 }));
 
+const scrolltoTop = vi.fn();
+
 describe('CreateArticleForm', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders the form', () => {
-    render(<CreateArticleForm />);
+    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
     expect(screen.getByTestId('article-form')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Titre')).toBeInTheDocument();
   });
@@ -66,7 +68,7 @@ describe('CreateArticleForm', () => {
       message: true,
       text: 'Article created successfully',
     });
-    render(<CreateArticleForm />);
+    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
     const titleInput = screen.getByPlaceholderText('Titre');
     const introductionInput = screen.getByPlaceholderText('introduction');
     const mainInput = screen.getByPlaceholderText('Texte');
@@ -103,7 +105,7 @@ describe('CreateArticleForm', () => {
   });
 
   it('adds and removes URL inputs', async () => {
-    render(<CreateArticleForm />);
+    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
     // Simulate addInputs and removeInputs via props
     // Since ArticleMarkupForm is mocked, we can't trigger addInputs directly
     // Instead, test that urlsToArray is initially empty
@@ -111,7 +113,7 @@ describe('CreateArticleForm', () => {
   });
 
   it('clears errors when input changes', async () => {
-    render(<CreateArticleForm />);
+    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
     const titleInput = screen.getByPlaceholderText('Titre');
     const introductionInput = screen.getByPlaceholderText('introduction');
     const mainInput = screen.getByPlaceholderText('Texte');

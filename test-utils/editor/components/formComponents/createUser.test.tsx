@@ -20,13 +20,15 @@ vi.mock("@/app/components/single-elements/ArticleTitle", () => ({
   ArticleTitle: ({ text }: { text: string }) => <h2>{text}</h2>,
 }));
 
+const scrolltoTop = vi.fn();
+
 describe("CreateUserForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("renders the form with all fields", () => {
-    render(<CreateUserForm />);
+    render(<CreateUserForm scrolltoTop={scrolltoTop} />);
 
     expect(screen.getByText("Créer un utilisateur")).toBeDefined();
     expect(screen.getByLabelText("Email:")).toBeDefined();
@@ -36,7 +38,7 @@ describe("CreateUserForm", () => {
   });
 
   it("validates required fields", async () => {
-    render(<CreateUserForm />);
+    render(<CreateUserForm scrolltoTop={scrolltoTop} />);
 
     fireEvent.click(screen.getByRole("button", { name: "Créer l'utilisateur" }));
 
@@ -47,7 +49,7 @@ describe("CreateUserForm", () => {
   });
 
   it("updates permissions when role changes", async () => {
-    render(<CreateUserForm />);
+    render(<CreateUserForm scrolltoTop={scrolltoTop} />);
 
     const roleSelect = screen.getByLabelText("Rôle:");
     fireEvent.change(roleSelect, { target: { value: "admin" } });
@@ -67,7 +69,7 @@ describe("CreateUserForm", () => {
 
   it("displays a success notification on successful submission", async () => {
 
-    render(<CreateUserForm />);
+    render(<CreateUserForm scrolltoTop={scrolltoTop} />);
 
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } });
     fireEvent.change(screen.getByLabelText("Identifiant Tiers Service:"), { target: { value: "12345" } });
@@ -82,7 +84,7 @@ describe("CreateUserForm", () => {
 
   it("displays an error notification on failed submission", async () => {
 
-    render(<CreateUserForm />);
+    render(<CreateUserForm scrolltoTop={scrolltoTop} />);
 
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } });
     fireEvent.change(screen.getByLabelText("Identifiant Tiers Service:"), { target: { value: "12345" } });

@@ -29,7 +29,7 @@ import NotificationsComponent from '@/app/components/single-elements/notificatio
 import { customResolver } from '../resolvers/customResolver';
 import { custom } from 'zod/v3';
 
-export default function ManageUserForm() {
+export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => void }) {
   const [state, updateAction, isPending] = useActionState(
     updateUserAction,
     null
@@ -115,10 +115,12 @@ export default function ManageUserForm() {
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
+      scrolltoTop();
       notifTimeout = setTimer();
     }
     if (secondState) {
       setNotification(true);
+      scrolltoTop();
       notifTimeout = setTimer();
     }
 

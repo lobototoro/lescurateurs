@@ -26,7 +26,11 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
  *
  * @returns {JSX.Element} Returns an ArticleMarkupForm component with all necessary props for creating an article.
  */
-export default function CreateArticleForm(): JSX.Element {
+export default function CreateArticleForm({
+  scrolltoTop,
+}: {
+  scrolltoTop: () => void;
+}): JSX.Element {
   const [state, formAction, isPending] = useActionState(
     createArticleAction,
     null
@@ -74,6 +78,7 @@ export default function CreateArticleForm(): JSX.Element {
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
+      scrolltoTop();
       notifTimeout = setTimeout(() => {
         reset();
         setNotification(false);

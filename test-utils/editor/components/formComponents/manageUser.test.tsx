@@ -48,7 +48,6 @@ vi.mock('@/app/components/single-elements/notificationsComponent', () => ({
   default: (props: any) => <div data-testid="notification">{props.notification}</div>,
 }));
 
-
 const mockUser = {
   id: 1,
   email: 'test@example.com',
@@ -58,6 +57,8 @@ const mockUser = {
   lastConnectionAt: new Date().toISOString(),
   permissions: JSON.stringify(['perm3']),
 };
+
+const scrolltoTop = vi.fn();
 
 describe('ManageUserForm', () => {
   beforeEach(() => {
@@ -80,13 +81,13 @@ describe('ManageUserForm', () => {
   });
 
   it('renders user search when no user is selected', async () => {
-    render(<ManageUserForm />);
+    render(<ManageUserForm scrolltoTop={scrolltoTop} />);
     expect(await screen.findByTestId('article-title')).toHaveTextContent('Sélectionnez un utilisateur');
     expect(screen.getByTestId('paginated-search')).toBeInTheDocument();
   });
 
   it('shows user form when a user is selected', async () => {
-    render(<ManageUserForm />);
+    render(<ManageUserForm scrolltoTop={scrolltoTop} />);
     
     // Simulate user selection via PaginatedSearchDisplay
     fireEvent.click(await screen.findByTestId('paginated-search'));
@@ -97,7 +98,7 @@ describe('ManageUserForm', () => {
   });
 
   // it('submits the form and shows notification', async () => {
-  //   render(<ManageUserForm />);
+  //   render(<ManageUserForm scrolltoTop={scrolltoTop} />);
   //   fireEvent.click(await screen.findByTestId('paginated-search'));
   //   const submitBtn = await screen.findByTestId('final-submit');
   //   fireEvent.click(submitBtn);
@@ -107,7 +108,7 @@ describe('ManageUserForm', () => {
   // });
 
   it('returns to search when clicking "Retour à la recherche"', async () => {
-    render(<ManageUserForm />);
+    render(<ManageUserForm scrolltoTop={scrolltoTop} />);
     fireEvent.click(await screen.findByTestId('paginated-search'));
     const backBtn = await screen.findByTestId('back-to-search');
     fireEvent.click(backBtn);
@@ -115,7 +116,7 @@ describe('ManageUserForm', () => {
   });
 
   // it('shows and handles delete modal', async () => {
-  //   render(<ManageUserForm />);
+  //   render(<ManageUserForm scrolltoTop={scrolltoTop} />);
   //   // Simulate delete action
   //   fireEvent.click(await screen.findByTestId('paginated-search'));
   //   screen.debug();
@@ -132,7 +133,7 @@ describe('ManageUserForm', () => {
   // });
 
   // it('handles cancel deletion', async () => {
-  //   render(<ManageUserForm />);
+  //   render(<ManageUserForm scrolltoTop={scrolltoTop} />);
   //   fireEvent.click(await screen.findByTestId('paginated-search'));
   //   // Simulate handleSelectedUser for delete
   //   // @ts-ignore
@@ -143,7 +144,7 @@ describe('ManageUserForm', () => {
   // });
 
   it('changes role and updates permissions', async () => {
-    render(<ManageUserForm />);
+    render(<ManageUserForm scrolltoTop={scrolltoTop} />);
     fireEvent.click(await screen.findByTestId('paginated-search'));
     const roleSelect = await screen.findByTestId('role');
     fireEvent.change(roleSelect, { target: { value: 'admin' } });
