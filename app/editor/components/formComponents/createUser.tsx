@@ -15,7 +15,7 @@ import { userSchema } from '@/models/userSchema';
 import { createUserAction } from '@/app/userActions';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 
-export default function CreateUserForm() {
+export default function CreateUserForm({ scrolltoTop }: { scrolltoTop: () => void }) {
   const [state, formAction, isPending] = useActionState(createUserAction, null);
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
@@ -69,6 +69,7 @@ export default function CreateUserForm() {
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
+      scrolltoTop();
       reset();
       notifTimeout = setTimeout(() => {
         setNotification(false);
