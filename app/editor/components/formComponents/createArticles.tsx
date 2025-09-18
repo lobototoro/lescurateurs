@@ -37,6 +37,7 @@ export default function CreateArticleForm({
   );
   const [notification, setNotification] = useState<boolean>(false);
 
+  // declaring react hook form variables
   const {
     register,
     handleSubmit,
@@ -60,9 +61,12 @@ export default function CreateArticleForm({
     },
   });
 
+  // registering urls that need a special treatment
+  // adding, removing and updating those fields are handled by the urlsToArrayUtil function
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
+  // main function that submits data to the server action part
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
     startTransition(() => {
       formAction(data);
@@ -70,11 +74,14 @@ export default function CreateArticleForm({
   };
 
   useEffect(() => {
+    // utility that helps clear errors when addressed live by the user
     const subscription = watch((value, { name }) => {
       if (name) {
         clearErrors(name);
       }
     });
+
+    // display of the final notification, on success or failure
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
@@ -93,12 +100,14 @@ export default function CreateArticleForm({
     };
   }, [watch, clearErrors, state]);
 
+  // template for urls, injected when a url field is added
   const initialUrls = {
     type: 'website' as UrlsTypes,
     url: '',
     credits: '',
   };
 
+  // utilities for urls fields
   const addInputs = () => {
     const urls = urlsToArray;
     setValue('urls', JSON.stringify([...urls, initialUrls]));
@@ -108,7 +117,6 @@ export default function CreateArticleForm({
       setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
     }
   };
-
   const updateUrls = (
     newUrl: { type: UrlsTypes; url: string; credits?: string },
     index: number

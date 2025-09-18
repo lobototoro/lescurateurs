@@ -32,7 +32,11 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
  *
  * @returns {JSX.Element} The rendered UpdateArticleForm component
  */
-export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => void; }): JSX.Element {
+export default function UpdateArticleForm({
+  scrolltoTop,
+}: {
+  scrolltoTop: () => void;
+}): JSX.Element {
   const [state, formAction, isPending] = useActionState(
     updateArticleAction,
     null
@@ -45,6 +49,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
   const [selectedId, setSelectedId] = useState<string | number>();
   const [notification, setNotification] = useState<boolean>(false);
 
+  // declaring react hook form variables with the full template of the article template
   const {
     register,
     handleSubmit,
@@ -76,6 +81,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
     values: currentArticle,
   });
 
+  // can't remember why I had to register everything again: maybe to enforce using 'required' properties
   register('id', { required: true });
   register('slug', { required: true });
   register('author', { required: true });
@@ -86,9 +92,11 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
   register('validated', { required: true });
   register('shipped', { required: true });
 
+  // special treatment for urls added by the user
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
 
+  // inline check for identical article: forbid the form to be sent to action if identical
   const checkForIdenticalArticle = (
     data: z.infer<typeof articleSchema>,
     article: z.infer<typeof articleSchema>
@@ -96,7 +104,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
     if (R.equals(data, article)) {
       setIdenticalWarnMessage(true);
       scrolltoTop();
-      
+
       return true;
     }
     if (identicalWarnMessage) {
@@ -106,6 +114,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
     return false;
   };
 
+  // main submit handler
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
     startTransition(() => {
       if (
@@ -140,6 +149,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
   };
 
   useEffect(() => {
+    // transition between search article to update to displaying selected article
     startTransition(async () => {
       if (selectedId === undefined) {
         setCurrentArticle(undefined);
@@ -154,11 +164,14 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
   }, [selectedId]);
 
   useEffect(() => {
+    // clearing errors when addressed
     const subscription = watch((value, { name }) => {
       if (name) {
         clearErrors(name);
       }
     });
+
+    // success or failure notification
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
@@ -179,6 +192,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
     };
   }, [watch, clearErrors, state]);
 
+  // add urls utilities
   const initialUrls = {
     type: 'website' as UrlsTypes,
     url: '',
@@ -205,6 +219,7 @@ export default function UpdateArticleForm({ scrolltoTop }: { scrolltoTop: () => 
     setValue('urls', JSON.stringify(newUrls));
   };
 
+  // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {
     event.preventDefault();
     setSelectedId(undefined);
