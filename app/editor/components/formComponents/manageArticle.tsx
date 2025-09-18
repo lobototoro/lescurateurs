@@ -16,13 +16,13 @@ import NotificationsComponent from '@/app/components/single-elements/notificatio
 import SearchArticle from './searchArticle';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 
+// isolated submit for validation and shipping
 const sendAction = (
   action: string,
   id: string | number,
   actionMethod: any,
   choice?: string
 ) => {
-  // console.info(`Action: ${action}, ID: ${id} and Method: ${actionMethod}`);
   startTransition(() => {
     const formData = new FormData();
     formData.append('id', String(id));
@@ -34,8 +34,6 @@ const sendAction = (
     }
 
     return actionMethod(formData);
-
-    // console.info("method fired!", formData);
   });
 };
 
@@ -70,14 +68,16 @@ export default function ManageArticleForm({
     | typeof isValidatePending
     | typeof isShipPending
     | null
-  >(null);
+  >(null); // mix state for the pending action
 
+  // close action on modal
   const onclose = () => {
     if (modalRef.current) {
       modalRef.current.classList.remove('is-active');
     }
   };
 
+  // general switch taht fills the infos for the modal
   const handleAction = (action: Record<string, any>) => {
     switch (action.actionName) {
       case 'delete':
@@ -138,12 +138,12 @@ export default function ManageArticleForm({
         modalRef.current?.classList.add('is-active');
         break;
       default:
-        // console.warn("Unknown action:", action.actionName);
         break;
     }
   };
 
   useEffect(() => {
+    // securing action name: dirty fix for a bug, TODO: implement a proper solution
     if (action?.actionName === undefined) {
       return;
     } else {
@@ -152,6 +152,7 @@ export default function ManageArticleForm({
   }, [action]);
 
   useEffect(() => {
+    // each server action gets to have its own timeout
     let notifTimeout: NodeJS.Timeout | undefined;
     let cancelDisplayTimeout: NodeJS.Timeout | undefined;
     if (deleteState?.message) {
@@ -178,6 +179,7 @@ export default function ManageArticleForm({
       }, 6000);
     }
 
+    // in case of cancel search
     if (cancelSearchDisplay) {
       cancelDisplayTimeout = setTimeout(() => {
         setCancelSearchDisplay(false);
