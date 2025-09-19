@@ -1,6 +1,7 @@
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { AddUrlsObjects } from '@/app/editor/components/formComponents/addUrlsObjects';
 import { isEmpty } from '@/lib/utility-functions';
+import RTE from '@/app/components/single-elements/rte';
 
 export default function ArticleMarkupForm({
   handleSubmit,
@@ -12,6 +13,8 @@ export default function ArticleMarkupForm({
   removeInputs,
   target,
   isPending,
+  getMainContent,
+  setMainContent,
 }: {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   register: any;
@@ -22,6 +25,8 @@ export default function ArticleMarkupForm({
   removeInputs: () => void;
   target: string;
   isPending?: boolean;
+  getMainContent: (v: string) => void;
+  setMainContent?: () => string;
 }) {
   return (
     <form onSubmit={handleSubmit} data-testid="article-form">
@@ -66,7 +71,7 @@ export default function ArticleMarkupForm({
           )}
         </div>
 
-        <div className="field">
+        {/*<div className="field">
           <label className="label" aria-label="main" htmlFor="main">
             Texte
           </label>
@@ -81,6 +86,20 @@ export default function ArticleMarkupForm({
           {errors.main && (
             <p className="has-text-danger">{errors.main.message}</p>
           )}
+        </div>*/}
+
+        <div className="field">
+          <label className="label" aria-labelledby="main" htmlFor="main">
+            Texte
+          </label>
+          <RTE
+            field-id="main"
+            aria-label="main"
+            className="is-family-primary has-text-weight-normal is-size-6 has-text-white"
+            data-testid="main"
+            getMainContent={getMainContent}
+            setMainContent={setMainContent}
+          />
         </div>
 
         <div className="field">

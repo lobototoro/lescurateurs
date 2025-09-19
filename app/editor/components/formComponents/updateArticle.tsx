@@ -22,6 +22,7 @@ import { isEmpty, urlsToArrayUtil } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { get } from 'http';
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -92,6 +93,12 @@ export default function UpdateArticleForm({
   register('validated', { required: true });
   register('shipped', { required: true });
 
+  register('main', { required: true });
+  const setMainContent = () => getValues('main');
+  const getMaincontent = (value: string) => {
+    return setValue('main', value);
+  };
+  
   // special treatment for urls added by the user
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
@@ -270,6 +277,8 @@ export default function UpdateArticleForm({
             removeInputs={removeInputs}
             target="update"
             isPending={isPending}
+            getMainContent={getMaincontent}
+            setMainContent={setMainContent}
           />
           <div className="is-flex is-justify-content-flex-end">
             <button

@@ -51,19 +51,12 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="main"
+          aria-labelledby="main"
           class="label"
           for="main"
         >
           Texte
         </label>
-        <textarea
-          aria-label="main"
-          class="textarea"
-          data-testid="main"
-          id="main"
-          rows="10"
-        />
       </div>
       <div
         class="field"
@@ -204,19 +197,12 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="main"
+          aria-labelledby="main"
           class="label"
           for="main"
         >
           Texte
         </label>
-        <textarea
-          aria-label="main"
-          class="textarea"
-          data-testid="main"
-          id="main"
-          rows="10"
-        />
       </div>
       <div
         class="field"
