@@ -8,7 +8,6 @@ import {
   useState,
 } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { articleSchema } from '@/models/articleSchema';
@@ -62,6 +61,11 @@ export default function CreateArticleForm({
   });
 
   // registering urls that need a special treatment
+  register('main');
+  const getMaincontent = (value: string) => {
+    return setValue('main', value);
+  };
+
   // adding, removing and updating those fields are handled by the urlsToArrayUtil function
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
@@ -126,6 +130,8 @@ export default function CreateArticleForm({
     setValue('urls', JSON.stringify(newUrls));
   };
 
+  console.info(getValues());
+
   return (
     <>
       <ArticleTitle
@@ -150,6 +156,7 @@ export default function CreateArticleForm({
         removeInputs={removeInputs}
         target="create"
         isPending={isPending}
+        getMainContent={getMaincontent}
       />
     </>
   );
