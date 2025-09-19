@@ -89,12 +89,13 @@ export default function ArticleMarkupForm({
         </div>*/}
 
         <div className="field">
-          <label className="label" aria-label="main" htmlFor="main">
+          <label className="label" aria-labelledby="main" htmlFor="main">
             Texte
           </label>
           <RTE
+            field-id="main"
             aria-label="main"
-            className="textarea"
+            className="is-family-primary has-text-weight-normal is-size-6 has-text-white"
             data-testid="main"
             getMainContent={getMainContent}
             setMainContent={setMainContent}

@@ -3,8 +3,10 @@ import dynamic from 'next/dynamic';
 import React, { useState, useMemo, useEffect } from 'react';
 
 import 'react-quill-new/dist/quill.snow.css';
+import './rte.css';
 
 export default function RTE(props: {
+  'field-id': string,
   'aria-label': string,
   className?: string,
   'data-testid': string,
@@ -30,8 +32,9 @@ export default function RTE(props: {
   return (
     <ReactQuill theme="snow" value={value} onChange={setValue}>
       <div
+        id={props['field-id']}
         aria-label={props['aria-label']}
-        className={props.className}
+        className={`custom-text-area ${props.className}`}
         data-testid={props['data-testid']}
       />
     </ReactQuill>

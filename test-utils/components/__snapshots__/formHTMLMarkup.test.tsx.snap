@@ -51,7 +51,7 @@ exports[`should render correct markup 1`] = `
         class="field"
       >
         <label
-          aria-label="main"
+          aria-labelledby="main"
           class="label"
           for="main"
         >
@@ -197,7 +197,7 @@ exports[`should render correct markup for update 1`] = `
         class="field"
       >
         <label
-          aria-label="main"
+          aria-labelledby="main"
           class="label"
           for="main"
         >
