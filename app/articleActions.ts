@@ -1,10 +1,9 @@
-"use server";
-import { z } from "zod";
+'use server';
+import { z } from 'zod';
 import slugify from 'slugify';
 
-import { auth0 } from "@/lib/auth0"
-import { articleSchema } from "@/models/articleSchema";
-
+import { auth0 } from '@/lib/auth0';
+import { articleSchema } from '@/models/articleSchema';
 
 import {
   createArticle,
@@ -14,20 +13,21 @@ import {
   getArticleById,
   deleteSlug,
   validateArticle,
-  shipArticle
-} from "@/lib/articles";
+  shipArticle,
+} from '@/lib/articles';
 
 interface ValidateTypes {
   articleId: number | bigint;
   validation: string;
+  updatedAt: string;
 }
 
 /**
  * Creates a new article based on the provided form data.
- * 
+ *
  * This function handles the creation of a new article, including user authentication,
  * data extraction from the form, article creation, and slug generation.
- * 
+ *
  * @param prevState - The previous state of the application (not used in this function).
  * @param formData - FormData object containing the article details.
  * @returns An object with a message indicating success or failure, and a descriptive text.
@@ -41,13 +41,13 @@ export async function createArticleAction(prevState: any, data: any) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article'
-    }
+      text: 'You must be logged in to create an article',
+    };
   }
 
   const author = session?.user.nickname;
   const author_email = session?.user.email;
-  
+
   // const title = formData.get('title') as string;
   // const introduction = formData.get('introduction') as string;
   // const main = formData.get('main') as string;
@@ -96,25 +96,25 @@ export async function createArticleAction(prevState: any, data: any) {
 
     return {
       message: true,
-      text: 'Article was successfully created'
-    }
+      text: 'Article was successfully created',
+    };
   } catch (error) {
     console.log(error);
     await deleteArticle(articleError as number | bigint);
 
     return {
       message: false,
-      text: 'Error creating article'
-    }
+      text: 'Error creating article',
+    };
   }
-};
+}
 
 /**
  * Updates an existing article based on the provided form data.
- * 
+ *
  * This function handles the update of an existing article, including user authentication,
  * data extraction from the form, and article update in the database.
- * 
+ *
  * @param prevState - The previous state of the application (not used in this function).
  * @param formData - FormData object containing the updated article details.
  * @returns An object with a message indicating success or failure, and a descriptive text.
@@ -128,8 +128,8 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to update an article'
-    }
+      text: 'You must be logged in to update an article',
+    };
   }
 
   const id = parseInt(formData.get('id') as string, 10);
@@ -170,35 +170,35 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
 
     return {
       message: true,
-      text: 'Article was successfully updated'
-    }
+      text: 'Article was successfully updated',
+    };
   } catch (error) {
     console.log(error);
 
     return {
       message: false,
-      text: 'Error updating article'
-    }
+      text: 'Error updating article',
+    };
   }
-};
+}
 
 export async function fetchArticleById(id: number | bigint) {
   try {
     const article = await getArticleById(id);
-    
+
     return {
       message: true,
       article,
-    }
+    };
   } catch (error) {
     console.log(error);
 
     return {
       message: false,
-      text: "Pas d'article correspondant à cet ID"
-    }
+      text: "Pas d'article correspondant à cet ID",
+    };
   }
-};
+}
 
 /**
  * Deletes an article based on the provided form data and updates the application state.
@@ -227,30 +227,28 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to delete an article'
-    }
+      text: 'You must be logged in to delete an article',
+    };
   }
 
   const id = parseInt(formData.get('id') as string, 10);
   try {
-    const slugResult = await deleteSlug(id); 
+    const slugResult = await deleteSlug(id);
     const articleResult = await deleteArticle(id);
 
     const result = await Promise.all([slugResult, articleResult]);
-    
+
     const totalchanges = result[0]?.changes + result[1]?.changes;
     if (totalchanges > 1) {
-      
       return {
         message: true,
-        text: 'L\'article a été supprimé avec succès'
-      }
+        text: "L'article a été supprimé avec succès",
+      };
     } else {
-
       return {
         message: false,
-        text: 'une erreur s\'est produite lors de la suppression de l\'article'
-      }
+        text: "une erreur s'est produite lors de la suppression de l'article",
+      };
     }
   } catch (error) {
     // Log the error to the console for debugging purposes
@@ -258,48 +256,53 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
 
     return {
       message: false,
-      text: 'une erreur s\'est produite : contactez l\'administrateur'
-    }
-  };
+      text: "une erreur s'est produite : contactez l'administrateur",
+    };
+  }
 }
 
-export async function validateArticleAction(prevState: any, formData: FormData) {
+export async function validateArticleAction(
+  prevState: any,
+  formData: FormData
+) {
   const session = await auth0.getSession();
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to validate an article'
-    }
+      text: 'You must be logged in to validate an article',
+    };
   }
 
   const validationArgs: ValidateTypes = {
     articleId: parseInt(formData.get('id') as string, 10),
     validation: formData.get('validation') as string,
-  }
+    updatedAt: new Date().toISOString() as string, // NEX-59
+  };
 
   try {
     const validation = await validateArticle({
       articleId: validationArgs.articleId,
-      validatedValue: validationArgs.validation
+      validatedValue: validationArgs.validation,
+      updatedAt: validationArgs.updatedAt,
     });
     if (!validation) {
       return {
         message: false,
-        text: 'Article not found'
-      }
+        text: 'Article not found',
+      };
     }
 
     return {
       message: true,
-      text: `L'article a été ${validationArgs.validation === 'true' ? 'validé' : 'rejeté'} avec succès`
-    }
+      text: `L'article a été ${validationArgs.validation === 'true' ? 'validé' : 'rejeté'} avec succès`,
+    };
   } catch (error) {
     console.log(error);
 
     return {
       message: false,
-      text: 'Error validating article'
-    }
+      text: 'Error validating article',
+    };
   }
 }
 
@@ -308,42 +311,45 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to ship an article'
-    }
+      text: 'You must be logged in to ship an article',
+    };
   }
 
   const id = parseInt(formData.get('id') as string, 10);
   const ship = (formData.get('shipped') as string) === 'true' ? true : false;
+  const updatedAt = new Date().toISOString() as string;
 
   // get article to check for validity: 'true' or 'false'
-  const article = await getArticleById(id) as z.infer<typeof articleSchema>;
+  const article = (await getArticleById(id)) as z.infer<typeof articleSchema>;
   if (!article) {
     return {
       message: false,
-      text: 'Article inconnu'
-    }
+      text: 'Article inconnu',
+    };
   }
   if (article?.validated === 'false' && ship) {
     return {
       message: false,
-      text: "L'article doit être validé avant d'être mis en MeP"
-    }
+      text: "L'article doit être validé avant d'être mis en MeP",
+    };
   }
   const shippedValue = ship ? 'true' : 'false';
   const result = await shipArticle({
     articleId: id,
-    shippedValue
+    shippedValue,
+    updatedAt, // NEX-59
   });
   if (!result) {
     return {
       message: false,
-      text: 'Une erreur est survenue lors de la mise en MeP de l\'article'
-    }
+      text: "Une erreur est survenue lors de la mise en MeP de l'article",
+    };
   }
-  
+
   return {
     message: true,
-    text: ship ? "L'article a été mis en MeP avec succès"
-      : "L'article a été mis offline avec succès"
-  }
+    text: ship
+      ? "L'article a été mis en MeP avec succès"
+      : "L'article a été mis offline avec succès",
+  };
 }
