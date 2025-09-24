@@ -94,11 +94,10 @@ export default function UpdateArticleForm({
   register('shipped', { required: true });
 
   register('main', { required: true });
-  const setMainContent = () => getValues('main');
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
-  
+
   // special treatment for urls added by the user
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
@@ -269,7 +268,7 @@ export default function UpdateArticleForm({
         <Suspense fallback={<div>Loading...</div>}>
           <ArticleMarkupForm
             handleSubmit={handleSubmit(onSubmit)}
-            register={register}
+            register={register as any}
             errors={errors}
             urlsToArray={urlsToArray}
             updateUrls={updateUrls}
@@ -278,7 +277,7 @@ export default function UpdateArticleForm({
             target="update"
             isPending={isPending}
             getMainContent={getMaincontent}
-            setMainContent={setMainContent}
+            watch={watch}
           />
           <div className="is-flex is-justify-content-flex-end">
             <button

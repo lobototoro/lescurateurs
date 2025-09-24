@@ -1,3 +1,6 @@
+#main {
+  margin-bottom: 60px;
+}
 .ql-toolbar.ql-snow {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
@@ -7,7 +10,7 @@
 }
 .custom-text-area {
   height: 400px;
-  border-color: rgb(53, 58, 70)!important;
+  border-color: rgb(53, 58, 70) !important;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }

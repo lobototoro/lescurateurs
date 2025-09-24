@@ -1,25 +1,25 @@
-import ArticleMarkupForm from "@/app/components/single-elements/articleHTMLForm";
-import { fireEvent, render } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
+import { fireEvent, render } from '@testing-library/react';
+import { expect, it, vi } from 'vitest';
 
 const mockProps = {
-    handleSubmit: vi.fn(),
-    register: vi.fn(),
-    errors: {},
-    urlsToArray: [],
-    updateUrls: vi.fn(),
-    removeUrl: vi.fn(),
-    addUrl: vi.fn(),
-    handleChange: vi.fn(),
-    addInputs: vi.fn(),
-    removeInputs: vi.fn(),
-    formSentModal: null,
-    state: { message: false, text: '' },
-    closeModal: vi.fn(),
-    target: 'create',
-    getMainContent: vi.fn(),
-    setMainContent: vi.fn(),
-  };
+  handleSubmit: vi.fn(),
+  register: vi.fn(),
+  errors: {},
+  urlsToArray: [],
+  updateUrls: vi.fn(),
+  removeUrl: vi.fn(),
+  addUrl: vi.fn(),
+  handleChange: vi.fn(),
+  addInputs: vi.fn(),
+  removeInputs: vi.fn(),
+  formSentModal: null,
+  state: { message: false, text: '' },
+  closeModal: vi.fn(),
+  target: 'create',
+  getMainContent: vi.fn(),
+  watch: vi.fn(),
+};
 
 it('should render correct markup', () => {
   const { asFragment } = render(<ArticleMarkupForm {...mockProps} />);
@@ -51,6 +51,7 @@ it('Should display an additionnal link line with blinking validate button while 
   fireEvent.change(getByTestId('select-type'), { target: { value: 'videos' } });
   expect(getByTestId('add-url-button')?.classList.toString()).toMatch(/blink/);
   fireEvent.click(getByTestId('add-url-button'));
-  expect(getByTestId('add-url-button')?.classList.toString()).not.toMatch(/blink/);
+  expect(getByTestId('add-url-button')?.classList.toString()).not.toMatch(
+    /blink/
+  );
 });
-

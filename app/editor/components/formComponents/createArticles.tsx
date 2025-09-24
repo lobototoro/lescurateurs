@@ -3,7 +3,6 @@ import {
   useActionState,
   useEffect,
   startTransition,
-  useRef,
   JSX,
   useState,
 } from 'react';
@@ -61,7 +60,7 @@ export default function CreateArticleForm({
   });
 
   // registering urls that need a special treatment
-  register('main');
+  register('main', { required: true });
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
@@ -77,6 +76,9 @@ export default function CreateArticleForm({
     });
   };
 
+  // reset function specifically made for rte
+  const resetAllfields = () => {};
+
   useEffect(() => {
     // utility that helps clear errors when addressed live by the user
     const subscription = watch((value, { name }) => {
@@ -91,7 +93,11 @@ export default function CreateArticleForm({
       setNotification(true);
       scrolltoTop();
       notifTimeout = setTimeout(() => {
-        reset();
+        if (state?.message) {
+          // NEX-65 in case of error, we don't reset the form
+          // NEX-65
+          reset();
+        }
         setNotification(false);
       }, 6000);
     }
@@ -130,8 +136,6 @@ export default function CreateArticleForm({
     setValue('urls', JSON.stringify(newUrls));
   };
 
-  console.info(getValues());
-
   return (
     <>
       <ArticleTitle
@@ -148,7 +152,7 @@ export default function CreateArticleForm({
       )}
       <ArticleMarkupForm
         handleSubmit={handleSubmit(onSubmit)}
-        register={register}
+        register={register as any}
         errors={errors}
         urlsToArray={urlsToArray}
         updateUrls={updateUrls}
@@ -157,6 +161,7 @@ export default function CreateArticleForm({
         target="create"
         isPending={isPending}
         getMainContent={getMaincontent}
+        watch={watch}
       />
     </>
   );

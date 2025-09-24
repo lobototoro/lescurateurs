@@ -15,9 +15,13 @@ export default function ArticleMarkupForm({
   isPending,
   getMainContent,
   setMainContent,
+  watch,
 }: {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  register: any;
+  register: (
+    name: string,
+    options?: any
+  ) => { onChange: any; onBlur: any; name: any; ref: any };
   errors: any;
   urlsToArray: any[];
   updateUrls: (newUrl: any, index: number) => void;
@@ -27,6 +31,9 @@ export default function ArticleMarkupForm({
   isPending?: boolean;
   getMainContent: (v: string) => void;
   setMainContent?: () => string;
+  watch: (
+    names?: string | string[] | ((data: any, options: any) => void)
+  ) => unknown;
 }) {
   return (
     <form onSubmit={handleSubmit} data-testid="article-form">
@@ -71,23 +78,6 @@ export default function ArticleMarkupForm({
           )}
         </div>
 
-        {/*<div className="field">
-          <label className="label" aria-label="main" htmlFor="main">
-            Texte
-          </label>
-          <textarea
-            id="main"
-            aria-label="main"
-            className="textarea"
-            {...register('main')}
-            rows={10}
-            data-testid="main"
-          ></textarea>
-          {errors.main && (
-            <p className="has-text-danger">{errors.main.message}</p>
-          )}
-        </div>*/}
-
         <div className="field">
           <label className="label" aria-labelledby="main" htmlFor="main">
             Texte
@@ -98,8 +88,12 @@ export default function ArticleMarkupForm({
             className="is-family-primary has-text-weight-normal is-size-6 has-text-white"
             data-testid="main"
             getMainContent={getMainContent}
-            setMainContent={setMainContent}
+            watch={watch}
+            register={register}
           />
+          {errors.main && (
+            <p className="has-text-danger">{errors.main.message}</p>
+          )}
         </div>
 
         <div className="field">
