@@ -1,8 +1,9 @@
 'use server';
 import { z } from 'zod';
 import slugify from 'slugify';
-
 import { auth0 } from '@/lib/auth0';
+import { redirect } from 'next/navigation';
+
 import { articleSchema } from '@/models/articleSchema';
 
 import {
@@ -39,10 +40,7 @@ interface ValidateTypes {
 export async function createArticleAction(prevState: any, data: any) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to create an article',
-    };
+    redirect('/editor');
   }
 
   const author = session?.user.nickname;
@@ -126,10 +124,7 @@ export async function createArticleAction(prevState: any, data: any) {
 export async function updateArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to update an article',
-    };
+    redirect('/editor');
   }
 
   const id = parseInt(formData.get('id') as string, 10);
@@ -225,10 +220,7 @@ export async function fetchArticleById(id: number | bigint) {
 export async function deleteArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to delete an article',
-    };
+    redirect('/editor');
   }
 
   const id = parseInt(formData.get('id') as string, 10);
@@ -267,10 +259,7 @@ export async function validateArticleAction(
 ) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to validate an article',
-    };
+    redirect('/editor');
   }
 
   const validationArgs: ValidateTypes = {
@@ -309,10 +298,7 @@ export async function validateArticleAction(
 export async function shipArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to ship an article',
-    };
+    redirect('/editor');
   }
 
   const id = parseInt(formData.get('id') as string, 10);
