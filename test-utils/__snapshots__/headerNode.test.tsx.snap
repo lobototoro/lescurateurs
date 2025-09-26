@@ -50,8 +50,14 @@ exports[`Should render correctly 1`] = `
         >
           <a
             class="button "
+            title=" edit articles"
           >
-            edit articles
+            edit articles 
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              error
+            </span>
           </a>
         </div>
         <div
@@ -59,8 +65,14 @@ exports[`Should render correctly 1`] = `
         >
           <a
             class="button "
+            title=" manage user"
           >
-            manage user
+            manage user 
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              manage_accounts
+            </span>
           </a>
         </div>
         <div
@@ -68,8 +80,14 @@ exports[`Should render correctly 1`] = `
         >
           <a
             class="button "
+            title=" manage articles"
           >
-            manage articles
+            manage articles 
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              library_books
+            </span>
           </a>
         </div>
       </div>
@@ -80,7 +98,7 @@ exports[`Should render correctly 1`] = `
           class="navbar-item"
         >
           <div
-            class="buttons"
+            class="buttons is-flex-direction-column"
           >
             <a
               class="button is-info"

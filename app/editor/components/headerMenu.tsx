@@ -1,12 +1,14 @@
-"use client";
-import { ArticleTitle } from "@/app/components/single-elements/ArticleTitle";
-import React, { useRef } from "react";
+'use client';
+import React, { useRef } from 'react';
+
+import { iconMapper } from '@/lib/utility-functions';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 export default function HeaderMenu({
   role,
   permissions,
   setSelection,
-  selection
+  selection,
 }: {
   role: string;
   permissions: string;
@@ -15,17 +17,23 @@ export default function HeaderMenu({
 }) {
   // NEX-50: whikle working on modal and notif, we simplify BO menu
   let definitivePermissions = [];
-  
+
   const stringifiedPermissions =
     role === 'admin'
       ? JSON.parse(permissions).filter(
           (permission: string) =>
-            permission !== 'update:user' && permission !== 'delete:user' && permission !== 'delete:articles' && permission !== 'validate:articles' && permission !== 'ship:articles'
+            permission !== 'update:user' &&
+            permission !== 'delete:user' &&
+            permission !== 'delete:articles' &&
+            permission !== 'validate:articles' &&
+            permission !== 'ship:articles'
         )
       : JSON.parse(permissions);
 
   if (role === 'admin') {
-    definitivePermissions = stringifiedPermissions.toSpliced(3, 0, 'manage:articles').toSpliced(-1, 0, 'manage:user');
+    definitivePermissions = stringifiedPermissions
+      .toSpliced(3, 0, 'manage:articles')
+      .toSpliced(-1, 0, 'manage:user');
   } else {
     definitivePermissions = stringifiedPermissions.toSpliced(
       2,
@@ -33,7 +41,7 @@ export default function HeaderMenu({
       'manage:articles'
     );
   }
-  
+
   const filteredMenu = definitivePermissions.map(
     (permission: string, index: number) => {
       // TODO: how do we read articles > is it the same as validate article?
@@ -44,8 +52,13 @@ export default function HeaderMenu({
           <a
             className={`button ${selection === permission.split(':').join('') ? 'is-active' : ''}`}
             onClick={() => setSelection(permission.split(':').join(''))}
+            title={` ${permission.split(':')[0]} ${permission.split(':')[1]}`}
           >
             {permission.split(':')[0]} {permission.split(':')[1]}
+            &nbsp;
+            <span className="material-icons-outlined is-size-5">
+              {iconMapper(permission)}
+            </span>
           </a>
         </div>
       );
@@ -97,13 +110,11 @@ export default function HeaderMenu({
           className="navbar-menu is-flex-direction-row"
           ref={toggledMenu}
         >
-          <div className="navbar-start is-flex-wrap-wrap">
-            {filteredMenu}
-          </div>
+          <div className="navbar-start is-flex-wrap-wrap">{filteredMenu}</div>
 
           <div className="is-flex">
             <div className="navbar-item">
-              <div className="buttons">
+              <div className="buttons is-flex-direction-column">
                 <a className="button is-info" href="/auth/logout">
                   Log out
                 </a>
