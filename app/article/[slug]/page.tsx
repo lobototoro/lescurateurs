@@ -26,7 +26,7 @@ export default async function ArticlePage(props: { params: Promise<Params> }) {
       />
       <p>{article.introduction}</p>
       <p>{article.main}</p>
-      {publishedDate && <p>Publié {publishedDate}</p>}
+      {publishedDate && <p>Article publié {publishedDate} par</p>}
       <h5>{article.author}</h5>
     </div>
   );
