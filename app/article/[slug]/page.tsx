@@ -25,7 +25,7 @@ export default async function ArticlePage(props: { params: Promise<Params> }) {
         color="black"
       />
       <p>{article.introduction}</p>
-      <p>{article.main}</p>
+      <p dangerouslySetInnerHTML={{ __html: article.main }} />
       {publishedDate && <p>Article publié {publishedDate} par</p>}
       <h5>{article.author}</h5>
     </div>
