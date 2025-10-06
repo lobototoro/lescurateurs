@@ -68,6 +68,14 @@ export const updateArticle = cache(async (article: Article) => {
     .run(article);
 });
 
+export const updateSlug = cache(async (validatedArgs: Slugs) => {
+  return db
+    .prepare(
+      'UPDATE slugs SET slug = @slug, createdAt = @createdAt, articleId = @articleId, validated = @validated WHERE id = @id'
+    )
+    .run(validatedArgs);
+});
+
 export const validateArticle = cache(
   async (validateProps: {
     articleId: number | bigint;

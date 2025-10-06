@@ -11,6 +11,7 @@ import {
   createSlug,
   deleteArticle,
   updateArticle,
+  updateSlug,
   getArticleById,
   deleteSlug,
   validateArticle,
@@ -65,47 +66,51 @@ export async function createArticleAction(prevState: any, data: any) {
   const shipped = 'false';
   const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
 
-  let articleError;
-  try {
-    const articleresult = await createArticle({
-      slug,
-      title,
-      introduction,
-      main,
-      urls,
-      mainAudioUrl,
-      urlToMainIllustration,
-      author: author as string,
-      author_email: author_email as string,
-      createdAt,
-      updatedAt,
-      publishedAt,
-      validated,
-      shipped,
+  const articleresult = await createArticle({
+    slug,
+    title,
+    introduction,
+    main,
+    urls,
+    mainAudioUrl,
+    urlToMainIllustration,
+    author: author as string,
+    author_email: author_email as string,
+    createdAt,
+    updatedAt,
+    publishedAt,
+    validated,
+    shipped,
+  });
+
+  const articleError = articleresult?.lastInsertRowid;
+
+  const slugResult = await createSlug({
+    slug,
+    createdAt,
+    articleId: articleresult?.lastInsertRowid as number,
+    validated,
+  });
+
+  Promise.allSettled([articleresult, slugResult])
+    .then(() => {
+      return {
+        message: true,
+        text: 'Article was successfully created',
+      };
+    })
+    .catch(async (error) => {
+      console.log(error);
+
+      // TODO: this should be a function of its own
+      // in case of error in r/w errors
+      await deleteArticle(articleError as number | bigint);
+
+      return {
+        message: false,
+        text: 'Error creating article',
+      };
     });
-
-    articleError = articleresult?.lastInsertRowid;
-
-    await createSlug({
-      slug,
-      createdAt,
-      articleId: articleresult?.lastInsertRowid as number,
-      validated,
-    });
-
-    return {
-      message: true,
-      text: 'Article was successfully created',
-    };
-  } catch (error) {
-    console.log(error);
-    await deleteArticle(articleError as number | bigint);
-
-    return {
-      message: false,
-      text: 'Error creating article',
-    };
-  }
 }
 
 /**
@@ -140,42 +145,52 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
   const createdAt = formData.get('createdAt') as string;
   const publishedAt = formData.get('publishedAt') as string;
-  const validated = formData.get('validated') as string;
+  const validated = 'false'; // NEX-72
   const shipped = formData.get('shipped') as string;
 
   const updatedAt = new Date().toISOString() as string;
 
-  try {
-    await updateArticle({
-      id,
-      slug,
-      title,
-      introduction,
-      main,
-      urls,
-      mainAudioUrl,
-      urlToMainIllustration,
-      author,
-      author_email,
-      createdAt,
-      updatedAt,
-      publishedAt,
-      validated,
-      shipped,
+  const updateReq = await updateArticle({
+    id,
+    slug,
+    title,
+    introduction,
+    main,
+    urls,
+    mainAudioUrl,
+    urlToMainIllustration,
+    author,
+    author_email,
+    createdAt,
+    updatedAt,
+    publishedAt,
+    validated,
+    shipped,
+  });
+
+  const updateslugReq = await updateSlug({
+    id, // assuming slug ID is the same as article ID
+    slug,
+    createdAt,
+    articleId: id,
+    validated,
+  });
+
+  Promise.allSettled([updateReq, updateslugReq])
+    .then((values) => {
+      return {
+        message: true,
+        text: 'Article was successfully updated',
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+
+      return {
+        message: false,
+        text: 'Error updating article',
+      };
     });
-
-    return {
-      message: true,
-      text: 'Article was successfully updated',
-    };
-  } catch (error) {
-    console.log(error);
-
-    return {
-      message: false,
-      text: 'Error updating article',
-    };
-  }
 }
 
 export async function fetchArticleById(id: number | bigint) {
