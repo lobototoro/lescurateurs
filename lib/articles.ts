@@ -11,7 +11,9 @@ import { Slugs } from '@/models/slugs';
 const db = sql('lcfr.db');
 
 export const getArticle = cache(async (slug: string) => {
-  return db.prepare('SELECT * FROM articles WHERE slug = ?').get(slug);
+  return db
+    .prepare('SELECT * FROM articles WHERE slug = ? AND validated = "true" ')
+    .get(slug);
 });
 
 export const getArticleById = cache(async (id: number | bigint) => {
@@ -19,13 +21,13 @@ export const getArticleById = cache(async (id: number | bigint) => {
 });
 
 export const getSlugs = cache(async () => {
-  return db.prepare('SELECT * FROM slugs').all();
+  return db.prepare('SELECT * FROM slugs WHERE validated="true"').all();
 });
 
 export const createSlug = cache(async (slugObject: Slugs) => {
   return db
     .prepare(
-      'INSERT INTO slugs (slug, createdAt, articleId) VALUES (@slug, @createdAt, @articleId)'
+      'INSERT INTO slugs (slug, createdAt, articleId) VALUES (@slug, @createdAt, @articleId, @validated)'
     )
     .run(slugObject);
 });
@@ -75,6 +77,19 @@ export const validateArticle = cache(
     return db
       .prepare(
         'UPDATE articles SET validated = @validatedValue, updatedAt = @updatedAt WHERE id = @articleId'
+      )
+      .run(validateProps);
+  }
+);
+
+export const validateSlugField = cache(
+  async (validateProps: {
+    slugId: number | bigint;
+    validatedValue: string;
+  }) => {
+    return db
+      .prepare(
+        'UPDATE slugs SET validated = @validatedValue WHERE id = @slugId'
       )
       .run(validateProps);
   }
