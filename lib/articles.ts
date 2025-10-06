@@ -12,7 +12,7 @@ const db = sql('lcfr.db');
 
 export const getArticle = cache(async (slug: string) => {
   return db
-    .prepare('SELECT * FROM articles WHERE slug = ? AND validated = "true" ')
+    .prepare("SELECT * FROM articles WHERE slug = ? AND validated = 'true' ")
     .get(slug);
 });
 
@@ -21,13 +21,13 @@ export const getArticleById = cache(async (id: number | bigint) => {
 });
 
 export const getSlugs = cache(async () => {
-  return db.prepare('SELECT * FROM slugs WHERE validated="true"').all();
+  return db.prepare("SELECT * FROM slugs WHERE validated='true'").all();
 });
 
 export const createSlug = cache(async (slugObject: Slugs) => {
   return db
     .prepare(
-      'INSERT INTO slugs (slug, createdAt, articleId) VALUES (@slug, @createdAt, @articleId, @validated)'
+      'INSERT INTO slugs (slug, createdAt, articleId, validated) VALUES (@slug, @createdAt, @articleId, @validated)'
     )
     .run(slugObject);
 });

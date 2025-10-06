@@ -3,7 +3,7 @@ export interface Slugs {
   slug: string;
   createdAt: string;
   articleId: number | bigint;
-  validated: boolean;
+  validated: string;
 }
 
 export interface Params {

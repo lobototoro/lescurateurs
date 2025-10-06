@@ -90,6 +90,7 @@ export async function createArticleAction(prevState: any, data: any) {
       slug,
       createdAt,
       articleId: articleresult?.lastInsertRowid as number,
+      validated,
     });
 
     return {
