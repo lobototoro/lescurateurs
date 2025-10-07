@@ -15,6 +15,7 @@ import {
   getArticleById,
   deleteSlug,
   validateArticle,
+  validateSlugField,
   shipArticle,
 } from '@/lib/articles';
 
@@ -284,7 +285,11 @@ export async function validateArticleAction(
       validatedValue: validationArgs.validation,
       updatedAt: validationArgs.updatedAt,
     });
-    if (!validation) {
+    const slugValidation = await validateSlugField({
+      slugId: validationArgs.articleId,
+      validatedValue: validationArgs.validation,
+    });
+    if (!validation || !slugValidation) {
       return {
         message: false,
         text: 'Article not found',
