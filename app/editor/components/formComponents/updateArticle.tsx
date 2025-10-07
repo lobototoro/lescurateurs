@@ -22,7 +22,6 @@ import { isEmpty, urlsToArrayUtil } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
-import { get } from 'http';
 
 /**
  * UpdateArticleForm component for updating an existing article.

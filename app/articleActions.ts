@@ -11,9 +11,11 @@ import {
   createSlug,
   deleteArticle,
   updateArticle,
+  updateSlug,
   getArticleById,
   deleteSlug,
   validateArticle,
+  validateSlugField,
   shipArticle,
 } from '@/lib/articles';
 
@@ -90,6 +92,7 @@ export async function createArticleAction(prevState: any, data: any) {
       slug,
       createdAt,
       articleId: articleresult?.lastInsertRowid as number,
+      validated,
     });
 
     return {
@@ -139,7 +142,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
   const createdAt = formData.get('createdAt') as string;
   const publishedAt = formData.get('publishedAt') as string;
-  const validated = formData.get('validated') as string;
+  const validated = 'false'; // NEX-72
   const shipped = formData.get('shipped') as string;
 
   const updatedAt = new Date().toISOString() as string;
@@ -161,6 +164,14 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
       publishedAt,
       validated,
       shipped,
+    });
+
+    await updateSlug({
+      id, // assuming slug ID is the same as article ID
+      slug,
+      createdAt,
+      articleId: id,
+      validated,
     });
 
     return {
@@ -274,7 +285,11 @@ export async function validateArticleAction(
       validatedValue: validationArgs.validation,
       updatedAt: validationArgs.updatedAt,
     });
-    if (!validation) {
+    const slugValidation = await validateSlugField({
+      slugId: validationArgs.articleId,
+      validatedValue: validationArgs.validation,
+    });
+    if (!validation || !slugValidation) {
       return {
         message: false,
         text: 'Article not found',
