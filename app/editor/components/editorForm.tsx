@@ -2,14 +2,10 @@
 
 import React, { useState } from "react";
 
-import HeaderNode from '@/app/editor/components/headerMenu';
+import HeaderMenu from '@/app/editor/components/headerMenu';
 import CreateArticleForm from "@/app/editor/components/formComponents/createArticles";
 import UpdateArticleForm from '@/app/editor/components/formComponents/updateArticle';
-
 import ManageArticleForm from '@/app/editor/components/formComponents/manageArticle';
-
-// import ValidateArticleForm from '@/app/editor/components/formComponents/validateArticle';
-// import ShipArticle from '@/app/editor/components/formComponents/shipArticle';
 import CreateUserForm from '@/app/editor/components/formComponents/createUser';
 import ManageUserForm from './formComponents/manageUser';
 
@@ -28,7 +24,7 @@ export default function EditorForm({ role, permissions }: {
 
   return (
     <>
-      <HeaderNode
+      <HeaderMenu
         role={role}
         permissions={permissions}
         setSelection={setSelection}
