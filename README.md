@@ -5,7 +5,9 @@ In the future it will be a mobile only webzine, but desktop displayed backoffice
 
 First, run the development server:
 
-```bash npm i --legacy-peer-deps ```
+```bash
+npm i --legacy-peer-deps
+```
 
 First, run the development server:
 
