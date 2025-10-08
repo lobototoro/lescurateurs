@@ -1,15 +1,15 @@
-"use server";
-import { auth0 } from "@/lib/auth0";
+'use server';
+import { auth0 } from '@/lib/auth0';
 import { createUser, updateUser, getAllUsers, deleteUser } from '@/lib/users';
-import { User } from "@/models/user";
+import { User } from '@/models/user';
 
 export async function createUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article'
-    }
+      text: 'You must be logged in to create an article',
+    };
   }
 
   const userCandidate = {
@@ -24,6 +24,11 @@ export async function createUserAction(preState: any, formData: FormData) {
   let usererror;
   try {
     await createUser(userCandidate as User);
+
+    return {
+      message: true,
+      text: 'L’utilisateur a été créé avec succès',
+    };
   } catch (error) {
     usererror = error;
   }
@@ -32,13 +37,8 @@ export async function createUserAction(preState: any, formData: FormData) {
 
     return {
       message: false,
-      text: 'Une erreur est survenue lors de la création de l’utilisateur'
-    }
-  }
-
-  return {
-    message: true,
-    text: 'L’utilisateur a été créé avec succès',
+      text: 'Une erreur est survenue lors de la création de l’utilisateur',
+    };
   }
 }
 
@@ -47,8 +47,8 @@ export async function updateUserAction(preState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article'
-    }
+      text: 'You must be logged in to create an article',
+    };
   }
 
   const userCandidate = {
@@ -56,12 +56,19 @@ export async function updateUserAction(preState: any, formData: FormData) {
     email: formData.get('email'),
     tiersServiceIdent: formData.get('tiersServiceIdent'),
     role: formData.get('role'),
-    permissions: formData.get('permissions')
+    permissions: formData.get('permissions'),
+    updatedAt: new Date().toISOString().slice(0, 10),
+    updatedBy: session.user?.email,
   };
 
   let usererror;
   try {
     await updateUser(userCandidate as User);
+
+    return {
+      message: true,
+      text: 'L’utilisateur a été modifié avec succès',
+    };
   } catch (error) {
     usererror = error;
   }
@@ -70,13 +77,8 @@ export async function updateUserAction(preState: any, formData: FormData) {
 
     return {
       message: false,
-      text: 'Une erreur est survenue lors de la modification de l’utilisateur'
-    }
-  }
-
-  return {
-    message: true,
-    text: 'L’utilisateur a été modifié avec succès',
+      text: 'Une erreur est survenue lors de la modification de l’utilisateur',
+    };
   }
 }
 
@@ -85,24 +87,24 @@ export async function getUsersList() {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article'
-    }
+      text: 'You must be logged in to create an article',
+    };
   }
 
   try {
-    const usersList = await getAllUsers() as unknown as User[];
+    const usersList = (await getAllUsers()) as unknown as User[];
 
     return {
       message: true,
       usersList,
-    }
+    };
   } catch (error) {
     console.error('[!] while getting all users ', error);
 
     return {
       message: false,
-      text: 'Une erreur est survenue lors de la récupération de la liste des  utilisateurs'
-    }
+      text: 'Une erreur est survenue lors de la récupération de la liste des  utilisateurs',
+    };
   }
 }
 
@@ -111,8 +113,8 @@ export async function deleteUserAction(preState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article'
-    }
+      text: 'You must be logged in to create an article',
+    };
   }
 
   const email = formData.get('email');
@@ -128,12 +130,12 @@ export async function deleteUserAction(preState: any, formData: FormData) {
 
     return {
       message: false,
-      text: 'Une erreur est survenue lors de la suppression de l’utilisateur'
-    }
+      text: 'Une erreur est survenue lors de la suppression de l’utilisateur',
+    };
   }
 
   return {
     message: true,
     text: 'L’utilisateur a été supprimé avec succès',
-  }
+  };
 }
