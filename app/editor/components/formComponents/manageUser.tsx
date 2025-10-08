@@ -69,8 +69,6 @@ export default function ManageUserForm({
       createdAt: new Date().toISOString(),
       lastConnectionAt: new Date().toISOString(),
       permissions: JSON.stringify(contributorPermissions),
-      updatedAt: new Date().toISOString(),
-      updatedBy: '',
     },
     values: selectedUser || undefined,
   });
@@ -182,8 +180,6 @@ export default function ManageUserForm({
       formData.append('permissions', data.permissions);
       formData.append('createdAt', data.createdAt);
       formData.append('lastConnectionAt', data.lastConnectionAt);
-      formData.append('updatedAt', new Date().toISOString().slice(0, 10));
-      formData.append('updatedBy', data.updatedBy || '');
       updateAction(formData);
     });
   };
