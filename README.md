@@ -29,3 +29,8 @@ The stack: (as for October 7th)
 - Typescript
 - React
 - SQLite3 libs
+
+Aided by AI:
+- copilot in Zed editor
+- coderabbit as an reviewer agent
+- healthcheck made by checkly every 12h
