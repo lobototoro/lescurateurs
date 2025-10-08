@@ -29,7 +29,11 @@ import NotificationsComponent from '@/app/components/single-elements/notificatio
 import { customResolver } from '../resolvers/customResolver';
 import { custom } from 'zod/v3';
 
-export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => void }) {
+export default function ManageUserForm({
+  scrolltoTop,
+}: {
+  scrolltoTop: () => void;
+}) {
   const [state, updateAction, isPending] = useActionState(
     updateUserAction,
     null
@@ -53,7 +57,6 @@ export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => voi
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<z.infer<typeof userSchema>>({
     mode: 'onChange',

@@ -1,0 +1,123 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Should render correctly 1`] = `
+<DocumentFragment>
+  <div>
+    <h2
+      class="undefined article-title_large article-title_black mt-5 mb-5"
+    >
+      ÉDITEUR
+    </h2>
+  </div>
+  <nav
+    aria-label="main navigation"
+    class="navbar box"
+    role="navigation"
+  >
+    <div
+      class="navbar-brand"
+    >
+      <a
+        aria-expanded="false"
+        aria-label="menu"
+        class="navbar-burger"
+        data-target="navbarMenuItems"
+        role="button"
+      >
+        <span
+          aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+        />
+        <span
+          aria-hidden="true"
+        />
+      </a>
+    </div>
+    <div
+      class="navbar-menu is-flex-direction-row"
+      id="navbarMenuItems"
+    >
+      <div
+        class="navbar-start is-flex-wrap-wrap"
+      >
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
+            title=" edit articles"
+          >
+            edit articles 
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              error
+            </span>
+          </a>
+        </div>
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
+            title=" manage user"
+          >
+            manage user 
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              manage_accounts
+            </span>
+          </a>
+        </div>
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
+            title=" manage articles"
+          >
+            manage articles 
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              library_books
+            </span>
+          </a>
+        </div>
+      </div>
+      <div
+        class="is-flex"
+      >
+        <div
+          class="navbar-item"
+        >
+          <div
+            class="buttons is-flex-direction-column"
+          >
+            <a
+              class="button is-info"
+              href="/auth/logout"
+            >
+              Log out
+            </a>
+            <span
+              class="tag is-dark"
+            >
+              <strong>
+                Role : admin
+              </strong>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </nav>
+</DocumentFragment>
+`;

@@ -11,4 +11,6 @@ export const userSchema = z.object({
   createdAt: z.string().trim(),
   lastConnectionAt: z.string().trim(),
   permissions: z.string(),
+  updatedAt: z.string().optional().nullable(),
+  updatedBy: z.string().optional().nullable(),
 });

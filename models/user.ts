@@ -6,6 +6,8 @@ export interface User {
   permissions: string;
   createdAt: string;
   lastConnectionAt: string;
+  updatedAt?: string | null;
+  updatedBy?: string | null;
 }
 
 export enum UserRole {
@@ -24,12 +26,12 @@ export const adminPermissions = [
   'create:user',
   'update:user',
   'delete:user',
-  'enable:maintenance'
+  'enable:maintenance',
 ];
 
 export const contributorPermissions = [
   'read:articles',
   'create:articles',
   'update:articles',
-  'validate:articles'
+  'validate:articles',
 ];
