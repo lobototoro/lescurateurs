@@ -48,8 +48,8 @@ export const createUser = cache(async (user: User) => {
     permissions,
     createdAt,
     lastConnectionAt,
-    '',
-    ''
+    null,
+    null
   );
 });
 

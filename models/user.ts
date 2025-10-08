@@ -6,8 +6,8 @@ export interface User {
   permissions: string;
   createdAt: string;
   lastConnectionAt: string;
-  updatedAt?: string;
-  updatedBy?: string;
+  updatedAt?: string | null;
+  updatedBy?: string | null;
 }
 
 export enum UserRole {

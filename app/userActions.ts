@@ -8,7 +8,7 @@ export async function createUserAction(preState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article',
+      text: 'Vous devez être connecté',
     };
   }
 
@@ -47,7 +47,7 @@ export async function updateUserAction(preState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article',
+      text: 'Vous devez être connecté',
     };
   }
 
@@ -58,7 +58,7 @@ export async function updateUserAction(preState: any, formData: FormData) {
     role: formData.get('role'),
     permissions: formData.get('permissions'),
     updatedAt: new Date().toISOString().slice(0, 10),
-    updatedBy: session.user?.email,
+    updatedBy: session.user.email ?? '',
   };
 
   let usererror;
@@ -87,7 +87,7 @@ export async function getUsersList() {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article',
+      text: 'Vous devez être connecté',
     };
   }
 
@@ -113,7 +113,7 @@ export async function deleteUserAction(preState: any, formData: FormData) {
   if (!session?.user) {
     return {
       message: false,
-      text: 'You must be logged in to create an article',
+      text: 'Vous devez être connecté',
     };
   }
 

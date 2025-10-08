@@ -29,7 +29,11 @@ import NotificationsComponent from '@/app/components/single-elements/notificatio
 import { customResolver } from '../resolvers/customResolver';
 import { custom } from 'zod/v3';
 
-export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => void }) {
+export default function ManageUserForm({
+  scrolltoTop,
+}: {
+  scrolltoTop: () => void;
+}) {
   const [state, updateAction, isPending] = useActionState(
     updateUserAction,
     null
@@ -53,7 +57,6 @@ export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => voi
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<z.infer<typeof userSchema>>({
     mode: 'onChange',
@@ -66,6 +69,8 @@ export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => voi
       createdAt: new Date().toISOString(),
       lastConnectionAt: new Date().toISOString(),
       permissions: JSON.stringify(contributorPermissions),
+      updatedAt: new Date().toISOString(),
+      updatedBy: '',
     },
     values: selectedUser || undefined,
   });
@@ -177,6 +182,8 @@ export default function ManageUserForm({ scrolltoTop }: { scrolltoTop: () => voi
       formData.append('permissions', data.permissions);
       formData.append('createdAt', data.createdAt);
       formData.append('lastConnectionAt', data.lastConnectionAt);
+      formData.append('updatedAt', new Date().toISOString().slice(0, 10));
+      formData.append('updatedBy', data.updatedBy || '');
       updateAction(formData);
     });
   };
