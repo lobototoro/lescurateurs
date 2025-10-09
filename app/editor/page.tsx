@@ -10,7 +10,7 @@ export default async function Login() {
   const session = await auth0.getSession();
 
   if (!session || !session.user || !session.user.email) {
-    return <RedirectFragment url="/auth/login" />;
+    return <RedirectFragment url="/auth/login?returnTo=/editor" />;
   }
 
   // NEX-49: Log user connection time
@@ -19,7 +19,7 @@ export default async function Login() {
   } catch (error) {
     console.error('Error logging connection:', error);
 
-    return <RedirectFragment url="/auth/login" />;
+    return <RedirectFragment url="/auth/login?returnTo=/editor" />;
   }
 
   const credentials = (await getUser(session.user.email)) as User;
