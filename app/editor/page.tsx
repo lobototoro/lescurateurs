@@ -29,11 +29,7 @@ export default async function Login() {
 
   return (
     <>
-      {/* <Header
-        role={credentials.role}
-        permissions={credentials.permissions}
-      /> */}
-      {session && credentials && (
+      {credentials && (
         <EditorForm
           role={credentials.role}
           permissions={credentials.permissions}
