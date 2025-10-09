@@ -18,8 +18,6 @@ export default async function Login() {
     await logConnection(session.user.email);
   } catch (error) {
     console.error('Error logging connection:', error);
-
-    return <RedirectFragment url="/auth/login?returnTo=/editor" />;
   }
 
   const credentials = (await getUser(session.user.email)) as User;
