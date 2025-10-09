@@ -1,5 +1,4 @@
 'use server';
-import { cache } from 'react';
 import sql from 'better-sqlite3';
 
 import { User } from '@/models/user';
