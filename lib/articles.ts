@@ -7,20 +7,24 @@ import { Slugs } from '@/models/slugs';
 const db = sql('lcfr.db');
 
 // utility function to execute queries with error handling
-const executeQuery = (
+const executeQuery = <T = any>(
   queryName: string,
   query: string,
   type: 'get' | 'all' | 'run' = 'get',
-  params: any = undefined
-) => {
+  params?: Record<string, any> | string | number | bigint
+): T => {
   try {
     if (type === 'all') {
-      return db.prepare(query).all(params);
+      if (typeof params === 'undefined') {
+        return db.prepare(query).all() as T;
+      }
+
+      return db.prepare(query).all(params) as T;
     } else if (type === 'run') {
-      return db.prepare(query).run(params);
+      return db.prepare(query).run(params) as T;
     }
 
-    return db.prepare(query).get(params);
+    return db.prepare(query).get(params) as T;
   } catch (err) {
     console.error(`Error executing query: ${queryName}`, err);
     throw err;
@@ -46,12 +50,11 @@ export const getArticleById = async (id: number | bigint) => {
 };
 
 export const getSlugs = async () => {
-  try {
-    return db.prepare("SELECT * FROM slugs WHERE validated = 'true'").all();
-  } catch (err) {
-    console.error('Error fetching slugs', err);
-    throw err;
-  }
+  return executeQuery(
+    'get slugs',
+    "SELECT * FROM slugs WHERE validated = 'true'",
+    'all'
+  );
 };
 
 export const createSlug = async (slugObject: Slugs) => {
@@ -102,7 +105,7 @@ export const deleteArticle = async (articleId: number | bigint) => {
 export const deleteSlug = async (slugId: number | bigint) => {
   return executeQuery(
     'delete slug',
-    'DELETE FROM slugs WHERE id = ?',
+    'DELETE FROM slugs WHERE articleId = ?',
     'run',
     slugId
   );
