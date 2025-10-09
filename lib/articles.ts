@@ -9,20 +9,20 @@ const db = sql('lcfr.db');
 export const getArticle = async (slug: string) => {
   try {
     return db
-      .prepare("SELECT * FROM articles WHERE slug = ? AND validated = 'true' ")
+      .prepare("SELECT * FROM articles WHERE slug = ? AND validated = 'true'")
       .get(slug);
   } catch (error) {
     console.error('Error fetching article by slug:', error);
-    throw new Error('Error fetching article by slug');
+    throw error;
   }
 };
 
 export const getArticleById = async (id: number | bigint) => {
   try {
-    return db.prepare('SELECT * FROM articles WHERE id =?').get(id);
+    return db.prepare('SELECT * FROM articles WHERE id = ?').get(id);
   } catch (error) {
     console.error('Error fetching article by ID:', error);
-    throw new Error('Error fetching article by ID');
+    throw error;
   }
 };
 
@@ -31,7 +31,7 @@ export const getSlugs = async () => {
     return db.prepare("SELECT * FROM slugs WHERE validated='true'").all();
   } catch (error) {
     console.error('Error fetching slugs:', error);
-    throw new Error('Error fetching slugs');
+    throw error;
   }
 };
 
@@ -44,7 +44,7 @@ export const createSlug = async (slugObject: Slugs) => {
       .run(slugObject);
   } catch (error) {
     console.error('Error creating slug:', error);
-    throw new Error('Error creating slug');
+    throw error;
   }
 };
 
@@ -57,7 +57,7 @@ export const createArticle = async (article: Article) => {
       .run(article);
   } catch (error) {
     console.error('Error creating article:', error);
-    throw new Error('Error creating article');
+    throw error;
   }
 };
 
@@ -68,7 +68,7 @@ export const searchSlugs = async (searchTerm: string) => {
       .all({ searchTerm: `%${searchTerm}%` });
   } catch (error) {
     console.error('Error searching slugs:', error);
-    throw new Error('Error searching slugs');
+    throw error;
   }
 };
 
@@ -79,7 +79,7 @@ export const searchArticles = async (searchTerm: string) => {
       .all({ searchTerm: `%${searchTerm}%` });
   } catch (error) {
     console.error('Error searching articles:', error);
-    throw new Error('Error searching articles');
+    throw error;
   }
 };
 
@@ -88,7 +88,7 @@ export const deleteArticle = async (articleId: number | bigint) => {
     return db.prepare('DELETE FROM articles WHERE id = ?').run(articleId);
   } catch (error) {
     console.error('Error deleting article:', error);
-    throw new Error('Error deleting article');
+    throw error;
   }
 };
 
@@ -97,7 +97,7 @@ export const deleteSlug = async (slugId: number | bigint) => {
     return db.prepare('DELETE FROM slugs WHERE articleId = ?').run(slugId);
   } catch (error) {
     console.error('Error deleting slug:', error);
-    throw new Error('Error deleting slug');
+    throw error;
   }
 };
 
@@ -110,7 +110,7 @@ export const updateArticle = async (article: Article) => {
       .run(article);
   } catch (error) {
     console.error('Error updating article:', error);
-    throw new Error('Error updating article');
+    throw error;
   }
 };
 
@@ -123,7 +123,7 @@ export const updateSlug = async (validatedArgs: Slugs) => {
       .run(validatedArgs);
   } catch (error) {
     console.error('Error updating slug:', error);
-    throw new Error('Error updating slug');
+    throw error;
   }
 };
 
@@ -140,7 +140,7 @@ export const validateArticle = async (validateProps: {
       .run(validateProps);
   } catch (error) {
     console.error('Error validating article:', error);
-    throw new Error('Error validating article');
+    throw error;
   }
 };
 
@@ -156,7 +156,7 @@ export const validateSlugField = async (validateProps: {
       .run(validateProps);
   } catch (error) {
     console.error('Error validating slug:', error);
-    throw new Error('Error validating slug');
+    throw error;
   }
 };
 
@@ -173,6 +173,6 @@ export const shipArticle = async (shipProps: {
       .run(shipProps);
   } catch (error) {
     console.error('Error shipping article:', error);
-    throw new Error('Error shipping article');
+    throw error;
   }
 };
