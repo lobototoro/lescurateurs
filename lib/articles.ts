@@ -4,75 +4,127 @@ import sql from 'better-sqlite3';
 import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
 
-// import slugify from 'slugify';
-// import xss from 'xss';
-
 const db = sql('lcfr.db');
 
 export const getArticle = async (slug: string) => {
-  return db
-    .prepare("SELECT * FROM articles WHERE slug = ? AND validated = 'true' ")
-    .get(slug);
+  try {
+    return db
+      .prepare("SELECT * FROM articles WHERE slug = ? AND validated = 'true' ")
+      .get(slug);
+  } catch (error) {
+    console.error('Error fetching article by slug:', error);
+    throw new Error('Error fetching article by slug');
+  }
 };
 
 export const getArticleById = async (id: number | bigint) => {
-  return db.prepare('SELECT * FROM articles WHERE id =?').get(id);
+  try {
+    return db.prepare('SELECT * FROM articles WHERE id =?').get(id);
+  } catch (error) {
+    console.error('Error fetching article by ID:', error);
+    throw new Error('Error fetching article by ID');
+  }
 };
 
 export const getSlugs = async () => {
-  return db.prepare("SELECT * FROM slugs WHERE validated='true'").all();
+  try {
+    return db.prepare("SELECT * FROM slugs WHERE validated='true'").all();
+  } catch (error) {
+    console.error('Error fetching slugs:', error);
+    throw new Error('Error fetching slugs');
+  }
 };
 
 export const createSlug = async (slugObject: Slugs) => {
-  return db
-    .prepare(
-      'INSERT INTO slugs (slug, createdAt, articleId, validated) VALUES (@slug, @createdAt, @articleId, @validated)'
-    )
-    .run(slugObject);
+  try {
+    return db
+      .prepare(
+        'INSERT INTO slugs (slug, createdAt, articleId, validated) VALUES (@slug, @createdAt, @articleId, @validated)'
+      )
+      .run(slugObject);
+  } catch (error) {
+    console.error('Error creating slug:', error);
+    throw new Error('Error creating slug');
+  }
 };
 
 export const createArticle = async (article: Article) => {
-  return db
-    .prepare(
-      'INSERT INTO articles (slug, title, introduction, main, urls, mainAudioUrl, urlToMainIllustration, author, author_email, createdAt, updatedAt, publishedAt, validated, shipped) VALUES (@slug, @title, @introduction, @main, @urls, @mainAudioUrl, @urlToMainIllustration, @author, @author_email, @createdAt, @updatedAt, @publishedAt, @validated, @shipped)'
-    )
-    .run(article);
+  try {
+    return db
+      .prepare(
+        'INSERT INTO articles (slug, title, introduction, main, urls, mainAudioUrl, urlToMainIllustration, author, author_email, createdAt, updatedAt, publishedAt, validated, shipped) VALUES (@slug, @title, @introduction, @main, @urls, @mainAudioUrl, @urlToMainIllustration, @author, @author_email, @createdAt, @updatedAt, @publishedAt, @validated, @shipped)'
+      )
+      .run(article);
+  } catch (error) {
+    console.error('Error creating article:', error);
+    throw new Error('Error creating article');
+  }
 };
 
 export const searchSlugs = async (searchTerm: string) => {
-  return db
-    .prepare('SELECT * FROM slugs WHERE slug LIKE @searchTerm')
-    .all({ searchTerm: `%${searchTerm}%` });
+  try {
+    return db
+      .prepare('SELECT * FROM slugs WHERE slug LIKE @searchTerm')
+      .all({ searchTerm: `%${searchTerm}%` });
+  } catch (error) {
+    console.error('Error searching slugs:', error);
+    throw new Error('Error searching slugs');
+  }
 };
 
 export const searchArticles = async (searchTerm: string) => {
-  return db
-    .prepare('SELECT * FROM articles WHERE slug LiKE @searchTerm')
-    .all({ searchTerm: `%${searchTerm}%` });
+  try {
+    return db
+      .prepare('SELECT * FROM articles WHERE slug LIKE @searchTerm')
+      .all({ searchTerm: `%${searchTerm}%` });
+  } catch (error) {
+    console.error('Error searching articles:', error);
+    throw new Error('Error searching articles');
+  }
 };
 
 export const deleteArticle = async (articleId: number | bigint) => {
-  return db.prepare('DELETE FROM articles WHERE id = ?').run(articleId);
+  try {
+    return db.prepare('DELETE FROM articles WHERE id = ?').run(articleId);
+  } catch (error) {
+    console.error('Error deleting article:', error);
+    throw new Error('Error deleting article');
+  }
 };
 
 export const deleteSlug = async (slugId: number | bigint) => {
-  return db.prepare('DELETE FROM slugs WHERE articleId = ?').run(slugId);
+  try {
+    return db.prepare('DELETE FROM slugs WHERE articleId = ?').run(slugId);
+  } catch (error) {
+    console.error('Error deleting slug:', error);
+    throw new Error('Error deleting slug');
+  }
 };
 
 export const updateArticle = async (article: Article) => {
-  return db
-    .prepare(
-      'UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, mainAudioUrl = @mainAudioUrl, urlToMainIllustration = @urlToMainIllustration, createdAt = @createdAt, updatedAt = @updatedAt, publishedAt = @publishedAt, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id'
-    )
-    .run(article);
+  try {
+    return db
+      .prepare(
+        'UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, mainAudioUrl = @mainAudioUrl, urlToMainIllustration = @urlToMainIllustration, createdAt = @createdAt, updatedAt = @updatedAt, publishedAt = @publishedAt, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id'
+      )
+      .run(article);
+  } catch (error) {
+    console.error('Error updating article:', error);
+    throw new Error('Error updating article');
+  }
 };
 
 export const updateSlug = async (validatedArgs: Slugs) => {
-  return db
-    .prepare(
-      'UPDATE slugs SET slug = @slug, createdAt = @createdAt, articleId = @articleId, validated = @validated WHERE id = @id'
-    )
-    .run(validatedArgs);
+  try {
+    return db
+      .prepare(
+        'UPDATE slugs SET slug = @slug, createdAt = @createdAt, articleId = @articleId, validated = @validated WHERE id = @id'
+      )
+      .run(validatedArgs);
+  } catch (error) {
+    console.error('Error updating slug:', error);
+    throw new Error('Error updating slug');
+  }
 };
 
 export const validateArticle = async (validateProps: {
@@ -80,20 +132,32 @@ export const validateArticle = async (validateProps: {
   validatedValue: string;
   updatedAt: string;
 }) => {
-  return db
-    .prepare(
-      'UPDATE articles SET validated = @validatedValue, updatedAt = @updatedAt WHERE id = @articleId'
-    )
-    .run(validateProps);
+  try {
+    return db
+      .prepare(
+        'UPDATE articles SET validated = @validatedValue, updatedAt = @updatedAt WHERE id = @articleId'
+      )
+      .run(validateProps);
+  } catch (error) {
+    console.error('Error validating article:', error);
+    throw new Error('Error validating article');
+  }
 };
 
 export const validateSlugField = async (validateProps: {
   slugId: number | bigint;
   validatedValue: string;
 }) => {
-  return db
-    .prepare('UPDATE slugs SET validated = @validatedValue WHERE id = @slugId')
-    .run(validateProps);
+  try {
+    return db
+      .prepare(
+        'UPDATE slugs SET validated = @validatedValue WHERE id = @slugId'
+      )
+      .run(validateProps);
+  } catch (error) {
+    console.error('Error validating slug:', error);
+    throw new Error('Error validating slug');
+  }
 };
 
 export const shipArticle = async (shipProps: {
@@ -101,9 +165,14 @@ export const shipArticle = async (shipProps: {
   shippedValue: string;
   updatedAt: string;
 }) => {
-  return db
-    .prepare(
-      'UPDATE articles SET shipped = @shippedValue, updatedAt = @updatedAt WHERE id = @articleId'
-    )
-    .run(shipProps);
+  try {
+    return db
+      .prepare(
+        'UPDATE articles SET shipped = @shippedValue, updatedAt = @updatedAt WHERE id = @articleId'
+      )
+      .run(shipProps);
+  } catch (error) {
+    console.error('Error shipping article:', error);
+    throw new Error('Error shipping article');
+  }
 };
