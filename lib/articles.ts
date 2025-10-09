@@ -7,12 +7,12 @@ import { Slugs } from '@/models/slugs';
 const db = sql('lcfr.db');
 
 // utility function to execute queries with error handling
-const executeQuery = <T = any>(
+const executeQuery = async <T = any>(
   queryName: string,
   query: string,
   type: 'get' | 'all' | 'run' = 'get',
   params?: Record<string, any> | string | number | bigint
-): T => {
+): Promise<T> => {
   try {
     if (type === 'all') {
       if (typeof params === 'undefined') {
