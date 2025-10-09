@@ -102,7 +102,6 @@ describe('ManageArticleForm', () => {
 
     // Notification should appear
     await waitFor(() => {
-      screen.debug();
       expect(scrolltoTopMock).toHaveBeenCalled();
     });
   });

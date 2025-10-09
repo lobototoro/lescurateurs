@@ -66,3 +66,11 @@ export const deleteUser = cache(async (email: string) => {
 export const getAllUsers = cache(async () => {
   return db.prepare('SELECT * FROM users').all();
 });
+
+export const logConnection = cache(async (email: string) => {
+  const lastConnectionAt = new Date().toISOString().slice(0, 10);
+  db.prepare(`UPDATE users SET lastConnectionAt = ? WHERE email = ?`).run(
+    lastConnectionAt,
+    email
+  );
+});
