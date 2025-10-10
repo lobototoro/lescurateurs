@@ -1,12 +1,16 @@
 'use server';
-import sql from 'better-sqlite3';
 
 import { User } from '@/models/user';
 
-const db = sql('lcfr.db');
+import { executeQuery } from './db-utilities';
 
 export const getUser = async (email: string) => {
-  return db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+  return executeQuery(
+    'get user by email',
+    'SELECT * FROM users WHERE email = ?',
+    'get',
+    email
+  );
 };
 
 export const createUser = async (user: User) => {
@@ -17,66 +21,50 @@ export const createUser = async (user: User) => {
   const lastConnectionAt = new Date(user.lastConnectionAt)
     .toISOString()
     .slice(0, 10);
-
-  db.prepare(
-    `
-    INSERT INTO users (
-      email,
-      tiersServiceIdent,
-      role,
-      permissions,
-      createdAt,
-      lastConnectionAt,
-      updatedAt,
-      updatedBy
-    )
-    VALUES (
-      ?,
-      ?,
-      ?,
-      ?,
-      ?,
-      ?,
-      ?,
-      ?
-    )`
-  ).run(
-    user.email,
-    user.tiersServiceIdent,
-    user.role,
+  const mutatedUser = {
+    ...user,
     permissions,
     createdAt,
     lastConnectionAt,
-    null,
-    null
+    updatedAt: null,
+    updatedBy: null,
+  };
+
+  return executeQuery(
+    'get user by email',
+    'SELECT * FROM users WHERE email = ?',
+    'get',
+    mutatedUser
   );
 };
 
 export const updateUser = async (user: User) => {
-  db.prepare(
-    `UPDATE users SET email = @email, tiersServiceIdent = @tiersServiceIdent, role = @role, permissions = @permissions, updatedAt = @updatedAt, updatedBy = @updatedBy WHERE id = @id`
-  ).run(user);
+  return executeQuery(
+    'get user by id',
+    'SELECT * FROM users WHERE id = ?',
+    'get',
+    user
+  );
 };
 
 export const deleteUser = async (email: string) => {
-  db.prepare('DELETE FROM users WHERE email = ?').run(email);
+  return executeQuery(
+    'delete user by email',
+    'DELETE FROM users WHERE email = ?',
+    'run',
+    email
+  );
 };
 
 export const getAllUsers = async () => {
-  return db.prepare('SELECT * FROM users').all();
+  return executeQuery('get all users', 'SELECT * FROM users', 'all');
 };
 
 export const logConnection = async (email: string) => {
-  try {
-    const lastConnectionAt = new Date().toISOString().slice(0, 10);
-    const result = db
-      .prepare(`UPDATE users SET lastConnectionAt = ? WHERE email = ?`)
-      .run(lastConnectionAt, email);
-    if (result.changes === 0) {
-      console.warn(`No user found with email: ${email}`);
-    }
-  } catch (error) {
-    console.error('Error updating lastConnectionAt:', error);
-    throw error;
-  }
+  return executeQuery(
+    'log user connection',
+    'UPDATE users SET lastConnectionAt = ? WHERE email = ?',
+    'run',
+    email
+  );
 };
