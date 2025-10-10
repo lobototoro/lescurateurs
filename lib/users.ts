@@ -31,18 +31,18 @@ export const createUser = async (user: User) => {
   };
 
   return executeQuery(
-    'get user by email',
-    'SELECT * FROM users WHERE email = ?',
-    'get',
+    'create user',
+    'INSERT INTO users (email, tiersServiceIdent, role, permissions, createdAt, lastConnectionAt, updatedAt, updatedBy) VALUES (@email, @tiersServiceIdent, @role, @permissions, @createdAt, @lastConnectionAt, @updatedAt, @updatedBy)',
+    'run',
     mutatedUser
   );
 };
 
 export const updateUser = async (user: User) => {
   return executeQuery(
-    'get user by id',
-    'SELECT * FROM users WHERE id = ?',
-    'get',
+    'update user by id',
+    `UPDATE users SET email = @email, tiersServiceIdent = @tiersServiceIdent, role = @role, permissions = @permissions, updatedAt = @updatedAt, updatedBy = @updatedBy WHERE id = @id`,
+    'run',
     user
   );
 };
@@ -63,8 +63,11 @@ export const getAllUsers = async () => {
 export const logConnection = async (email: string) => {
   return executeQuery(
     'log user connection',
-    'UPDATE users SET lastConnectionAt = ? WHERE email = ?',
+    'UPDATE users SET lastConnectionAt = @lastConnectionAt WHERE email = @email',
     'run',
-    email
+    {
+      lastConnectionAt: new Date().toISOString().slice(0, 10),
+      email,
+    }
   );
 };
