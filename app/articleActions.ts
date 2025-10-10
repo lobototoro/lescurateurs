@@ -42,7 +42,7 @@ interface ValidateTypes {
  */
 export async function createArticleAction(prevState: any, data: any) {
   const session = await auth0.getSession();
-  if (!session || !session?.user) {
+  if (!session?.user) {
     redirect('/editor');
   }
 
@@ -123,7 +123,7 @@ export async function createArticleAction(prevState: any, data: any) {
  */
 export async function updateArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session || !session?.user) {
+  if (!session?.user) {
     redirect('/editor');
   }
 
@@ -143,7 +143,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   const shipped = formData.get('shipped') as string;
 
   const updatedAt = new Date().toISOString() as string;
-  const updatedBy = session?.user.nickname as string | 'Anonyme';
+  const updatedBy = session.user.nickname || session.user.email || 'Anonyme';
 
   try {
     await updateArticle({
@@ -229,7 +229,7 @@ export async function fetchArticleById(id: number | bigint) {
  */
 export async function deleteArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session || !session?.user) {
+  if (!session?.user) {
     redirect('/editor');
   }
 
@@ -268,7 +268,7 @@ export async function validateArticleAction(
   formData: FormData
 ) {
   const session = await auth0.getSession();
-  if (!session || !session?.user) {
+  if (!session?.user) {
     redirect('/editor');
   }
 
@@ -276,7 +276,7 @@ export async function validateArticleAction(
     articleId: parseInt(formData.get('id') as string, 10),
     validation: formData.get('validation') as string,
     updatedAt: new Date().toISOString() as string, // NEX-59
-    updatedBy: session?.user.nickname as string | 'Anonyme',
+    updatedBy: session.user.nickname || session.user.email || 'Anonyme',
   };
 
   try {
@@ -313,14 +313,14 @@ export async function validateArticleAction(
 
 export async function shipArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session || !session?.user) {
+  if (!session?.user) {
     redirect('/editor');
   }
 
   const id = parseInt(formData.get('id') as string, 10);
   const ship = (formData.get('shipped') as string) === 'true' ? true : false;
   const updatedAt = new Date().toISOString() as string;
-  const updatedBy = session?.user.nickname as string | 'Anonyme';
+  const updatedBy = session.user.nickname || session.user.email || 'Anonyme';
 
   // get article to check for validity: 'true' or 'false'
   const article = (await getArticleById(id)) as z.infer<typeof articleSchema>;

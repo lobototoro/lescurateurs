@@ -137,7 +137,7 @@ export const shipArticle = async (shipProps: {
 }) => {
   return executeQuery(
     'ship article',
-    'UPDATE articles SET shipped = @shippedValue, updatedAt = @updatedAt WHERE id = @articleId',
+    'UPDATE articles SET shipped = @shippedValue, updatedAt = @updatedAt, updatedBy = @updatedBy WHERE id = @articleId',
     'run',
     shipProps
   );
