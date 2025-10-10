@@ -57,7 +57,7 @@ export async function createArticleAction(prevState: any, data: any) {
   const urlToMainIllustration = data.urlToMainIllustration as string;
   const createdAt = new Date().toISOString();
   const updatedAt = new Date().toISOString();
-  const updatedBy = author as string;
+  const updatedBy = author;
   const publishedAt = '';
   const validated = 'false';
   const shipped = 'false';
@@ -73,8 +73,8 @@ export async function createArticleAction(prevState: any, data: any) {
       urls,
       mainAudioUrl,
       urlToMainIllustration,
-      author: author as string,
-      author_email: author_email as string,
+      author: author,
+      author_email: author_email,
       createdAt,
       updatedAt,
       updatedBy,
