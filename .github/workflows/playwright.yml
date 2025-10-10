@@ -1,35 +1,36 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      env:
-        AUTH0_DOMAIN: ${{secrets.AUTH0_DOMAIN}}
-        AUTH0_CLIENT_ID: ${{secrets.AUTH0_CLIENT_ID}}
-        AUTH0_CLIENT_SECRET: ${{secrets.AUTH0_CLIENT_SECRET}}
-        AUTH0_SECRET: ${{secrets.AUTH0_SECRET}}
-        APP_BASE_URL: ${{vars.APP_BASE_URL}}
-        NEXT_PUBLIC_DEFAULT_PAGE: ${{vars.NEXT_PUBLIC_DEFAULT_PAGE}}
-        NEXT_PUBLIC_DEFAULT_LIMIT: ${{vars.NEXT_PUBLIC_DEFAULT_LIMIT}}
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        env:
+          AUTH0_DOMAIN: ${{secrets.AUTH0_DOMAIN}}
+          AUTH0_CLIENT_ID: ${{secrets.AUTH0_CLIENT_ID}}
+          AUTH0_CLIENT_SECRET: ${{secrets.AUTH0_CLIENT_SECRET}}
+          AUTH0_SECRET: ${{secrets.AUTH0_SECRET}}
+          NEXT_DATABASE_NAME: ${{ secrets.NEXT_DATABASE_NAME }}
+          APP_BASE_URL: ${{vars.APP_BASE_URL}}
+          NEXT_PUBLIC_DEFAULT_PAGE: ${{vars.NEXT_PUBLIC_DEFAULT_PAGE}}
+          NEXT_PUBLIC_DEFAULT_LIMIT: ${{vars.NEXT_PUBLIC_DEFAULT_LIMIT}}
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

@@ -4,9 +4,19 @@ import { defineConfig, devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const result = dotenv.config({ path: path.resolve(__dirname, '.env.local') });
+if (result.error && process.env.CI !== 'true') {
+  console.warn(
+    'Warning: Could not load .env.local file:',
+    result.error.message
+  );
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
