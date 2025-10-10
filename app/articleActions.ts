@@ -23,6 +23,7 @@ interface ValidateTypes {
   articleId: number | bigint;
   validation: string;
   updatedAt: string;
+  updatedBy: string;
 }
 
 /**
@@ -41,19 +42,13 @@ interface ValidateTypes {
  */
 export async function createArticleAction(prevState: any, data: any) {
   const session = await auth0.getSession();
-  if (!session?.user) {
+  if (!session || !session?.user) {
     redirect('/editor');
   }
 
-  const author = session?.user.nickname;
-  const author_email = session?.user.email;
+  const author = session?.user.nickname || 'Anonyme';
+  const author_email = session?.user.email || 'Email inconnu';
 
-  // const title = formData.get('title') as string;
-  // const introduction = formData.get('introduction') as string;
-  // const main = formData.get('main') as string;
-  // const urls = formData.get('urls') as string;
-  // const mainAudioUrl = formData.get('mainAudioUrl') as string;
-  // const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
   const title = data.title as string;
   const introduction = data.introduction as string;
   const main = data.main as string;
@@ -62,6 +57,7 @@ export async function createArticleAction(prevState: any, data: any) {
   const urlToMainIllustration = data.urlToMainIllustration as string;
   const createdAt = new Date().toISOString();
   const updatedAt = new Date().toISOString();
+  const updatedBy = author as string;
   const publishedAt = '';
   const validated = 'false';
   const shipped = 'false';
@@ -81,6 +77,7 @@ export async function createArticleAction(prevState: any, data: any) {
       author_email: author_email as string,
       createdAt,
       updatedAt,
+      updatedBy,
       publishedAt,
       validated,
       shipped,
@@ -126,7 +123,7 @@ export async function createArticleAction(prevState: any, data: any) {
  */
 export async function updateArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session?.user) {
+  if (!session || !session?.user) {
     redirect('/editor');
   }
 
@@ -146,6 +143,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   const shipped = formData.get('shipped') as string;
 
   const updatedAt = new Date().toISOString() as string;
+  const updatedBy = session?.user.nickname as string | 'Anonyme';
 
   try {
     await updateArticle({
@@ -161,6 +159,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
       author_email,
       createdAt,
       updatedAt,
+      updatedBy,
       publishedAt,
       validated,
       shipped,
@@ -230,7 +229,7 @@ export async function fetchArticleById(id: number | bigint) {
  */
 export async function deleteArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session?.user) {
+  if (!session || !session?.user) {
     redirect('/editor');
   }
 
@@ -269,7 +268,7 @@ export async function validateArticleAction(
   formData: FormData
 ) {
   const session = await auth0.getSession();
-  if (!session?.user) {
+  if (!session || !session?.user) {
     redirect('/editor');
   }
 
@@ -277,6 +276,7 @@ export async function validateArticleAction(
     articleId: parseInt(formData.get('id') as string, 10),
     validation: formData.get('validation') as string,
     updatedAt: new Date().toISOString() as string, // NEX-59
+    updatedBy: session?.user.nickname as string | 'Anonyme',
   };
 
   try {
@@ -284,6 +284,7 @@ export async function validateArticleAction(
       articleId: validationArgs.articleId,
       validatedValue: validationArgs.validation,
       updatedAt: validationArgs.updatedAt,
+      updatedBy: validationArgs.updatedBy,
     });
     const slugValidation = await validateSlugField({
       slugId: validationArgs.articleId,
@@ -312,13 +313,14 @@ export async function validateArticleAction(
 
 export async function shipArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
-  if (!session?.user) {
+  if (!session || !session?.user) {
     redirect('/editor');
   }
 
   const id = parseInt(formData.get('id') as string, 10);
   const ship = (formData.get('shipped') as string) === 'true' ? true : false;
   const updatedAt = new Date().toISOString() as string;
+  const updatedBy = session?.user.nickname as string | 'Anonyme';
 
   // get article to check for validity: 'true' or 'false'
   const article = (await getArticleById(id)) as z.infer<typeof articleSchema>;
@@ -339,6 +341,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
     articleId: id,
     shippedValue,
     updatedAt, // NEX-59
+    updatedBy,
   });
   if (!result) {
     return {
