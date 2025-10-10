@@ -10,7 +10,13 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, '.env.local') });
+const result = dotenv.config({ path: path.resolve(__dirname, '.env.local') });
+if (result.error && process.env.CI !== 'true') {
+  console.warn(
+    'Warning: Could not load .env.local file:',
+    result.error.message
+  );
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
