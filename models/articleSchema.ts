@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const articleSchema = z.object({
   id: z.number().optional(),
@@ -31,6 +31,7 @@ export const articleSchema = z.object({
   author_email: z.string().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
+  updatedBy: z.string().optional().nullable(),
   publishedAt: z.string().optional(),
   validated: z.string().optional(),
   shipped: z.string().optional(),

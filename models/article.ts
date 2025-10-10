@@ -1,9 +1,9 @@
 export enum UrlsTypes {
-  WEBSITE = "website",
-  VIDEOS = "videos",
-  AUDIO = "audio",
-  SOCIAL = "social",
-  IMAGE = "image",
+  WEBSITE = 'website',
+  VIDEOS = 'videos',
+  AUDIO = 'audio',
+  SOCIAL = 'social',
+  IMAGE = 'image',
 }
 
 export interface Article {
@@ -17,9 +17,10 @@ export interface Article {
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  updatedBy: string | null;
   author: string;
   author_email: string;
   urls: string;
   validated: string;
   shipped: string;
-};
+}
