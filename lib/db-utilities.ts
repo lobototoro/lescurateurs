@@ -2,8 +2,11 @@
 import sql from 'better-sqlite3';
 
 // utility for db queries - serialization
-
-const db = sql(process.env.NEXT_DATABASE_NAME);
+const databaseName = process.env.NEXT_DATABASE_NAME;
+if (!databaseName) {
+  throw new Error('Database name is not defined in environment variables.');
+}
+const db = sql(databaseName);
 
 export const executeQuery = async <T = any>(
   queryName: string,
