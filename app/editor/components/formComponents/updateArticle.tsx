@@ -145,6 +145,7 @@ export default function UpdateArticleForm({
         formData.append('author_email', data.author_email as string);
         formData.append('created_at', data.created_at as string);
         formData.append('updated_at', data.updated_at as string);
+        formData.append('updated_by', data.updated_by as string);
         formData.append('published_at', data.published_at as string);
         formData.append('validated', data.validated as string);
         formData.append('shipped', data.shipped as string);

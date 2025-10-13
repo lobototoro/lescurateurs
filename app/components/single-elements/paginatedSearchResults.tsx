@@ -102,9 +102,9 @@ export function PaginatedSearchDisplay({
                       className="button mr-4"
                       data-testid="selection-button"
                       onClick={() => {
-                        if ('articleId' in item) {
+                        if ('article_id' in item) {
                           handleReference &&
-                            handleReference(item.articleId as number);
+                            handleReference(item.article_id as number);
                         } else if ('id' in item) {
                           handleReference && handleReference(item.id as number);
                         }
@@ -119,10 +119,10 @@ export function PaginatedSearchDisplay({
                       <button
                         className="button is-size-6"
                         onClick={() => {
-                          if ('articleId' in item) {
+                          if ('article_id' in item) {
                             handleReference &&
                               handleReference(
-                                item?.articleId as number,
+                                item?.article_id as number,
                                 '',
                                 'delete'
                               );
@@ -134,10 +134,10 @@ export function PaginatedSearchDisplay({
                       <button
                         className="button is-size-6"
                         onClick={() => {
-                          if ('articleId' in item) {
+                          if ('article_id' in item) {
                             handleReference &&
                               handleReference(
-                                item?.articleId as number,
+                                item?.article_id as number,
                                 '',
                                 'validate'
                               );
@@ -149,10 +149,10 @@ export function PaginatedSearchDisplay({
                       <button
                         className="button is-size-6"
                         onClick={() => {
-                          if ('articleId' in item) {
+                          if ('article_id' in item) {
                             handleReference &&
                               handleReference(
-                                item?.articleId as number,
+                                item?.article_id as number,
                                 '',
                                 'ship'
                               );

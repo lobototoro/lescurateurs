@@ -110,7 +110,7 @@ export default function ArticleMarkupForm({
               aria-label="urlToMainIllustration"
               className="input"
               type="url"
-              {...register('url_-to_main_illustration')}
+              {...register('url_to_main_illustration')}
               data-testid="urlToMainIllustration"
             />
           </div>

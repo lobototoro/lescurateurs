@@ -32,7 +32,7 @@ export const createUser = async (user: User) => {
 
   return executeQuery(
     'create user',
-    'INSERT INTO users (email, tiersServiceIdent, role, permissions, created_at, last_connection_at, updated_at, updated_by) VALUES (@email, @tiersServiceIdent, @role, @permissions, @created_at, @last_connection_at, @updated_at, @updated_by)',
+    'INSERT INTO users (email, tiers_service_ident, role, permissions, created_at, last_connection_at, updated_at, updated_by) VALUES (@email, @tiers_service_ident, @role, @permissions, @created_at, @last_connection_at, @updated_at, @updated_by)',
     'run',
     mutatedUser
   );
@@ -41,7 +41,7 @@ export const createUser = async (user: User) => {
 export const updateUser = async (user: User) => {
   return executeQuery(
     'update user by id',
-    `UPDATE users SET email = @email, tiersServiceIdent = @tiersServiceIdent, role = @role, permissions = @permissions, updated_at = @updated_at, updated_by = @updated_by WHERE id = @id`,
+    `UPDATE users SET email = @email, tiers_service_ident = @tiers_service_ident, role = @role, permissions = @permissions, updated_at = @updated_at, updated_by = @updated_by WHERE id = @id`,
     'run',
     user
   );
