@@ -1,13 +1,13 @@
 export interface User {
   id?: number | bigint;
   email: string;
-  tiersServiceIdent: string;
+  tiers_service_ident: string;
   role: string;
   permissions: string;
-  createdAt: string;
-  lastConnectionAt: string;
-  updatedAt?: string | null;
-  updatedBy?: string | null;
+  created_at: string;
+  last_connection_at: string;
+  updated_at?: string | null;
+  updated_by?: string | null;
 }
 
 export enum UserRole {

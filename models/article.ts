@@ -12,12 +12,12 @@ export interface Article {
   title: string;
   introduction: string | null;
   main: string;
-  mainAudioUrl: string | null;
-  urlToMainIllustration: string;
-  publishedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-  updatedBy: string | null;
+  main_audio_url: string | null;
+  url_to_main_illustration: string;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
   author: string;
   author_email: string;
   urls: string;

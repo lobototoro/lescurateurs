@@ -20,10 +20,10 @@ import {
 } from '@/lib/articles';
 
 interface ValidateTypes {
-  articleId: number | bigint;
+  article_id: number | bigint;
   validation: string;
-  updatedAt: string;
-  updatedBy: string;
+  updated_at: string;
+  updated_by: string;
 }
 
 /**
@@ -53,12 +53,12 @@ export async function createArticleAction(prevState: any, data: any) {
   const introduction = data.introduction as string;
   const main = data.main as string;
   const urls = data.urls as string;
-  const mainAudioUrl = data.mainAudioUrl as string;
-  const urlToMainIllustration = data.urlToMainIllustration as string;
-  const createdAt = new Date().toISOString();
-  const updatedAt = new Date().toISOString();
-  const updatedBy = author;
-  const publishedAt = '';
+  const main_audio_url = data.main_audio_url as string;
+  const url_to_main_illustration = data.url_to_main_illustration as string;
+  const created_at = new Date().toISOString();
+  const updated_at = new Date().toISOString();
+  const updated_by = author;
+  const published_at = '';
   const validated = 'false';
   const shipped = 'false';
   const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
@@ -71,14 +71,14 @@ export async function createArticleAction(prevState: any, data: any) {
       introduction,
       main,
       urls,
-      mainAudioUrl,
-      urlToMainIllustration,
+      main_audio_url,
+      url_to_main_illustration,
       author: author,
       author_email: author_email,
-      createdAt,
-      updatedAt,
-      updatedBy,
-      publishedAt,
+      created_at,
+      updated_at,
+      updated_by,
+      published_at,
       validated,
       shipped,
     });
@@ -87,8 +87,8 @@ export async function createArticleAction(prevState: any, data: any) {
 
     await createSlug({
       slug,
-      createdAt,
-      articleId: articleresult?.lastInsertRowid as number,
+      created_at,
+      article_id: articleresult?.lastInsertRowid as number,
       validated,
     });
 
@@ -135,15 +135,17 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   const introduction = formData.get('introduction') as string;
   const main = formData.get('main') as string;
   const urls = formData.get('urls') as string;
-  const mainAudioUrl = formData.get('mainAudioUrl') as string;
-  const urlToMainIllustration = formData.get('urlToMainIllustration') as string;
-  const createdAt = formData.get('createdAt') as string;
-  const publishedAt = formData.get('publishedAt') as string;
+  const main_audio_url = formData.get('main_audio_url') as string;
+  const url_to_main_illustration = formData.get(
+    'url_to_main_illustration'
+  ) as string;
+  const created_at = formData.get('created_at') as string;
+  const published_at = formData.get('published_at') as string;
   const validated = 'false'; // NEX-72
   const shipped = formData.get('shipped') as string;
 
-  const updatedAt = new Date().toISOString() as string;
-  const updatedBy = session.user.nickname || session.user.email || 'Anonyme';
+  const updated_at = new Date().toISOString() as string;
+  const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
   try {
     await updateArticle({
@@ -153,14 +155,14 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
       introduction,
       main,
       urls,
-      mainAudioUrl,
-      urlToMainIllustration,
+      main_audio_url,
+      url_to_main_illustration,
       author,
       author_email,
-      createdAt,
-      updatedAt,
-      updatedBy,
-      publishedAt,
+      created_at,
+      updated_at,
+      updated_by,
+      published_at,
       validated,
       shipped,
     });
@@ -168,8 +170,8 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
     await updateSlug({
       id, // assuming slug ID is the same as article ID
       slug,
-      createdAt,
-      articleId: id,
+      created_at,
+      article_id: id,
       validated,
     });
 
@@ -273,21 +275,21 @@ export async function validateArticleAction(
   }
 
   const validationArgs: ValidateTypes = {
-    articleId: parseInt(formData.get('id') as string, 10),
+    article_id: parseInt(formData.get('id') as string, 10),
     validation: formData.get('validation') as string,
-    updatedAt: new Date().toISOString() as string, // NEX-59
-    updatedBy: session.user.nickname || session.user.email || 'Anonyme',
+    updated_at: new Date().toISOString() as string, // NEX-59
+    updated_by: session.user.nickname || session.user.email || 'Anonyme',
   };
 
   try {
     const validation = await validateArticle({
-      articleId: validationArgs.articleId,
+      article_id: validationArgs.article_id,
       validatedValue: validationArgs.validation,
-      updatedAt: validationArgs.updatedAt,
-      updatedBy: validationArgs.updatedBy,
+      updated_at: validationArgs.updated_at,
+      updated_by: validationArgs.updated_by,
     });
     const slugValidation = await validateSlugField({
-      slugId: validationArgs.articleId,
+      slugId: validationArgs.article_id,
       validatedValue: validationArgs.validation,
     });
     if (!validation || !slugValidation) {
@@ -319,8 +321,8 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
 
   const id = parseInt(formData.get('id') as string, 10);
   const ship = (formData.get('shipped') as string) === 'true' ? true : false;
-  const updatedAt = new Date().toISOString() as string;
-  const updatedBy = session.user.nickname || session.user.email || 'Anonyme';
+  const updated_at = new Date().toISOString() as string;
+  const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
   // get article to check for validity: 'true' or 'false'
   const article = (await getArticleById(id)) as z.infer<typeof articleSchema>;
@@ -338,10 +340,10 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   }
   const shippedValue = ship ? 'true' : 'false';
   const result = await shipArticle({
-    articleId: id,
+    article_id: id,
     shippedValue,
-    updatedAt, // NEX-59
-    updatedBy,
+    updated_at, // NEX-59
+    updated_by,
   });
   if (!result) {
     return {

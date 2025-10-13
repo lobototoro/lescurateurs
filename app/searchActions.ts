@@ -1,40 +1,35 @@
-"use server";
+'use server';
 
-import { auth0 } from "@/lib/auth0";
-import { searchArticles, searchSlugs } from "@/lib/articles";
-import { Slugs } from "@/models/slugs";
+import { auth0 } from '@/lib/auth0';
+import { redirect } from 'next/navigation';
+import { searchArticles, searchSlugs } from '@/lib/articles';
+import { Slugs } from '@/models/slugs';
 
 export async function searchForSlugs(searchTerm: string) {
-  const sessions = await auth0.getSession();
-  if (!sessions?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to create an article'
-    }
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    redirect('/editor');
   }
 
   try {
-    const slugs = await searchSlugs(searchTerm) as Slugs[];
+    const slugs = (await searchSlugs(searchTerm)) as Slugs[];
 
     return {
       message: true,
-      slugs
-    }
+      slugs,
+    };
   } catch (error) {
     return {
       message: false,
-      text: 'Error searching for slugs'
-    }
+      text: 'Error searching for slugs',
+    };
   }
 }
 
 export async function searchForArticle(slug: string) {
-  const sessions = await auth0.getSession();
-  if (!sessions?.user) {
-    return {
-      message: false,
-      text: 'You must be logged in to search for an article'
-    }
+  const session = await auth0.getSession();
+  if (!session?.user) {
+    redirect('/editor');
   }
 
   try {
@@ -42,12 +37,12 @@ export async function searchForArticle(slug: string) {
 
     return {
       message: true,
-      article
-    }
+      article,
+    };
   } catch (error) {
     return {
       message: false,
-      text: 'Error getting article'
-    }
+      text: 'Error getting article',
+    };
   }
 }

@@ -1,24 +1,22 @@
 'use server';
 import { auth0 } from '@/lib/auth0';
+import { redirect } from 'next/navigation';
 import { createUser, updateUser, getAllUsers, deleteUser } from '@/lib/users';
 import { User } from '@/models/user';
 
 export async function createUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'Vous devez être connecté',
-    };
+    redirect('/editor');
   }
 
   const userCandidate = {
     email: formData.get('email'),
-    tiersServiceIdent: formData.get('tiersServiceIdent'),
+    tiers_service_ident: formData.get('tiers_service_ident'),
     role: formData.get('role'),
     permissions: formData.get('permissions'),
-    createdAt: formData.get('createdAt'),
-    lastConnectionAt: formData.get('lastConnectionAt'),
+    created_at: formData.get('created_at'),
+    last_connection_at: formData.get('last_connection_at'),
   };
 
   let usererror;
@@ -45,20 +43,17 @@ export async function createUserAction(preState: any, formData: FormData) {
 export async function updateUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'Vous devez être connecté',
-    };
+    redirect('/editor');
   }
 
   const userCandidate = {
     id: parseInt(formData.get('id') as string, 10),
     email: formData.get('email'),
-    tiersServiceIdent: formData.get('tiersServiceIdent'),
+    tiers_service_ident: formData.get('tiers_service_ident'),
     role: formData.get('role'),
     permissions: formData.get('permissions'),
-    updatedAt: new Date().toISOString().slice(0, 10),
-    updatedBy: session.user.email ?? '',
+    updated_at: new Date().toISOString().slice(0, 10),
+    updated_by: session.user.email ?? '',
   };
 
   let usererror;
@@ -85,10 +80,7 @@ export async function updateUserAction(preState: any, formData: FormData) {
 export async function getUsersList() {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'Vous devez être connecté',
-    };
+    redirect('/editor');
   }
 
   try {
@@ -111,10 +103,7 @@ export async function getUsersList() {
 export async function deleteUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
-    return {
-      message: false,
-      text: 'Vous devez être connecté',
-    };
+    redirect('/editor');
   }
 
   const email = formData.get('email');

@@ -15,24 +15,24 @@ export const getUser = async (email: string) => {
 
 export const createUser = async (user: User) => {
   // mutation for permissions (stringify)
-  // mutation for createdAt (date) to string 'yyyy-mm-dd'
+  // mutation for created_at (date) to string 'yyyy-mm-dd'
   const permissions = JSON.stringify(user.permissions);
-  const createdAt = new Date(user.createdAt).toISOString().slice(0, 10);
-  const lastConnectionAt = new Date(user.lastConnectionAt)
+  const created_at = new Date(user.created_at).toISOString().slice(0, 10);
+  const last_connection_at = new Date(user.last_connection_at)
     .toISOString()
     .slice(0, 10);
   const mutatedUser = {
     ...user,
     permissions,
-    createdAt,
-    lastConnectionAt,
-    updatedAt: null,
-    updatedBy: null,
+    created_at,
+    last_connection_at,
+    updated_at: null,
+    updated_by: null,
   };
 
   return executeQuery(
     'create user',
-    'INSERT INTO users (email, tiersServiceIdent, role, permissions, createdAt, lastConnectionAt, updatedAt, updatedBy) VALUES (@email, @tiersServiceIdent, @role, @permissions, @createdAt, @lastConnectionAt, @updatedAt, @updatedBy)',
+    'INSERT INTO users (email, tiersServiceIdent, role, permissions, created_at, last_connection_at, updated_at, updated_by) VALUES (@email, @tiersServiceIdent, @role, @permissions, @created_at, @last_connection_at, @updated_at, @updated_by)',
     'run',
     mutatedUser
   );
@@ -41,7 +41,7 @@ export const createUser = async (user: User) => {
 export const updateUser = async (user: User) => {
   return executeQuery(
     'update user by id',
-    `UPDATE users SET email = @email, tiersServiceIdent = @tiersServiceIdent, role = @role, permissions = @permissions, updatedAt = @updatedAt, updatedBy = @updatedBy WHERE id = @id`,
+    `UPDATE users SET email = @email, tiersServiceIdent = @tiersServiceIdent, role = @role, permissions = @permissions, updated_at = @updated_at, updated_by = @updated_by WHERE id = @id`,
     'run',
     user
   );
@@ -63,10 +63,10 @@ export const getAllUsers = async () => {
 export const logConnection = async (email: string) => {
   return executeQuery(
     'log user connection',
-    'UPDATE users SET lastConnectionAt = @lastConnectionAt WHERE email = @email',
+    'UPDATE users SET last_connection_at = @last_connection_at WHERE email = @email',
     'run',
     {
-      lastConnectionAt: new Date().toISOString().slice(0, 10),
+      last_connection_at: new Date().toISOString().slice(0, 10),
       email,
     }
   );

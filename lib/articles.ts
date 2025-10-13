@@ -34,7 +34,7 @@ export const getSlugs = async () => {
 export const createSlug = async (slugObject: Slugs) => {
   return executeQuery(
     'create slug',
-    'INSERT INTO slugs (slug, createdAt, articleId, validated) VALUES (@slug, @createdAt, @articleId, @validated)',
+    'INSERT INTO slugs (slug, created_at, article_id, validated) VALUES (@slug, @created_at, @article_id, @validated)',
     'run',
     slugObject
   );
@@ -43,7 +43,7 @@ export const createSlug = async (slugObject: Slugs) => {
 export const createArticle = async (article: Article) => {
   return executeQuery(
     'create article',
-    'INSERT INTO articles (slug, title, introduction, main, urls, mainAudioUrl, urlToMainIllustration, author, author_email, createdAt, updatedAt, updatedBy, publishedAt, validated, shipped) VALUES (@slug, @title, @introduction, @main, @urls, @mainAudioUrl, @urlToMainIllustration, @author, @author_email, @createdAt, @updatedAt, @updatedBy, @publishedAt, @validated, @shipped)',
+    'INSERT INTO articles (slug, title, introduction, main, urls, main_audio_url, url_to_main_illustration, author, author_email, created_at, updated_at, updated_by, published_at, validated, shipped) VALUES (@slug, @title, @introduction, @main, @urls, @main_audio_url, @url_to_main_illustration, @author, @author_email, @created_at, @updated_at, @updated_by, @published_at, @validated, @shipped)',
     'run',
     article
   );
@@ -67,19 +67,19 @@ export const searchArticles = async (searchTerm: string) => {
   );
 };
 
-export const deleteArticle = async (articleId: number | bigint) => {
+export const deleteArticle = async (article_id: number | bigint) => {
   return executeQuery(
     'delete article',
     'DELETE FROM articles WHERE id = ?',
     'run',
-    articleId
+    article_id
   );
 };
 
 export const deleteSlug = async (slugId: number | bigint) => {
   return executeQuery(
     'delete slug',
-    'DELETE FROM slugs WHERE articleId = ?',
+    'DELETE FROM slugs WHERE article_id = ?',
     'run',
     slugId
   );
@@ -88,7 +88,7 @@ export const deleteSlug = async (slugId: number | bigint) => {
 export const updateArticle = async (article: Article) => {
   return executeQuery(
     'update article',
-    'UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, mainAudioUrl = @mainAudioUrl, urlToMainIllustration = @urlToMainIllustration, createdAt = @createdAt, updatedAt = @updatedAt, updatedBy = @updatedBy, publishedAt = @publishedAt, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id',
+    'UPDATE articles SET title = @title, introduction = @introduction, main = @main, urls = @urls, main_audio_url = @main_audio_url, url_to_main_illustration = @url_to_main_illustration, created_at = @created_at, updated_at = @updated_at, updated_by = @updated_by, published_at = @published_at, validated = @validated, shipped = @shipped, author = @author, author_email = @author_email, slug = @slug WHERE id = @id',
     'run',
     article
   );
@@ -97,21 +97,21 @@ export const updateArticle = async (article: Article) => {
 export const updateSlug = async (validatedArgs: Slugs) => {
   return executeQuery(
     'update slug',
-    'UPDATE slugs SET slug = @slug, createdAt = @createdAt, articleId = @articleId, validated = @validated WHERE id = @id',
+    'UPDATE slugs SET slug = @slug, created_at = @created_at, article_id = @article_id, validated = @validated WHERE id = @id',
     'run',
     validatedArgs
   );
 };
 
 export const validateArticle = async (validateProps: {
-  articleId: number | bigint;
+  article_id: number | bigint;
   validatedValue: string;
-  updatedAt: string;
-  updatedBy: string;
+  updated_at: string;
+  updated_by: string;
 }) => {
   return executeQuery(
     'validate article',
-    'UPDATE articles SET validated = @validatedValue, updatedAt = @updatedAt, updatedBy = @updatedBy WHERE id = @articleId',
+    'UPDATE articles SET validated = @validatedValue, updated_at = @updated_at, updated_by = @updated_by WHERE id = @article_id',
     'run',
     validateProps
   );
@@ -130,14 +130,14 @@ export const validateSlugField = async (validateProps: {
 };
 
 export const shipArticle = async (shipProps: {
-  articleId: number | bigint;
+  article_id: number | bigint;
   shippedValue: string;
-  updatedAt: string;
-  updatedBy: string;
+  updated_at: string;
+  updated_by: string;
 }) => {
   return executeQuery(
     'ship article',
-    'UPDATE articles SET shipped = @shippedValue, updatedAt = @updatedAt, updatedBy = @updatedBy WHERE id = @articleId',
+    'UPDATE articles SET shipped = @shippedValue, updated_at = @updated_at, updated_by = @updated_by WHERE id = @article_id',
     'run',
     shipProps
   );
