@@ -53,8 +53,8 @@ export default function CreateArticleForm({
       title: '',
       introduction: '',
       main: '',
-      mainAudioUrl: '',
-      urlToMainIllustration: '',
+      main_audio_url: '',
+      url_to_main_illustration: '',
       urls: '',
     },
   });

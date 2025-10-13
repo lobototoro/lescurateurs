@@ -1,10 +1,10 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 import { z } from 'zod';
 
-import { Slugs } from "@/models/slugs";
+import { Slugs } from '@/models/slugs';
 import { userSchema } from '@/models/userSchema';
-import { ArticleTitle } from "./ArticleTitle";
+import { ArticleTitle } from './ArticleTitle';
 import styles from './paginatedSearchResults.module.css';
 
 export function PaginatedSearchDisplay({
@@ -21,8 +21,15 @@ export function PaginatedSearchDisplay({
   defaultLimit: number;
   target: string;
   context: 'article' | 'user';
-  handleReference?: (id: number, itemName?: string, actionName?: string) => void;
-  handleSelectedUser?: (user: z.infer<typeof userSchema>, action: 'update' | 'delete') => void;
+  handleReference?: (
+    id: number,
+    itemName?: string,
+    actionName?: string
+  ) => void;
+  handleSelectedUser?: (
+    user: z.infer<typeof userSchema>,
+    action: 'update' | 'delete'
+  ) => void;
 }) {
   const [activePage, setActivePage] = useState<number>(Number(defaultPage));
   const totalPages = Math.ceil(itemList.length / Number(defaultLimit));
@@ -49,11 +56,15 @@ export function PaginatedSearchDisplay({
 
   return (
     <section className="section">
-      <table className="table container slugs-list" data-testid="paginated-search">
+      <table
+        className="table container slugs-list"
+        data-testid="paginated-search"
+      >
         <thead>
           <tr>
             <th className={styles['id-cell']}>
-              <abbr title={styles['id-cell']}>#</abbr> <abbr title={styles.identifiant}>ID</abbr>
+              <abbr title={styles['id-cell']}>#</abbr>{' '}
+              <abbr title={styles.identifiant}>ID</abbr>
             </th>
             <th className={styles['slug-cell']}>Slug</th>
             <th className={styles['date-cell']}>Créé le</th>
@@ -73,7 +84,7 @@ export function PaginatedSearchDisplay({
                     text={`${swapValue(item)}`}
                   />
                 </td>
-                <td>{item?.createdAt}</td>
+                <td>{item?.created_at}</td>
                 <td>
                   {context === 'article' && target === 'search' && (
                     <button

@@ -21,9 +21,9 @@ vi.mock('@/app/components/single-elements/articleHTMLForm', () => ({
       <input {...props.register('title')} placeholder="Titre" />
       <input {...props.register('introduction')} placeholder="introduction" />
       <input {...props.register('main')} placeholder="Texte" />
-      <input {...props.register('mainAudioUrl')} placeholder="Audio URL" />
+      <input {...props.register('main_audio_url')} placeholder="Audio URL" />
       <input
-        {...props.register('urlToMainIllustration')}
+        {...props.register('url_to_main_illustration')}
         placeholder="Illustration URL"
       />
       <button type="submit">Submit</button>
@@ -52,16 +52,16 @@ mockFetchArticleById.mockResolvedValue({
     introduction:
       "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
     main: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\nWhy do we use it?\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-    publishedAt: '2022-01-01',
-    createdAt: '2022-01-01',
-    updatedAt: '2022-01-01',
+    published_at: '2022-01-01',
+    created_at: '2022-01-01',
+    updated_at: '2022-01-01',
     author: 'John Doe',
     author_email: 'johndoe@example.com',
     validated: 'false',
     shipped: 'false',
     urls: '',
-    mainAudioUrl: 'https://www.fr.fr/2.mp3',
-    urlToMainIllustration: 'https://www.fr.com.1.jpg',
+    main_audio_url: 'https://www.fr.fr/2.mp3',
+    url_to_main_illustration: 'https://www.fr.com.1.jpg',
   },
 });
 const mockUpdateArticleAction = articleActions.updateArticleAction as Mock;
@@ -78,14 +78,14 @@ describe('UpdateArticleForm', () => {
   });
 
   it('renders SearchArticle when no article is selected', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop}/>);
+    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
     await waitFor(() => {
       expect(screen.getByText('Select Article')).toBeInTheDocument();
     });
   });
 
   it('loads article and renders ArticleMarkupForm after selection', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop}/>);
+    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
     fireEvent.click(screen.getByText('Select Article'));
 
     await waitFor(() => {
@@ -94,7 +94,7 @@ describe('UpdateArticleForm', () => {
   });
 
   it('shows notification after successful update', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop}/>);
+    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
 
     fireEvent.click(screen.getByText('Select Article'));
 
@@ -114,7 +114,7 @@ describe('UpdateArticleForm', () => {
   });
 
   it('shows identical warning if no changes are made', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop}/>);
+    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
     fireEvent.click(screen.getByText('Select Article'));
     await waitFor(() => screen.getByText('Submit'));
     fireEvent.click(screen.getByText('Submit'));
@@ -126,7 +126,7 @@ describe('UpdateArticleForm', () => {
   });
 
   it('returns to search when "Retour à la recherche" is clicked', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop}/>);
+    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
     fireEvent.click(screen.getByText('Select Article'));
     await waitFor(() => screen.getByText('Retour à la recherche'));
     fireEvent.click(screen.getByText('Retour à la recherche'));

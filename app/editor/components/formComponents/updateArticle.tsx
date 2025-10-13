@@ -67,16 +67,16 @@ export default function UpdateArticleForm({
       title: '',
       introduction: '',
       main: '',
-      publishedAt: '',
-      createdAt: '',
-      updatedAt: '',
+      published_at: '',
+      created_at: '',
+      updated_at: '',
       author: '',
       author_email: '',
       validated: 'false',
       shipped: 'false',
       urls: '',
-      mainAudioUrl: '',
-      urlToMainIllustration: '',
+      main_audio_url: '',
+      url_to_main_illustration: '',
     },
     values: currentArticle,
   });
@@ -86,9 +86,9 @@ export default function UpdateArticleForm({
   register('slug', { required: true });
   register('author', { required: true });
   register('author_email', { required: true });
-  register('createdAt', { required: true });
-  register('updatedAt', { required: true });
-  register('publishedAt', { required: true });
+  register('created_at', { required: true });
+  register('updated_at', { required: true });
+  register('published_at', { required: true });
   register('validated', { required: true });
   register('shipped', { required: true });
 
@@ -136,16 +136,16 @@ export default function UpdateArticleForm({
         formData.append('introduction', data.introduction as string);
         formData.append('main', data.main as string);
         formData.append('urls', data.urls as string);
-        formData.append('mainAudioUrl', data.mainAudioUrl as string);
+        formData.append('main_audio_url', data.main_audio_url as string);
         formData.append(
-          'urlToMainIllustration',
-          data.urlToMainIllustration as string
+          'url_to_main_illustration',
+          data.url_to_main_illustration as string
         );
         formData.append('author', data.author as string);
         formData.append('author_email', data.author_email as string);
-        formData.append('createdAt', data.createdAt as string);
-        formData.append('updatedAt', data.updatedAt as string);
-        formData.append('publishedAt', data.publishedAt as string);
+        formData.append('created_at', data.created_at as string);
+        formData.append('updated_at', data.updated_at as string);
+        formData.append('published_at', data.published_at as string);
         formData.append('validated', data.validated as string);
         formData.append('shipped', data.shipped as string);
         formAction(formData);
