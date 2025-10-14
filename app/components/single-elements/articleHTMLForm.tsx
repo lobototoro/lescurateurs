@@ -114,7 +114,7 @@ export default function ArticleMarkupForm({
               data-testid="urlToMainIllustration"
             />
           </div>
-          {errors.urlToMainIllustration && (
+          {errors.url_to_main_illustration && (
             <p className="has-text-danger">
               {errors.url_to_main_illustration.message}
             </p>
@@ -139,7 +139,7 @@ export default function ArticleMarkupForm({
               data-testid="mainAudioUrl"
             />
           </div>
-          {errors.mainAudioUrl && (
+          {errors.main_audio_url && (
             <p className="has-text-danger">{errors.main_audio_url.message}</p>
           )}
         </div>
