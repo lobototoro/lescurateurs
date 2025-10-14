@@ -110,13 +110,13 @@ export default function ArticleMarkupForm({
               aria-label="urlToMainIllustration"
               className="input"
               type="url"
-              {...register('urlToMainIllustration')}
+              {...register('url_to_main_illustration')}
               data-testid="urlToMainIllustration"
             />
           </div>
-          {errors.urlToMainIllustration && (
+          {errors.url_to_main_illustration && (
             <p className="has-text-danger">
-              {errors.urlToMainIllustration.message}
+              {errors.url_to_main_illustration.message}
             </p>
           )}
         </div>
@@ -135,12 +135,12 @@ export default function ArticleMarkupForm({
               aria-label="mainAudioUrl"
               className="input"
               type="url"
-              {...register('mainAudioUrl')}
+              {...register('main_audio_url')}
               data-testid="mainAudioUrl"
             />
           </div>
-          {errors.mainAudioUrl && (
-            <p className="has-text-danger">{errors.mainAudioUrl.message}</p>
+          {errors.main_audio_url && (
+            <p className="has-text-danger">{errors.main_audio_url.message}</p>
           )}
         </div>
 

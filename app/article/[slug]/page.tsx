@@ -10,8 +10,8 @@ export default async function ArticlePage(props: { params: Promise<Params> }) {
   const params = await props.params;
   const article = (await getArticle(params.slug)) as Article;
   const publishedDate =
-    article.publishedAt &&
-    formatDistanceToNow(article.publishedAt || '', {
+    article.published_at &&
+    formatDistanceToNow(article.published_at || '', {
       locale: fr,
       addSuffix: true,
     });

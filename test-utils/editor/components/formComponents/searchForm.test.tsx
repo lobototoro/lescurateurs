@@ -6,10 +6,10 @@ import { getMockedSlugs } from '../../../articles-mocked';
 
 /**
  * Mocks the searchForSlugs function from the searchActions module.
- * 
+ *
  * This mock implementation simulates the behavior of the searchForSlugs function
  * by returning a predefined set of search results.
- * 
+ *
  * @returns {Object} An object containing:
  *   - message: A boolean indicating the success of the search (always true in this mock).
  *   - slugs: An array of slug objects, each containing:
@@ -19,30 +19,36 @@ import { getMockedSlugs } from '../../../articles-mocked';
  *     - articleId: The ID of the associated article.
  */
 vi.mock('@/app/searchActions', () => ({
-  searchForSlugs: vi.fn().mockImplementationOnce(() => {
-    return {
-      message: true,
-      slugs: [
-        { id: 1, slug: 'article-1', createdAt: '2025-03-20', articleId: 1 },
-        { id: 2, slug: 'article-2', createdAt: '2025-03-20', articleId: 2 }
-      ],
-    }
-  }).mockImplementationOnce(() => {
-    return {
-      message: false,
-      slugs: [],
-    }
-  }).mockImplementationOnce(() => {
-    return {
-      message: true,
-      slugs: getMockedSlugs(),
-    }
-  })
+  searchForSlugs: vi
+    .fn()
+    .mockImplementationOnce(() => {
+      return {
+        message: true,
+        slugs: [
+          { id: 1, slug: 'article-1', createdAt: '2025-03-20', articleId: 1 },
+          { id: 2, slug: 'article-2', createdAt: '2025-03-20', articleId: 2 },
+        ],
+      };
+    })
+    .mockImplementationOnce(() => {
+      return {
+        message: false,
+        slugs: [],
+      };
+    })
+    .mockImplementationOnce(() => {
+      return {
+        message: true,
+        slugs: getMockedSlugs(),
+      };
+    }),
 }));
 
 describe('Search article', () => {
   it('Should render search results', async () => {
-    const { getByTestId, getByText } = render(<SearchArticle target="search" />);
+    const { getByTestId, getByText } = render(
+      <SearchArticle target="search" />
+    );
 
     const searchInput = getByTestId('search-input');
     fireEvent.change(searchInput, { target: { value: 'slugs' } });
@@ -55,7 +61,9 @@ describe('Search article', () => {
   });
 
   it('Should display no results message when no slugs are found', async () => {
-    const { getByTestId, getByText } = render(<SearchArticle target="search" />);
+    const { getByTestId, getByText } = render(
+      <SearchArticle target="search" />
+    );
 
     const searchInput = getByTestId('search-input');
     fireEvent.change(searchInput, { target: { value: 'nonexistent-slug' } });
@@ -68,7 +76,9 @@ describe('Search article', () => {
   });
 
   it('Should display pagination when results length is above 10', async () => {
-    const { getByRole, getByTestId } = render(<SearchArticle target="search" />);
+    const { getByRole, getByTestId } = render(
+      <SearchArticle target="search" />
+    );
 
     const searchInput = getByTestId('search-input');
     fireEvent.change(searchInput, { target: { value: 'slugs' } });
@@ -84,7 +94,7 @@ describe('Search article', () => {
 
     act(() => {
       const nextButton = getByTestId('next-button');
-      fireEvent.click(nextButton);  
+      fireEvent.click(nextButton);
     });
 
     await waitFor(() => {

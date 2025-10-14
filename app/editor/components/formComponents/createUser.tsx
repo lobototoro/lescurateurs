@@ -15,7 +15,11 @@ import { userSchema } from '@/models/userSchema';
 import { createUserAction } from '@/app/userActions';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 
-export default function CreateUserForm({ scrolltoTop }: { scrolltoTop: () => void }) {
+export default function CreateUserForm({
+  scrolltoTop,
+}: {
+  scrolltoTop: () => void;
+}) {
   const [state, formAction, isPending] = useActionState(createUserAction, null);
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
@@ -36,10 +40,10 @@ export default function CreateUserForm({ scrolltoTop }: { scrolltoTop: () => voi
     resolver: customResolver(userSchema) as any,
     defaultValues: {
       email: '',
-      tiersServiceIdent: '',
+      tiers_service_ident: '',
       role: 'contributor',
-      createdAt: new Date().toISOString(),
-      lastConnectionAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      last_connection_at: new Date().toISOString(),
       permissions: JSON.stringify(contributorPermissions),
     },
   });
@@ -48,11 +52,11 @@ export default function CreateUserForm({ scrolltoTop }: { scrolltoTop: () => voi
     startTransition(() => {
       const formData = new FormData();
       formData.append('email', data.email);
-      formData.append('tiersServiceIdent', data.tiersServiceIdent);
+      formData.append('tiers_service_ident', data.tiers_service_ident);
       formData.append('role', data.role);
       formData.append('permissions', data.permissions);
-      formData.append('createdAt', data.createdAt);
-      formData.append('lastConnectionAt', data.lastConnectionAt);
+      formData.append('created_at', data.created_at);
+      formData.append('last_connection_at', data.last_connection_at);
       formAction(formData);
     });
   };
@@ -136,13 +140,13 @@ export default function CreateUserForm({ scrolltoTop }: { scrolltoTop: () => voi
                   type="text"
                   className="input mt-4"
                   data-testid="tiersServiceIdent"
-                  {...register('tiersServiceIdent', {
+                  {...register('tiers_service_ident', {
                     required: true,
                   })}
                 />
-                {errors.tiersServiceIdent && (
+                {errors.tiers_service_ident && (
                   <p className="has-text-danger">
-                    {errors.tiersServiceIdent.message}
+                    {errors.tiers_service_ident.message}
                   </p>
                 )}
               </div>

@@ -16,7 +16,7 @@ export const ArticleList = ({ list }: { list: Slugs[] }) => {
       {list.map((article) => (
         <li key={article.id}>
           <Link href={`article/${article.slug}`}>
-            {unslugged(article.slug)} - {formatDate(article.createdAt)}
+            {unslugged(article.slug)} - {formatDate(article.created_at)}
           </Link>
         </li>
       ))}

@@ -64,10 +64,10 @@ export default function ManageUserForm({
     resolver: customResolver(userSchema),
     defaultValues: {
       email: '',
-      tiersServiceIdent: '',
+      tiers_service_ident: '',
       role: 'contributor',
-      createdAt: new Date().toISOString(),
-      lastConnectionAt: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      last_connection_at: new Date().toISOString(),
       permissions: JSON.stringify(contributorPermissions),
     },
     values: selectedUser || undefined,
@@ -175,11 +175,11 @@ export default function ManageUserForm({
       const formData = new FormData();
       formData.append('id', data.id !== undefined ? String(data.id) : '');
       formData.append('email', data.email);
-      formData.append('tiersServiceIdent', data.tiersServiceIdent);
+      formData.append('tiers_service_ident', data.tiers_service_ident);
       formData.append('role', data.role);
       formData.append('permissions', data.permissions);
-      formData.append('createdAt', data.createdAt);
-      formData.append('lastConnectionAt', data.lastConnectionAt);
+      formData.append('created_at', data.created_at);
+      formData.append('last_connection_at', data.last_connection_at);
       updateAction(formData);
     });
   };
@@ -257,13 +257,13 @@ export default function ManageUserForm({
                       type="text"
                       className="input mt-4"
                       data-testid="tiersServiceIdent"
-                      {...register('tiersServiceIdent', {
+                      {...register('tiers_service_ident', {
                         required: true,
                       })}
                     />
-                    {errors.tiersServiceIdent && (
+                    {errors.tiers_service_ident && (
                       <p className="has-text-danger">
-                        {errors.tiersServiceIdent.message}
+                        {errors.tiers_service_ident.message}
                       </p>
                     )}
                   </div>
