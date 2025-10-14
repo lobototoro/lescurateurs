@@ -113,7 +113,7 @@ export async function createArticleAction(prevState: any, data: any) {
       await deleteArticle(createdArticleId as number | bigint);
     }
     if (createdSlugId) {
-      await deleteSlug(createdSlugId as number | bigint);
+      await deleteSlug(createdArticleId as number | bigint);
     }
 
     return {
