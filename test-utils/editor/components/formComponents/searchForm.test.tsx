@@ -15,7 +15,7 @@ import { getMockedSlugs } from '../../../articles-mocked';
  *   - slugs: An array of slug objects, each containing:
  *     - id: A unique identifier for the slug.
  *     - slug: The actual slug string.
- *     - createdAt: The creation date of the slug.
+ *     - created_at: The creation date of the slug.
  *     - articleId: The ID of the associated article.
  */
 vi.mock('@/app/searchActions', () => ({
@@ -25,8 +25,20 @@ vi.mock('@/app/searchActions', () => ({
       return {
         message: true,
         slugs: [
-          { id: 1, slug: 'article-1', createdAt: '2025-03-20', articleId: 1 },
-          { id: 2, slug: 'article-2', createdAt: '2025-03-20', articleId: 2 },
+          {
+            id: 1,
+            slug: 'article-1',
+            created_at: '2025-03-20',
+            article_id: 1,
+            validated: 'true',
+          },
+          {
+            id: 2,
+            slug: 'article-2',
+            created_at: '2025-03-20',
+            article_id: 2,
+            validated: 'true',
+          },
         ],
       };
     })

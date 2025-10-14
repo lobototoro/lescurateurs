@@ -70,6 +70,7 @@ export default function UpdateArticleForm({
       published_at: '',
       created_at: '',
       updated_at: '',
+      updated_by: '',
       author: '',
       author_email: '',
       validated: 'false',
@@ -89,6 +90,7 @@ export default function UpdateArticleForm({
   register('created_at', { required: true });
   register('updated_at', { required: true });
   register('published_at', { required: true });
+  register('updated_by');
   register('validated', { required: true });
   register('shipped', { required: true });
 
