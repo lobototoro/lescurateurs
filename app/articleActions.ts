@@ -18,6 +18,7 @@ import {
   validateSlugField,
   shipArticle,
 } from '@/lib/articles';
+import { forEach } from 'ramda';
 
 interface ValidateTypes {
   article_id: number | bigint;
@@ -64,6 +65,7 @@ export async function createArticleAction(prevState: any, data: any) {
   const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
 
   let articleError;
+  let slugError;
   try {
     const articleresult = await createArticle({
       slug,
@@ -85,12 +87,22 @@ export async function createArticleAction(prevState: any, data: any) {
 
     articleError = articleresult?.lastInsertRowid;
 
-    await createSlug({
+    /*
+      Create the slug entry in the slugs table
+      It should always be the same as the article id
+      because we use it to link both tables
+      In case there's a gap in id entries,
+      we can rely on the article_id field
+      to link both tables
+    */
+    const slugresult = await createSlug({
       slug,
       created_at,
       article_id: articleresult?.lastInsertRowid as number,
       validated,
     });
+
+    slugError = slugresult?.lastInsertRowid;
 
     return {
       message: true,
@@ -100,6 +112,9 @@ export async function createArticleAction(prevState: any, data: any) {
     console.log(error);
     if (articleError) {
       await deleteArticle(articleError as number | bigint);
+    }
+    if (slugError) {
+      await deleteSlug(slugError as number | bigint);
     }
 
     return {
@@ -169,14 +184,6 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
       shipped,
     });
 
-    await updateSlug({
-      id, // assuming slug ID is the same as article ID
-      slug,
-      created_at,
-      article_id: id,
-      validated,
-    });
-
     return {
       message: true,
       text: 'Article was successfully updated',
@@ -242,18 +249,18 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
     const slugResult = await deleteSlug(id);
     const articleResult = await deleteArticle(id);
 
-    const result = await Promise.all([slugResult, articleResult]);
-
-    const totalchanges = result[0]?.changes + result[1]?.changes;
-    if (totalchanges > 1) {
+    const promises = Promise.allSettled([slugResult, articleResult]);
+    const settledResults = await promises;
+    let successCount = 0;
+    settledResults.forEach((promise: any) => {
+      if (promise.status === 'fulfilled') {
+        successCount += 1;
+      }
+    });
+    if (successCount === 2) {
       return {
         message: true,
         text: "L'article a été supprimé avec succès",
-      };
-    } else {
-      return {
-        message: false,
-        text: "une erreur s'est produite lors de la suppression de l'article",
       };
     }
   } catch (error) {
@@ -291,7 +298,7 @@ export async function validateArticleAction(
       updated_by: validationArgs.updated_by,
     });
     const slugValidation = await validateSlugField({
-      slugId: validationArgs.article_id,
+      article_id: validationArgs.article_id, // NEX-81
       validatedValue: validationArgs.validation,
     });
     if (!validation || !slugValidation) {

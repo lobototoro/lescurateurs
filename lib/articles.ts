@@ -118,12 +118,12 @@ export const validateArticle = async (validateProps: {
 };
 
 export const validateSlugField = async (validateProps: {
-  slugId: number | bigint;
+  article_id: number | bigint;
   validatedValue: string;
 }) => {
   return executeQuery(
     'validate slug',
-    'UPDATE slugs SET validated = @validatedValue WHERE id = @slugId',
+    'UPDATE slugs SET validated = @validatedValue WHERE article_id = @article_id',
     'run',
     validateProps
   );
