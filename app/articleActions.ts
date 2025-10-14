@@ -109,11 +109,15 @@ export async function createArticleAction(prevState: any, data: any) {
     };
   } catch (error) {
     console.log(error);
-    if (createdArticleId) {
-      await deleteArticle(createdArticleId as number | bigint);
-    }
-    if (createdSlugId) {
-      await deleteSlug(createdArticleId as number | bigint);
+    try {
+      if (createdArticleId) {
+        await deleteArticle(createdArticleId as number | bigint);
+      }
+      if (createdSlugId) {
+        await deleteSlug(createdArticleId as number | bigint);
+      }
+    } catch (delError) {
+      console.log('Error during cleanup:', delError);
     }
 
     return {
