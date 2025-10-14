@@ -18,7 +18,6 @@ import {
   validateSlugField,
   shipArticle,
 } from '@/lib/articles';
-import { forEach } from 'ramda';
 
 interface ValidateTypes {
   article_id: number | bigint;
@@ -64,8 +63,8 @@ export async function createArticleAction(prevState: any, data: any) {
   const shipped = 'false';
   const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
 
-  let articleError;
-  let slugError;
+  let createdArticleId;
+  let createdSlugId;
   try {
     const articleresult = await createArticle({
       slug,
@@ -85,7 +84,7 @@ export async function createArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    articleError = articleresult?.lastInsertRowid;
+    createdArticleId = articleresult?.lastInsertRowid;
 
     /*
       Create the slug entry in the slugs table
@@ -102,7 +101,7 @@ export async function createArticleAction(prevState: any, data: any) {
       validated,
     });
 
-    slugError = slugresult?.lastInsertRowid;
+    createdSlugId = slugresult?.lastInsertRowid;
 
     return {
       message: true,
@@ -110,11 +109,11 @@ export async function createArticleAction(prevState: any, data: any) {
     };
   } catch (error) {
     console.log(error);
-    if (articleError) {
-      await deleteArticle(articleError as number | bigint);
+    if (createdArticleId) {
+      await deleteArticle(createdArticleId as number | bigint);
     }
-    if (slugError) {
-      await deleteSlug(slugError as number | bigint);
+    if (createdSlugId) {
+      await deleteSlug(createdSlugId as number | bigint);
     }
 
     return {
@@ -246,11 +245,10 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
 
   const id = parseInt(formData.get('id') as string, 10);
   try {
-    const slugResult = await deleteSlug(id);
-    const articleResult = await deleteArticle(id);
-
-    const promises = Promise.allSettled([slugResult, articleResult]);
-    const settledResults = await promises;
+    const settledResults = await Promise.allSettled([
+      deleteSlug(id),
+      deleteArticle(id),
+    ]);
     let successCount = 0;
     settledResults.forEach((promise: any) => {
       if (promise.status === 'fulfilled') {
@@ -263,6 +261,11 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
         text: "L'article a été supprimé avec succès",
       };
     }
+
+    return {
+      message: false,
+      text: "Une erreur s'est produite lors de la suppression de l'article ou du slug",
+    };
   } catch (error) {
     // Log the error to the console for debugging purposes
     console.log(error);

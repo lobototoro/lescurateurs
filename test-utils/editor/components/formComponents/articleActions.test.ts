@@ -57,35 +57,12 @@ describe('deleteArticleAction', () => {
     expect(deleteArticle).toHaveBeenCalledWith(1);
   });
 
-  // it('should return an error message if deletion fails', async () => {
-  //   vi.mocked(auth0.getSession).mockResolvedValue({
-  //     user: { nickname: 'testUser', sub: 'dd' },
-  //   } as any);
-  //   vi.mocked(deleteSlug).mockRejectedValue({
-  //     lastInsertRowid: 0,
-  //   });
-  //   vi.mocked(deleteArticle).mockRejectedValue({
-  //     lastInsertRowid: 0,
-  //   });
-
-  //   const formData = new FormData();
-  //   formData.append('id', '1');
-
-  //   const result = await deleteArticleAction({}, formData);
-
-  //   expect(result).toEqual({
-  //     message: false,
-  //     text: "une erreur s'est produite : contactez l'administrateur",
-  //   });
-  // });
-
   it('should return a generic error message if an exception occurs', async () => {
     vi.mocked(auth0.getSession).mockResolvedValue({
       user: { nickname: 'testUser', sub: 'dd' },
     } as any);
     vi.mocked(deleteSlug).mockRejectedValue(new Error('Test error'));
     vi.mocked(deleteArticle).mockResolvedValue({
-      changes: 1,
       lastInsertRowid: 1,
     });
 
@@ -96,7 +73,7 @@ describe('deleteArticleAction', () => {
 
     expect(result).toEqual({
       message: false,
-      text: "une erreur s'est produite : contactez l'administrateur",
+      text: "Une erreur s'est produite lors de la suppression de l'article ou du slug",
     });
   });
 });
