@@ -11,7 +11,6 @@ import {
   createSlug,
   deleteArticle,
   updateArticle,
-  updateSlug,
   getArticleById,
   deleteSlug,
   validateArticle,
@@ -254,8 +253,8 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
       deleteArticle(id),
     ]);
     let successCount = 0;
-    settledResults.forEach((promise: any) => {
-      if (promise.status === 'fulfilled') {
+    settledResults.forEach((result: PromiseSettledResult<any>) => {
+      if (result.status === 'fulfilled') {
         successCount += 1;
       }
     });
