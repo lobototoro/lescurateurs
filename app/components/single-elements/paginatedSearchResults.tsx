@@ -166,7 +166,7 @@ export function PaginatedSearchDisplay({
                   {context === 'user' && (
                     <button
                       className="button mr-4"
-                      data-testid="selection-button"
+                      data-testid="user-update-button"
                       onClick={() => {
                         if ('id' in item) {
                           handleSelectedUser &&
@@ -177,13 +177,13 @@ export function PaginatedSearchDisplay({
                         }
                       }}
                     >
-                      udpate
+                      update
                     </button>
                   )}
                   {context === 'user' && (
                     <button
                       className="button mr-4"
-                      data-testid="selection-button"
+                      data-testid="user-delete-button"
                       onClick={() => {
                         if ('id' in item) {
                           handleSelectedUser &&

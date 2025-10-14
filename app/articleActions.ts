@@ -98,7 +98,9 @@ export async function createArticleAction(prevState: any, data: any) {
     };
   } catch (error) {
     console.log(error);
-    await deleteArticle(articleError as number | bigint);
+    if (articleError) {
+      await deleteArticle(articleError as number | bigint);
+    }
 
     return {
       message: false,

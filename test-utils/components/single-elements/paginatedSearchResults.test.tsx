@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { z } from 'zod';
 
@@ -96,7 +96,7 @@ describe('PaginatedSearchDisplay', () => {
     const nextButton = screen.getByTestId('next-button');
     fireEvent.click(nextButton);
 
-    expect(screen.getByText('slug-3')).toBeDefined();
+    expect(screen.getByText('slug-3')).toBeInTheDocument();
     expect(screen.queryByText('slug-1')).toBeNull();
   });
 
@@ -148,8 +148,8 @@ describe('PaginatedSearchDisplay', () => {
       />
     );
 
-    expect(screen.getByText('user1@example.com')).toBeDefined();
-    expect(screen.getByText('user2@example.com')).toBeDefined();
+    expect(screen.getByText('user1@example.com')).toBeInTheDocument();
+    expect(screen.getByText('user2@example.com')).toBeInTheDocument();
     expect(screen.queryByText('user3@example.com')).toBeNull();
   });
 
@@ -166,7 +166,7 @@ describe('PaginatedSearchDisplay', () => {
     );
 
     const previousButton = screen.getByText('Previous');
-    expect(previousButton).property('disabled', true);
+    expect(previousButton).toBeDisabled();
   });
 
   it('disables the next button on the last page', () => {
@@ -182,10 +182,10 @@ describe('PaginatedSearchDisplay', () => {
     );
 
     const nextButton = screen.getByTestId('next-button');
-    expect(nextButton).property('disabled', true);
+    expect(nextButton).toBeDisabled();
   });
 
-  it("calls handleSelectedUser with correct arguments for 'update' action", () => {
+  it("calls handleSelectedUser with correct arguments for 'update' action", async () => {
     const mockHandleSelectedUser = vi.fn();
 
     render(
@@ -199,10 +199,14 @@ describe('PaginatedSearchDisplay', () => {
       />
     );
 
-    const updateButton = screen.getAllByText('udpate')[0];
-    fireEvent.click(updateButton);
-
-    expect(mockHandleSelectedUser).toHaveBeenCalledWith(mockUsers[0], 'update');
+    await waitFor(() => {
+      const updateButton = screen.getAllByTestId('user-update-button')[0];
+      fireEvent.click(updateButton);
+      expect(mockHandleSelectedUser).toHaveBeenCalledWith(
+        mockUsers[0],
+        'update'
+      );
+    });
   });
 
   it("calls handleSelectedUser with correct arguments for 'delete' action", () => {
@@ -260,7 +264,7 @@ describe('PaginatedSearchDisplay', () => {
     const page2Link = screen.getByRole('button', { name: 'Goto page 2' });
     fireEvent.click(page2Link);
 
-    expect(screen.getByText('slug-3')).toBeDefined();
+    expect(screen.getByText('slug-3')).toBeInTheDocument();
     expect(screen.queryByText('slug-1')).toBeNull();
   });
 
@@ -316,15 +320,15 @@ describe('PaginatedSearchDisplay', () => {
       />
     );
     // Page 1
-    expect(screen.getByText('slug-1')).toBeDefined();
+    expect(screen.getByText('slug-1')).toBeInTheDocument();
     // Go to page 2
     const nextButton = screen.getByTestId('next-button');
     fireEvent.click(nextButton);
-    expect(screen.getByText('slug-2')).toBeDefined();
+    expect(screen.getByText('slug-2')).toBeInTheDocument();
     expect(screen.queryByText('slug-1')).toBeNull();
     // Go to page 3
     fireEvent.click(nextButton);
-    expect(screen.getByText('slug-3')).toBeDefined();
+    expect(screen.getByText('slug-3')).toBeInTheDocument();
     expect(screen.queryByText('slug-2')).toBeNull();
   });
 

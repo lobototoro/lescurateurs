@@ -116,7 +116,7 @@ export default function ArticleMarkupForm({
           </div>
           {errors.urlToMainIllustration && (
             <p className="has-text-danger">
-              {errors.urlToMainIllustration.message}
+              {errors.url_to_main_illustration.message}
             </p>
           )}
         </div>
@@ -140,7 +140,7 @@ export default function ArticleMarkupForm({
             />
           </div>
           {errors.mainAudioUrl && (
-            <p className="has-text-danger">{errors.mainAudioUrl.message}</p>
+            <p className="has-text-danger">{errors.main_audio_url.message}</p>
           )}
         </div>
 
