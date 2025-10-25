@@ -70,7 +70,7 @@ mockUpdateArticleAction.mockResolvedValue({
   text: 'Article updated',
 });
 
-const scrolltoTop = vi.fn();
+const scrollTopAction = vi.fn();
 
 describe('UpdateArticleForm', () => {
   beforeEach(() => {
@@ -78,14 +78,14 @@ describe('UpdateArticleForm', () => {
   });
 
   it('renders SearchArticle when no article is selected', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
     await waitFor(() => {
       expect(screen.getByText('Select Article')).toBeInTheDocument();
     });
   });
 
   it('loads article and renders ArticleMarkupForm after selection', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
     fireEvent.click(screen.getByText('Select Article'));
 
     await waitFor(() => {
@@ -94,7 +94,7 @@ describe('UpdateArticleForm', () => {
   });
 
   it('shows notification after successful update', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
 
     fireEvent.click(screen.getByText('Select Article'));
 
@@ -114,7 +114,7 @@ describe('UpdateArticleForm', () => {
   });
 
   it('shows identical warning if no changes are made', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
     fireEvent.click(screen.getByText('Select Article'));
     await waitFor(() => screen.getByText('Submit'));
     fireEvent.click(screen.getByText('Submit'));
@@ -126,7 +126,7 @@ describe('UpdateArticleForm', () => {
   });
 
   it('returns to search when "Retour à la recherche" is clicked', async () => {
-    render(<UpdateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
     fireEvent.click(screen.getByText('Select Article'));
     await waitFor(() => screen.getByText('Retour à la recherche'));
     fireEvent.click(screen.getByText('Retour à la recherche'));
