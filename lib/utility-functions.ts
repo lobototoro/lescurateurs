@@ -42,7 +42,7 @@ export const iconMapper = (permissionLabel: string): string => {
 /* gathering of utilities fn for inputs in create article and update article
  *  it is a pseudo hook
  */
-export const useAddRemoveInputs = (
+export const addRemoveInputsFactory = (
   urlsArray: Array<{ type: UrlsTypes; url: string; credits?: string }> = [],
   valueSetter: (name: any, value: any, config?: SetValueConfig) => void
 ) => {

@@ -19,7 +19,7 @@ import SearchArticle from '@/app/editor/components/formComponents/searchArticle'
 import {
   isEmpty,
   urlsToArrayUtil,
-  useAddRemoveInputs,
+  addRemoveInputsFactory,
 } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
@@ -104,7 +104,7 @@ export default function UpdateArticleForm({
   // special treatment for urls added by the user
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
-  const [addInputs, removeInputs, updateUrls] = useAddRemoveInputs(
+  const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
   );
