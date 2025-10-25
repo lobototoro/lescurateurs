@@ -2,7 +2,7 @@
 import sql from 'better-sqlite3';
 
 // utility for db queries - serialization
-const databaseName = process.env.NEXT_DATABASE_NAME;
+const databaseName = process.env.NEXT_PUBLIC_DATABASE_NAME;
 if (!databaseName) {
   throw new Error('Database name is not defined in environment variables.');
 }

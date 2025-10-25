@@ -1,15 +1,18 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 import HeaderMenu from '@/app/editor/components/headerMenu';
-import CreateArticleForm from "@/app/editor/components/formComponents/createArticles";
+import CreateArticleForm from '@/app/editor/components/formComponents/createArticles';
 import UpdateArticleForm from '@/app/editor/components/formComponents/updateArticle';
 import ManageArticleForm from '@/app/editor/components/formComponents/manageArticle';
 import CreateUserForm from '@/app/editor/components/formComponents/createUser';
 import ManageUserForm from './formComponents/manageUser';
 
-export default function EditorForm({ role, permissions }: {
+export default function EditorForm({
+  role,
+  permissions,
+}: {
   role: string;
   permissions: string;
 }) {
@@ -32,22 +35,22 @@ export default function EditorForm({ role, permissions }: {
       />
       <div className="h-5" ref={topPointRef} />
       {selection === 'createarticles' && (
-        <CreateArticleForm scrolltoTop={handleScrollUp} />
+        <CreateArticleForm scrollTopAction={handleScrollUp} />
       )}
       {selection === 'updatearticles' && (
-        <UpdateArticleForm scrolltoTop={handleScrollUp} />
+        <UpdateArticleForm scrollTopAction={handleScrollUp} />
       )}
       {selection === 'managearticles' && (
-        <ManageArticleForm scrolltoTop={handleScrollUp} />
+        <ManageArticleForm scrollTopAction={handleScrollUp} />
       )}
       {selection === 'createuser' && (
-        <CreateUserForm scrolltoTop={handleScrollUp} />
+        <CreateUserForm scrollTopAction={handleScrollUp} />
       )}
       {selection === 'manageuser' && (
-        <ManageUserForm scrolltoTop={handleScrollUp} />
+        <ManageUserForm scrollTopAction={handleScrollUp} />
       )}
 
-      {/* 
+      {/*
       { (selection === 'enablemaintenance') && <EnableMaintenanceForm /> }
       */}
     </>

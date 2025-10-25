@@ -33,9 +33,9 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
  * @returns {JSX.Element} The rendered UpdateArticleForm component
  */
 export default function UpdateArticleForm({
-  scrolltoTop,
+  scrollTopAction,
 }: {
-  scrolltoTop: () => void;
+  scrollTopAction: () => void;
 }): JSX.Element {
   const [state, formAction, isPending] = useActionState(
     updateArticleAction,
@@ -110,7 +110,7 @@ export default function UpdateArticleForm({
   ) => {
     if (R.equals(data, article)) {
       setIdenticalWarnMessage(true);
-      scrolltoTop();
+      scrollTopAction();
 
       return true;
     }
@@ -183,7 +183,7 @@ export default function UpdateArticleForm({
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
-      scrolltoTop();
+      scrollTopAction();
       notifTimeout = setTimeout(() => {
         setSelectedId(undefined);
         setCurrentArticle(undefined);
@@ -231,7 +231,7 @@ export default function UpdateArticleForm({
   const backToSearch = (event: React.MouseEvent) => {
     event.preventDefault();
     setSelectedId(undefined);
-    scrolltoTop();
+    scrollTopAction();
   };
 
   return (
