@@ -11,9 +11,11 @@ import { z } from 'zod';
 
 import { articleSchema } from '@/models/articleSchema';
 import { createArticleAction } from '@/app/articleActions';
-import { UrlsTypes } from '@/models/article';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
-import { urlsToArrayUtil } from '@/lib/utility-functions';
+import {
+  urlsToArrayUtil,
+  addRemoveInputsFactory,
+} from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
@@ -25,9 +27,9 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
  * @returns {JSX.Element} Returns an ArticleMarkupForm component with all necessary props for creating an article.
  */
 export default function CreateArticleForm({
-  scrolltoTop,
+  scrollTopAction,
 }: {
-  scrolltoTop: () => void;
+  scrollTopAction: () => void;
 }): JSX.Element {
   const [state, formAction, isPending] = useActionState(
     createArticleAction,
@@ -49,6 +51,8 @@ export default function CreateArticleForm({
     mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: customResolver(articleSchema) as any,
+
+    /* minimum values to create an article */
     defaultValues: {
       title: '',
       introduction: '',
@@ -68,6 +72,10 @@ export default function CreateArticleForm({
   // adding, removing and updating those fields are handled by the urlsToArrayUtil function
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
+  const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
+    urlsToArray,
+    setValue
+  );
 
   // main function that submits data to the server action part
   const onSubmit = (data: z.infer<typeof articleSchema>) => {
@@ -75,9 +83,6 @@ export default function CreateArticleForm({
       formAction(data);
     });
   };
-
-  // reset function specifically made for rte
-  const resetAllfields = () => {};
 
   useEffect(() => {
     // utility that helps clear errors when addressed live by the user
@@ -91,7 +96,7 @@ export default function CreateArticleForm({
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
-      scrolltoTop();
+      scrollTopAction();
       notifTimeout = setTimeout(() => {
         if (state?.message) {
           // NEX-65 in case of error, we don't reset the form
@@ -109,32 +114,6 @@ export default function CreateArticleForm({
       }
     };
   }, [watch, clearErrors, state]);
-
-  // template for urls, injected when a url field is added
-  const initialUrls = {
-    type: 'website' as UrlsTypes,
-    url: '',
-    credits: '',
-  };
-
-  // utilities for urls fields
-  const addInputs = () => {
-    const urls = urlsToArray;
-    setValue('urls', JSON.stringify([...urls, initialUrls]));
-  };
-  const removeInputs = () => {
-    if (urlsToArray.length > 1) {
-      setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
-    }
-  };
-  const updateUrls = (
-    newUrl: { type: UrlsTypes; url: string; credits?: string },
-    index: number
-  ) => {
-    const newUrls = urlsToArray;
-    newUrls[index] = newUrl;
-    setValue('urls', JSON.stringify(newUrls));
-  };
 
   return (
     <>

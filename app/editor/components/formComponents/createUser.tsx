@@ -16,9 +16,9 @@ import { createUserAction } from '@/app/userActions';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 
 export default function CreateUserForm({
-  scrolltoTop,
+  scrollTopAction,
 }: {
-  scrolltoTop: () => void;
+  scrollTopAction: () => void;
 }) {
   const [state, formAction, isPending] = useActionState(createUserAction, null);
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
@@ -73,7 +73,7 @@ export default function CreateUserForm({
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
-      scrolltoTop();
+      scrollTopAction();
       reset();
       notifTimeout = setTimeout(() => {
         setNotification(false);

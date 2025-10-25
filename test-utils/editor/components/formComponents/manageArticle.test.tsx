@@ -66,14 +66,14 @@ vi.mock('@/app/components/single-elements/modalWithCTA', () => ({
 }));
 
 describe('ManageArticleForm', () => {
-  const scrolltoTopMock = vi.fn();
+  const scrollTopActionMock = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test('renders search article component', () => {
-    render(<ManageArticleForm scrolltoTop={scrolltoTopMock} />);
+    render(<ManageArticleForm scrollTopAction={scrollTopActionMock} />);
     expect(screen.getByTestId('search-article')).toBeInTheDocument();
     expect(screen.getByTestId('back-to-search')).toBeInTheDocument();
   });
@@ -86,7 +86,7 @@ describe('ManageArticleForm', () => {
       text: 'Article deleted',
     });
 
-    render(<ManageArticleForm scrolltoTop={scrolltoTopMock} />);
+    render(<ManageArticleForm scrollTopAction={scrollTopActionMock} />);
 
     // Click delete button to trigger modal
     fireEvent.click(screen.getByTestId('mock-delete-btn'));
@@ -102,7 +102,7 @@ describe('ManageArticleForm', () => {
 
     // Notification should appear
     await waitFor(() => {
-      expect(scrolltoTopMock).toHaveBeenCalled();
+      expect(scrollTopActionMock).toHaveBeenCalled();
     });
   });
 
@@ -116,7 +116,7 @@ describe('ManageArticleForm', () => {
         false,
       ]); // validate action
 
-    render(<ManageArticleForm scrolltoTop={scrolltoTopMock} />);
+    render(<ManageArticleForm scrollTopAction={scrollTopActionMock} />);
 
     // Trigger validation modal
     fireEvent.click(screen.getByTestId('mock-validate-btn'));
@@ -131,7 +131,7 @@ describe('ManageArticleForm', () => {
   });
 
   test('back to search button works', () => {
-    render(<ManageArticleForm scrolltoTop={scrolltoTopMock} />);
+    render(<ManageArticleForm scrollTopAction={scrollTopActionMock} />);
 
     fireEvent.click(screen.getByTestId('back-to-search'));
 

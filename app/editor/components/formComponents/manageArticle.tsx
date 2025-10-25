@@ -38,9 +38,9 @@ const sendAction = (
 };
 
 export default function ManageArticleForm({
-  scrolltoTop,
+  scrollTopAction,
 }: {
-  scrolltoTop: () => void;
+  scrollTopAction: () => void;
 }): JSX.Element {
   const [deleteState, deleteAction, isDeletePending] = useActionState(
     deleteArticleAction,
@@ -157,7 +157,7 @@ export default function ManageArticleForm({
     let cancelDisplayTimeout: NodeJS.Timeout | undefined;
     if (deleteState?.message) {
       setDeleteNotification(true);
-      scrolltoTop();
+      scrollTopAction();
       notifTimeout = setTimeout(() => {
         setDeleteNotification(false);
       }, 6000);
@@ -165,7 +165,7 @@ export default function ManageArticleForm({
 
     if (validateState?.message) {
       setValidateNotification(true);
-      scrolltoTop();
+      scrollTopAction();
       notifTimeout = setTimeout(() => {
         setValidateNotification(false);
       }, 6000);
@@ -173,7 +173,7 @@ export default function ManageArticleForm({
 
     if (shipState?.message) {
       setShipNotification(true);
-      scrolltoTop();
+      scrollTopAction();
       notifTimeout = setTimeout(() => {
         setShipNotification(false);
       }, 6000);

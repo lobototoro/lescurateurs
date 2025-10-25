@@ -38,17 +38,21 @@ vi.mock('@/app/components/single-elements/notificationsComponent', () => ({
 vi.mock('@/app/editor/components/resolvers/customResolver', () => ({
   customResolver: () => (data: any) => ({ values: data, errors: {} }),
 }));
-vi.mock('@/lib/utility-functions', () => ({
-  urlsToArrayUtil: (urls: string) => {
-    try {
-      return JSON.parse(urls) || [];
-    } catch {
-      return [];
-    }
-  },
-}));
+vi.mock(import('@/lib/utility-functions'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    urlsToArrayUtil: (urls: string) => {
+      try {
+        return JSON.parse(urls) || [];
+      } catch {
+        return [];
+      }
+    },
+  };
+});
 
-const scrolltoTop = vi.fn();
+const scrollTopAction = vi.fn();
 
 describe('CreateArticleForm', () => {
   beforeEach(() => {
@@ -56,7 +60,7 @@ describe('CreateArticleForm', () => {
   });
 
   it('renders the form', () => {
-    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<CreateArticleForm scrollTopAction={scrollTopAction} />);
     expect(screen.getByTestId('article-form')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Titre')).toBeInTheDocument();
   });
@@ -68,7 +72,7 @@ describe('CreateArticleForm', () => {
       message: true,
       text: 'Article created successfully',
     });
-    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<CreateArticleForm scrollTopAction={scrollTopAction} />);
     const titleInput = screen.getByPlaceholderText('Titre');
     const introductionInput = screen.getByPlaceholderText('introduction');
     const mainInput = screen.getByPlaceholderText('Texte');
@@ -105,7 +109,7 @@ describe('CreateArticleForm', () => {
   });
 
   it('adds and removes URL inputs', async () => {
-    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<CreateArticleForm scrollTopAction={scrollTopAction} />);
     // Simulate addInputs and removeInputs via props
     // Since ArticleMarkupForm is mocked, we can't trigger addInputs directly
     // Instead, test that urlsToArray is initially empty
@@ -113,7 +117,7 @@ describe('CreateArticleForm', () => {
   });
 
   it('clears errors when input changes', async () => {
-    render(<CreateArticleForm scrolltoTop={scrolltoTop} />);
+    render(<CreateArticleForm scrollTopAction={scrollTopAction} />);
     const titleInput = screen.getByPlaceholderText('Titre');
     const introductionInput = screen.getByPlaceholderText('introduction');
     const mainInput = screen.getByPlaceholderText('Texte');
