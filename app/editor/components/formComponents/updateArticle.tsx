@@ -6,7 +6,6 @@ import {
   Suspense,
   useActionState,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,11 +13,14 @@ import { z } from 'zod';
 import * as R from 'ramda';
 
 import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
-import { UrlsTypes } from '@/models/article';
 import { articleSchema } from '@/models/articleSchema';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
 import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
-import { isEmpty, urlsToArrayUtil } from '@/lib/utility-functions';
+import {
+  isEmpty,
+  urlsToArrayUtil,
+  useAddRemoveInputs,
+} from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
@@ -102,6 +104,10 @@ export default function UpdateArticleForm({
   // special treatment for urls added by the user
   register('urls');
   const urlsToArray = urlsToArrayUtil(getValues('urls'));
+  const [addInputs, removeInputs, updateUrls] = useAddRemoveInputs(
+    urlsToArray,
+    setValue
+  );
 
   // inline check for identical article: forbid the form to be sent to action if identical
   const checkForIdenticalArticle = (
@@ -199,33 +205,6 @@ export default function UpdateArticleForm({
       }
     };
   }, [watch, clearErrors, state]);
-
-  // add urls utilities
-  const initialUrls = {
-    type: 'website' as UrlsTypes,
-    url: '',
-    credits: '',
-  };
-
-  const addInputs = () => {
-    const urls = urlsToArray;
-    setValue('urls', JSON.stringify([...urls, initialUrls]));
-  };
-
-  const removeInputs = () => {
-    if (urlsToArray.length > 1) {
-      setValue('urls', JSON.stringify(urlsToArray.slice(0, -1)));
-    }
-  };
-
-  const updateUrls = (
-    newUrl: { type: UrlsTypes; url: string; credits?: string },
-    index: number
-  ) => {
-    const newUrls = urlsToArray;
-    newUrls[index] = newUrl;
-    setValue('urls', JSON.stringify(newUrls));
-  };
 
   // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {
