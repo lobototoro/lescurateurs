@@ -6,21 +6,27 @@ export enum UrlsTypes {
   IMAGE = 'image',
 }
 
+export type CustomFormInputs = {
+  type: UrlsTypes;
+  url: string;
+  credits?: string;
+}[];
+
 export interface Article {
   id?: number | bigint;
   slug: string;
   title: string;
-  introduction: string | null;
+  introduction: string;
   main: string;
-  main_audio_url: string | null;
+  main_audio_url: string;
   url_to_main_illustration: string;
-  published_at: string | null;
+  published_at: Date | null;
   created_at: string;
-  updated_at: string;
+  updated_at: Date | null;
   updated_by: string | null;
   author: string;
   author_email: string;
-  urls: string;
-  validated: string;
-  shipped: string;
+  urls: CustomFormInputs | null;
+  validated: boolean;
+  shipped: boolean;
 }
