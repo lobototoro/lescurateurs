@@ -1,8 +1,15 @@
 'use server';
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
-import { createUser, updateUser, getAllUsers, deleteUser } from '@/lib/users';
-import { User } from '@/models/user';
+// import { createUser, updateUser, getAllUsers, deleteUser } from '@/lib/users';
+import {
+  createUser,
+  updateUser,
+  getAllUsers,
+  deleteUser,
+} from '@/lib/supabase/users';
+import { User, UserRole } from '@/models/user';
+import { Json } from '@/lib/supabase/database.types';
 
 export async function createUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();
@@ -11,27 +18,24 @@ export async function createUserAction(preState: any, formData: FormData) {
   }
 
   const userCandidate = {
-    email: formData.get('email'),
-    tiers_service_ident: formData.get('tiers_service_ident'),
-    role: formData.get('role'),
-    permissions: formData.get('permissions'),
-    created_at: formData.get('created_at'),
-    last_connection_at: formData.get('last_connection_at'),
+    email: formData.get('email') as string,
+    tiers_service_ident: formData.get('tiers_service_ident') as string,
+    role: formData.get('role') as UserRole,
+    permissions: formData.get('permissions') as Json,
+    created_at: formData.get('created_at') as unknown as Date,
+    last_connection_at: formData.get('last_connection_at') as unknown as Date,
   };
 
-  let usererror;
   try {
-    await createUser(userCandidate as User);
+    const createUserStatus = await createUser(userCandidate as User);
 
     return {
       message: true,
+      status: createUserStatus,
       text: 'L’utilisateur a été créé avec succès',
     };
   } catch (error) {
-    usererror = error;
-  }
-  if (usererror) {
-    console.error('[!] while creating new user ', usererror);
+    console.log(error);
 
     return {
       message: false,
@@ -47,28 +51,25 @@ export async function updateUserAction(preState: any, formData: FormData) {
   }
 
   const userCandidate = {
-    id: parseInt(formData.get('id') as string, 10),
-    email: formData.get('email'),
-    tiers_service_ident: formData.get('tiers_service_ident'),
-    role: formData.get('role'),
-    permissions: formData.get('permissions'),
-    updated_at: new Date().toISOString().slice(0, 10),
-    updated_by: session.user.email ?? '',
+    id: parseInt(formData.get('id') as string, 10) as number | bigint,
+    email: formData.get('email') as string,
+    tiers_service_ident: formData.get('tiers_service_ident') as string,
+    role: formData.get('role') as UserRole,
+    permissions: formData.get('permissions') as Json,
+    updated_at: new Date(),
+    updated_by: session.user.nickname ?? ('' as string),
   };
 
-  let usererror;
   try {
-    await updateUser(userCandidate as User);
+    const updatedUserSatus = await updateUser(userCandidate as User);
 
     return {
       message: true,
+      status: updateUser,
       text: 'L’utilisateur a été modifié avec succès',
     };
   } catch (error) {
-    usererror = error;
-  }
-  if (usererror) {
-    console.error('[!] while modifying new user ', usererror.toString());
+    console.log(error);
 
     return {
       message: false,
@@ -106,25 +107,22 @@ export async function deleteUserAction(preState: any, formData: FormData) {
     redirect('/editor');
   }
 
-  const email = formData.get('email');
+  const email = formData.get('email') as string;
 
-  let usererror;
   try {
-    await deleteUser(email as string);
+    const deletedUserStatus = await deleteUser(email as string);
+
+    return {
+      message: true,
+      status: deletedUserStatus,
+      text: 'L’utilisateur a été supprimé avec succès',
+    };
   } catch (error) {
-    usererror = error;
-  }
-  if (usererror) {
-    console.error('[!] while deleting new user ', usererror);
+    console.error('[!] while deleting new user');
 
     return {
       message: false,
       text: 'Une erreur est survenue lors de la suppression de l’utilisateur',
     };
   }
-
-  return {
-    message: true,
-    text: 'L’utilisateur a été supprimé avec succès',
-  };
 }
