@@ -1,3 +1,5 @@
+import type { Json } from '@/lib/supabase/database.types';
+
 export enum UrlsTypes {
   WEBSITE = 'website',
   VIDEOS = 'videos',
@@ -21,12 +23,12 @@ export interface Article {
   main_audio_url: string;
   url_to_main_illustration: string;
   published_at: Date | null;
-  created_at: string;
+  created_at: Date;
   updated_at: Date | null;
   updated_by: string | null;
   author: string;
   author_email: string;
-  urls: CustomFormInputs | null;
+  urls: Json | null;
   validated: boolean;
   shipped: boolean;
 }

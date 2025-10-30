@@ -5,34 +5,51 @@ import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
 
 import { articleSchema } from '@/models/articleSchema';
+import type { Json } from '@/lib/supabase/database.types';
+
+// import {
+//   // createArticle,
+//   // createSlug,
+//   // deleteArticle,
+//   // updateArticle,
+//   // getArticleById,
+//   // deleteSlug,
+//   // validateArticle,
+//   // validateSlugField,
+//   // shipArticle,
+// } from '@/lib/articles';
 
 import {
   createArticle,
-  createSlug,
   deleteArticle,
   updateArticle,
   getArticleById,
   deleteSlug,
   validateArticle,
-  validateSlugField,
   shipArticle,
-} from '@/lib/articles';
+} from '@/lib/supabase/articles';
 
 interface ValidateTypes {
   article_id: number | bigint;
-  validation: string;
-  updated_at: string;
+  validatedValue: boolean;
+  updated_at: Date;
   updated_by: string;
 }
 
 /**
- * Creates a new article based on the provided form data.
+ * Creates a new article based on the provided data.
  *
  * This function handles the creation of a new article, including user authentication,
- * data extraction from the form, article creation, and slug generation.
+ * data extraction from the input, and article insertion into the database.
+ * It also includes the creation of a relating slug in a separate table 'slugs'
  *
+ * On sending data to backend, it returns an object with 2 statuses
+ * {
+ * articleStatus: status, // 201 http status in vcase of success
+ * slugStatus: slugCreationResult, // 201 http status in case of success
+ * }
  * @param prevState - The previous state of the application (not used in this function).
- * @param formData - FormData object containing the article details.
+ * @param data - An object containing the article details.
  * @returns An object with a message indicating success or failure, and a descriptive text.
  *          {message: boolean, text: string}
  *          message is true if the article was created successfully, false otherwise.
@@ -51,21 +68,21 @@ export async function createArticleAction(prevState: any, data: any) {
   const title = data.title as string;
   const introduction = data.introduction as string;
   const main = data.main as string;
-  const urls = data.urls as string;
+  const urls = JSON.parse(data.urls) as Json;
   const main_audio_url = data.main_audio_url as string;
   const url_to_main_illustration = data.url_to_main_illustration as string;
-  const created_at = new Date().toISOString();
-  const updated_at = new Date().toISOString();
-  const updated_by = author;
-  const published_at = '';
-  const validated = 'false';
-  const shipped = 'false';
+  const created_at = new Date();
+  const updated_at = null;
+  const updated_by = null;
+  const published_at = null;
+  const validated = false;
+  const shipped = false;
   const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
 
-  let createdArticleId;
-  let createdSlugId;
+  // let createdArticleId;
+  // let createdSlugId;
   try {
-    const articleresult = await createArticle({
+    const articleResult = await createArticle({
       slug,
       title,
       introduction,
@@ -83,45 +100,19 @@ export async function createArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    createdArticleId = articleresult?.lastInsertRowid;
-
-    /*
-      Create the slug entry in the slugs table
-      It should always be the same as the article id
-      because we use it to link both tables
-      In case there's a gap in id entries,
-      we can rely on the article_id field
-      to link both tables
-    */
-    const slugresult = await createSlug({
-      slug,
-      created_at,
-      article_id: articleresult?.lastInsertRowid as number,
-      validated,
-    });
-
-    createdSlugId = slugresult?.lastInsertRowid;
+    console.log(articleResult.toString());
 
     return {
       message: true,
-      text: 'Article was successfully created',
+      status: articleResult,
+      text: 'Article and slug were successfully created',
     };
   } catch (error) {
     console.log(error);
-    try {
-      if (createdArticleId) {
-        await deleteArticle(createdArticleId as number | bigint);
-      }
-      if (createdSlugId) {
-        await deleteSlug(createdArticleId as number | bigint);
-      }
-    } catch (delError) {
-      console.log('Error during cleanup:', delError);
-    }
 
     return {
       message: false,
-      text: 'Error creating article',
+      text: 'Error creating article or slug',
     };
   }
 }
@@ -139,6 +130,12 @@ export async function createArticleAction(prevState: any, data: any) {
  *          message is true if the article was updated successfully, false otherwise.
  *          text provides a description of the operation result.
  * @throws Will log any errors that occur during the article update process.
+ *
+ * @Rules
+ * - updates article by id
+ * - Title and slug can't be updated
+ * - an online or validated article is set to false
+ *  for validated, pubished_at = null, shipped
  */
 export async function updateArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
@@ -153,32 +150,32 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
   const title = formData.get('title') as string;
   const introduction = formData.get('introduction') as string;
   const main = formData.get('main') as string;
-  const urls = formData.get('urls') as string;
+  const urls = formData.get('urls') as Json;
   const main_audio_url = formData.get('main_audio_url') as string;
   const url_to_main_illustration = formData.get(
     'url_to_main_illustration'
   ) as string;
-  const created_at = formData.get('created_at') as string;
-  const published_at = formData.get('published_at') as string;
-  const validated = 'false'; // NEX-72
-  const shipped = formData.get('shipped') as string;
+  const created_at = formData.get('created_at') as unknown as Date;
+  const published_at = null;
+  const validated = false; // NEX-72
+  const shipped = false;
 
-  const updated_at = new Date().toISOString() as string;
+  const updated_at = new Date();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
   try {
-    await updateArticle({
-      id,
-      slug,
-      title,
+    const updateResult = await updateArticle({
+      id, // not updated
+      slug, // not updated
+      title, // not updated
       introduction,
       main,
       urls,
       main_audio_url,
       url_to_main_illustration,
-      author,
-      author_email,
-      created_at,
+      author, // not updated
+      author_email, // not updated
+      created_at, // not updated
       updated_at,
       updated_by,
       published_at,
@@ -188,6 +185,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
 
     return {
       message: true,
+      status: updateResult,
       text: 'Article was successfully updated',
     };
   } catch (error) {
@@ -280,10 +278,19 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
   }
 }
 
+/**
+ *
+ * @param prevState - Previous state
+ * @param formData - FormData from the validation form
+ * @returns {message: boolean; text: string}
+ *
+ * this function only call article validation backend func
+ * never the slug validation func, that is updated as well
+ */
 export async function validateArticleAction(
   prevState: any,
   formData: FormData
-) {
+): Promise<{ message: boolean; text: string }> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -291,23 +298,18 @@ export async function validateArticleAction(
 
   const validationArgs: ValidateTypes = {
     article_id: parseInt(formData.get('id') as string, 10),
-    validation: formData.get('validation') as string,
-    updated_at: new Date().toISOString() as string, // NEX-59
+    validatedValue: formData.get('validation') as unknown as boolean,
+    updated_at: new Date(), // NEX-59
     updated_by: session.user.nickname || session.user.email || 'Anonyme',
   };
 
   try {
-    const validation = await validateArticle({
-      article_id: validationArgs.article_id,
-      validatedValue: validationArgs.validation,
-      updated_at: validationArgs.updated_at,
-      updated_by: validationArgs.updated_by,
-    });
-    const slugValidation = await validateSlugField({
-      article_id: validationArgs.article_id, // NEX-81
-      validatedValue: validationArgs.validation,
-    });
-    if (!validation || !slugValidation) {
+    const validation = await validateArticle(validationArgs);
+
+    if (
+      validation.articleValidationStatus !== 201 &&
+      validation.slugValidationStatus !== 201
+    ) {
       return {
         message: false,
         text: 'Article not found',
@@ -316,7 +318,7 @@ export async function validateArticleAction(
 
     return {
       message: true,
-      text: `L'article a été ${validationArgs.validation === 'true' ? 'validé' : 'rejeté'} avec succès`,
+      text: `L'article a été ${validationArgs.validatedValue ? 'validé' : 'rejeté'} avec succès`,
     };
   } catch (error) {
     console.log(error);
@@ -328,6 +330,23 @@ export async function validateArticleAction(
   }
 }
 
+/**
+ * Ships or unships an article based on the provided form data.
+ *
+ * This function handles the shipping status of an article, including user authentication,
+ * data extraction from the form, and updating the shipping status in the database.
+ *
+ * @param prevState - The previous state of the application (not used in this function).
+ * @param formData - FormData object containing the article ID and shipping status.
+ * @returns An object with a message indicating success or failure, and a descriptive text.
+ *          {message: boolean, text: string}
+ *          message is true if the article was shipped/unshipped successfully, false otherwise.
+ *          text provides a description of the operation result.
+ * @throws Will log any errors that occur during the shipping process.
+ *
+ * @Rules
+ * - An article must be validated before it can be shipped.
+ */
 export async function shipArticleAction(prevState: any, formData: FormData) {
   const session = await auth0.getSession();
   if (!session?.user) {
@@ -335,32 +354,32 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   }
 
   const id = parseInt(formData.get('id') as string, 10);
-  const ship = (formData.get('shipped') as string) === 'true' ? true : false;
-  const updated_at = new Date().toISOString() as string;
+  const ship = formData.get('shipped') as unknown as boolean;
+  const updated_at = new Date();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
   // get article to check for validity: 'true' or 'false'
-  const article = (await getArticleById(id)) as z.infer<typeof articleSchema>;
+  const article = await getArticleById(id);
   if (!article) {
     return {
       message: false,
       text: 'Article inconnu',
     };
   }
-  if (article?.validated === 'false' && ship) {
+  if (!article[0].validated && ship) {
     return {
       message: false,
       text: "L'article doit être validé avant d'être mis en MeP",
     };
   }
-  const shippedValue = ship ? 'true' : 'false';
+
   const result = await shipArticle({
     article_id: id,
-    shippedValue,
+    shippedValue: ship,
     updated_at, // NEX-59
     updated_by,
   });
-  if (!result) {
+  if (result !== 201) {
     return {
       message: false,
       text: "Une erreur est survenue lors de la mise en MeP de l'article",
