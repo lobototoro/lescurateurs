@@ -1,5 +1,5 @@
 // import styles from "./page.module.css";
-import { getSlugs } from '@/lib/articles';
+import { getSlugs } from '@/lib/supabase/articles';
 import { Slugs } from '@/models/slugs';
 import { ArticleList } from './components/ArticleList';
 import { Suspense } from 'react';
@@ -7,7 +7,7 @@ import { Suspense } from 'react';
 export default function Home() {
   const Content = async () => {
     const slugs = (await getSlugs()) as Slugs[];
-
+    console.info('hp ', slugs);
     return <ArticleList list={slugs} />;
   };
 

@@ -1,17 +1,13 @@
-'use server';
-
-import { createClient } from './index';
+import { createClient } from './client';
 import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
 
-const supabase = await createClient();
-const articlesDb = `articles-${process.env.NODE_ENV}`;
-const slugsDb = `slugs-${process.env.NODE_ENV}`;
+const supabase = createClient();
 
 // fetch in tables actions
 export const getArticle = async (slug: string) => {
   const { data, error } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .select()
     .eq('slug', slug);
 
@@ -23,7 +19,7 @@ export const getArticle = async (slug: string) => {
 };
 
 export const getSlugs = async () => {
-  const { data, error } = await supabase.from(slugsDb).select();
+  const { data, error } = await supabase.from('slugs-development').select();
 
   if (error) {
     throw new Error('articles: could not fetch slugs');
@@ -33,7 +29,10 @@ export const getSlugs = async () => {
 };
 
 export const getArticleById = async (id: number | bigint) => {
-  const { data, error } = await supabase.from(articlesDb).select().eq('id', id);
+  const { data, error } = await supabase
+    .from('articles-development')
+    .select()
+    .eq('id', id);
 
   if (error) {
     throw new Error('Articles: could not find this article');
@@ -45,7 +44,7 @@ export const getArticleById = async (id: number | bigint) => {
 // create items in tables actions
 export const createSlug = async (slugObject: Slugs) => {
   const { slug, created_at, article_id, validated } = slugObject;
-  const { error, status } = await supabase.from(slugsDb).insert({
+  const { error, status } = await supabase.from('slugs-development').insert({
     slug,
     created_at,
     article_id,
@@ -78,7 +77,7 @@ export const createArticle = async (article: Article) => {
     shipped,
   } = article;
   const { data, error, status } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .insert({
       slug,
       title,
@@ -137,7 +136,7 @@ export const updateArticle = async (article: Article) => {
     shipped,
   } = article;
   const { error, status } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .update({
       introduction,
       main,
@@ -162,7 +161,7 @@ export const updateArticle = async (article: Article) => {
 // search in tables actions
 export const searchSlugs = async (searchTerm: string) => {
   const { data, error } = await supabase
-    .from(slugsDb)
+    .from('slugs-development')
     .select()
     .textSearch('slug', searchTerm);
 
@@ -177,7 +176,7 @@ export const searchSlugs = async (searchTerm: string) => {
 
 export const searchArticles = async (searchTerm: string) => {
   const { data, error } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .select()
     .textSearch('title', searchTerm)
     .textSearch('introduction', searchTerm)
@@ -195,7 +194,7 @@ export const searchArticles = async (searchTerm: string) => {
 // delete items in tables actions
 export const deleteSlug = async (slugId: number | bigint) => {
   const { error, status } = await supabase
-    .from(slugsDb)
+    .from('slugs-development')
     .delete()
     .eq('article_id', slugId);
 
@@ -208,7 +207,7 @@ export const deleteSlug = async (slugId: number | bigint) => {
 
 export const deleteArticle = async (article_id: number | bigint) => {
   const { error, status } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .delete()
     .eq('id', article_id);
 
@@ -227,7 +226,7 @@ export const validateSlugField = async (validateProps: {
   validatedValue: boolean;
 }) => {
   const { error, status } = await supabase
-    .from(slugsDb)
+    .from('slugs-development')
     .update({
       validated: validateProps.validatedValue,
     })
@@ -247,7 +246,7 @@ export const validateArticle = async (validateProps: {
   updated_by: string;
 }) => {
   const { error, status } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .update({
       validated: validateProps.validatedValue,
       updated_at: validateProps.updated_at,
@@ -281,7 +280,7 @@ export const shipArticle = async (shipProps: {
   updated_by: string;
 }) => {
   const { error, status } = await supabase
-    .from(articlesDb)
+    .from('articles-development')
     .update({
       shipped: shipProps.shippedValue,
       updated_at: shipProps.updated_at,

@@ -1,11 +1,11 @@
 'use server';
 
-import { createClient } from './index';
+import { createClient } from './client';
 
 import { User } from '@/models/user';
 import { Json } from './database.types';
 
-const supabase = await createClient();
+const supabase = createClient();
 const usersDb = `users-${process.env.NODE_ENV}`;
 
 // fetch in tables actions
