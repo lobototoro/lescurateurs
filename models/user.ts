@@ -1,11 +1,9 @@
-import { Json } from '@/lib/supabase/database.types';
-
 export interface User {
   id?: number | bigint;
   email: string;
   tiers_service_ident: string;
   role: UserRole;
-  permissions: Json;
+  permissions: string;
   created_at?: Date;
   last_connection_at?: Date | null;
   updated_at?: Date | null;

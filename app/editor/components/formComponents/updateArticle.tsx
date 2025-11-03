@@ -69,15 +69,15 @@ export default function UpdateArticleForm({
       title: '',
       introduction: '',
       main: '',
-      published_at: '',
-      created_at: '',
-      updated_at: '',
-      updated_by: '',
-      author: '',
-      author_email: '',
-      validated: 'false',
-      shipped: 'false',
-      urls: '',
+      published_at: null,
+      created_at: new Date(),
+      updated_at: null,
+      updated_by: null,
+      author: 'x',
+      author_email: 'examplae@examaple.com',
+      validated: false,
+      shipped: false,
+      urls: [],
       main_audio_url: '',
       url_to_main_illustration: '',
     },
@@ -137,26 +137,45 @@ export default function UpdateArticleForm({
         ) &&
         isEmpty(errors)
       ) {
+        // Build FormData expected by the action
         const formData = new FormData();
-        formData.append('id', data.id as unknown as string);
-        formData.append('slug', data.slug as string);
-        formData.append('title', data.title as string);
-        formData.append('introduction', data.introduction as string);
-        formData.append('main', data.main as string);
-        formData.append('urls', data.urls as string);
-        formData.append('main_audio_url', data.main_audio_url as string);
+        formData.append('id', String((data.id ?? 0) as number));
+        formData.append('slug', data.slug ?? '');
+        formData.append('title', data.title ?? '');
+        formData.append('introduction', data.introduction ?? '');
+        formData.append('main', data.main ?? '');
+        // urls as JSON string to preserve array structure
+        formData.append('urls', JSON.stringify(data.urls ?? []));
+        formData.append('main_audio_url', data.main_audio_url ?? '');
         formData.append(
           'url_to_main_illustration',
-          data.url_to_main_illustration as string
+          data.url_to_main_illustration ?? ''
         );
-        formData.append('author', data.author as string);
-        formData.append('author_email', data.author_email as string);
-        formData.append('created_at', data.created_at as string);
-        formData.append('updated_at', data.updated_at as string);
-        formData.append('updated_by', data.updated_by as string);
-        formData.append('published_at', data.published_at as string);
-        formData.append('validated', data.validated as string);
-        formData.append('shipped', data.shipped as string);
+        formData.append('author', data.author ?? '');
+        formData.append('author_email', data.author_email ?? '');
+        // dates -> ISO strings if present
+        formData.append(
+          'created_at',
+          data.created_at instanceof Date
+            ? data.created_at.toISOString()
+            : String(data.created_at ?? '')
+        );
+        formData.append(
+          'updated_at',
+          data.updated_at instanceof Date
+            ? data.updated_at.toISOString()
+            : String(data.updated_at ?? '')
+        );
+        formData.append('updated_by', String(data.updated_by ?? ''));
+        formData.append(
+          'published_at',
+          data.published_at instanceof Date
+            ? data.published_at.toISOString()
+            : String(data.published_at ?? '')
+        );
+        formData.append('validated', String(Boolean(data.validated)));
+        formData.append('shipped', String(Boolean(data.shipped)));
+
         formAction(formData);
       }
     });
@@ -173,13 +192,16 @@ export default function UpdateArticleForm({
       }
       const response = await fetchArticleById(selectedId as number | bigint);
 
-      setCurrentArticle(response?.article as z.infer<typeof articleSchema>);
+      // cast via unknown to avoid unsafe direct cast diagnostics
+      setCurrentArticle(
+        response?.article as unknown as z.infer<typeof articleSchema>
+      );
     });
   }, [selectedId]);
 
   useEffect(() => {
     // clearing errors when addressed
-    const subscription = watch((value, { name }) => {
+    const subscription = watch((_value, { name }) => {
       if (name) {
         clearErrors(name);
       }

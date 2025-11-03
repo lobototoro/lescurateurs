@@ -156,7 +156,7 @@ export async function updateArticleAction(prevState: any, formData: FormData) {
     'url_to_main_illustration'
   ) as string;
   const created_at = formData.get('created_at') as unknown as Date;
-  const published_at = null;
+  const published_at = new Date(formData.get('published_at') as string) ?? null;
   const validated = false; // NEX-72
   const shipped = false;
 
@@ -296,9 +296,11 @@ export async function validateArticleAction(
     redirect('/editor');
   }
 
+  const validatedValue = formData.get('validation') === 'true' ? true : false;
+
   const validationArgs: ValidateTypes = {
     article_id: parseInt(formData.get('id') as string, 10),
-    validatedValue: formData.get('validation') as unknown as boolean,
+    validatedValue,
     updated_at: new Date(), // NEX-59
     updated_by: session.user.nickname || session.user.email || 'Anonyme',
   };
@@ -354,7 +356,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   }
 
   const id = parseInt(formData.get('id') as string, 10);
-  const ship = formData.get('shipped') as unknown as boolean;
+  const ship = formData.get('shipped') === 'true' ? true : false;
   const updated_at = new Date();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 

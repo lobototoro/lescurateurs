@@ -21,18 +21,18 @@ export const articleSchema = z.object({
     .string()
     .trim()
     .min(50, 'Le texte principal doit avoir au moins 50 caractères'),
-  urls: z.string().trim(),
+  urls: z.any().optional(),
   main_audio_url: z.string().trim(),
   url_to_main_illustration: z
     .string()
     .trim()
     .min(1, 'Au moins un lien est requis'),
-  author: z.string().trim().optional(),
-  author_email: z.string().optional(),
-  created_at: z.string().optional(),
-  updated_at: z.string().optional(),
+  author: z.string().trim(),
+  author_email: z.email().trim(),
+  created_at: z.date(),
+  updated_at: z.date().optional().nullable(),
   updated_by: z.string().optional().nullable(),
-  published_at: z.string().optional(),
-  validated: z.string().optional(),
-  shipped: z.string().optional(),
+  published_at: z.date().optional().nullable(),
+  validated: z.boolean().optional(),
+  shipped: z.boolean().optional(),
 });

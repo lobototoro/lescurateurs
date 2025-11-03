@@ -28,7 +28,7 @@ export interface Article {
   updated_by: string | null;
   author: string;
   author_email: string;
-  urls: Json | null;
+  urls: any | any[] | null;
   validated: boolean;
   shipped: boolean;
 }

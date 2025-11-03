@@ -13,7 +13,7 @@ export function isEmpty(obj: any): boolean {
 }
 
 /* produce an parsed json object into js object
- *  if supabase is used, this func must be inactivated
+ *  if supabase is used, this func must be deactivated
  *  since supabase supports json object natively
  */
 export const urlsToArrayUtil = (urls: any[] | any) =>
@@ -53,11 +53,12 @@ export const addRemoveInputsFactory = (
   };
   const addInputs = () => {
     const urls = urlsArray;
-    valueSetter('urls', JSON.stringify([...urls, initialUrls]));
+    valueSetter('urls', [...urls, initialUrls]);
   };
   const removeInputs = () => {
     if (urlsArray.length > 1) {
-      valueSetter('urls', JSON.stringify(urlsArray.slice(0, -1)));
+      // valueSetter('urls', JSON.stringify(urlsArray.slice(0, -1)));
+      valueSetter('urls', urlsArray.slice(0, -1));
     }
   };
   const updateUrls = (
@@ -66,7 +67,8 @@ export const addRemoveInputsFactory = (
   ) => {
     const newUrls = [...urlsArray];
     newUrls[index] = newUrl;
-    valueSetter('urls', JSON.stringify(newUrls));
+    // valueSetter('urls', JSON.stringify(newUrls));
+    valueSetter('urls', newUrls);
   };
 
   return [addInputs, removeInputs, updateUrls] as const;
