@@ -115,8 +115,6 @@ export default function CreateArticleForm({
     };
   }, [watch, clearErrors, state]);
 
-  console.info('err ', errors);
-
   return (
     <>
       <ArticleTitle

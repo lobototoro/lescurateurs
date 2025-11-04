@@ -6,10 +6,13 @@ import { Slugs } from '@/models/slugs';
 const supabaseFront = createClientFront();
 const supabase = createClient();
 
+const articlesDB = `articles-${process.env.NODE_ENV}`;
+const slugsDB = `slugs-${process.env.NODE_ENV}`;
+
 // fetch in tables actions
 export const getArticle = async (slug: string) => {
   const { data, error } = await supabase
-    .from('articles-development')
+    .from(articlesDB)
     .select()
     .eq('slug', slug);
 
@@ -21,9 +24,7 @@ export const getArticle = async (slug: string) => {
 };
 
 export const getSlugs = async () => {
-  const { data, error } = await supabaseFront
-    .from('slugs-development')
-    .select();
+  const { data, error } = await supabaseFront.from(slugsDB).select();
 
   if (error) {
     throw new Error('articles: could not fetch slugs');
@@ -34,7 +35,7 @@ export const getSlugs = async () => {
 
 export const getArticleById = async (id: number | bigint): Promise<Article> => {
   const { data, error } = await supabaseFront
-    .from('articles-development')
+    .from(articlesDB)
     .select()
     .eq('id', id);
 
@@ -52,7 +53,7 @@ export const getArticleById = async (id: number | bigint): Promise<Article> => {
 // create items in tables actions
 export const createSlug = async (slugObject: Slugs) => {
   const { slug, created_at, article_id, validated } = slugObject;
-  const { error, status } = await supabase.from('slugs-development').insert({
+  const { error, status } = await supabase.from(slugsDB).insert({
     slug,
     created_at,
     article_id,
@@ -60,10 +61,8 @@ export const createSlug = async (slugObject: Slugs) => {
   });
 
   if (error) {
-    console.log('error in slug creation ', error);
+    throw new Error(error.toString());
   }
-
-  console.log('status ', status);
 
   return status;
 };
@@ -88,7 +87,7 @@ export const createArticle = async (article: Article) => {
       shipped,
     } = article;
     const { data, error, status } = await supabase
-      .from('articles-development')
+      .from(articlesDB)
       .insert({
         slug,
         title,
@@ -108,7 +107,6 @@ export const createArticle = async (article: Article) => {
       })
       .select();
 
-    console.log('data ', data);
     const lastInsertedId = data && data.length > 0 ? data[0].id : null;
     if (!lastInsertedId && error) {
       throw new Error('Article: could not create article', error);
@@ -147,12 +145,10 @@ export const updateArticle = async (article: Article) => {
     url_to_main_illustration,
     updated_at,
     updated_by,
-    published_at,
-    validated,
-    shipped,
   } = article;
+
   const { error, status } = await supabase
-    .from('articles-development')
+    .from(articlesDB)
     .update({
       introduction,
       main,
@@ -161,9 +157,6 @@ export const updateArticle = async (article: Article) => {
       url_to_main_illustration,
       updated_at,
       updated_by,
-      published_at,
-      validated,
-      shipped,
     })
     .eq('id', id);
 
@@ -177,7 +170,7 @@ export const updateArticle = async (article: Article) => {
 // search in tables actions
 export const searchSlugs = async (searchTerm: string) => {
   const { data, error } = await supabase
-    .from('slugs-development')
+    .from(slugsDB)
     .select()
     .textSearch('slug', searchTerm);
 
@@ -192,7 +185,7 @@ export const searchSlugs = async (searchTerm: string) => {
 
 export const searchArticles = async (searchTerm: string) => {
   const { data, error } = await supabase
-    .from('articles-development')
+    .from(articlesDB)
     .select()
     .textSearch('title', searchTerm)
     .textSearch('introduction', searchTerm)
@@ -210,7 +203,7 @@ export const searchArticles = async (searchTerm: string) => {
 // delete items in tables actions
 export const deleteSlug = async (slugId: number | bigint) => {
   const { error, status } = await supabase
-    .from('slugs-development')
+    .from(slugsDB)
     .delete()
     .eq('article_id', slugId);
 
@@ -223,7 +216,7 @@ export const deleteSlug = async (slugId: number | bigint) => {
 
 export const deleteArticle = async (article_id: number | bigint) => {
   const { error, status } = await supabase
-    .from('articles-development')
+    .from(articlesDB)
     .delete()
     .eq('id', article_id);
 
@@ -242,7 +235,7 @@ export const validateSlugField = async (validateProps: {
   validatedValue: boolean;
 }) => {
   const { error, status } = await supabase
-    .from('slugs-development')
+    .from(slugsDB)
     .update({
       validated: validateProps.validatedValue,
     })
@@ -262,7 +255,7 @@ export const validateArticle = async (validateProps: {
   updated_by: string;
 }) => {
   const { error, status } = await supabase
-    .from('articles-development')
+    .from(articlesDB)
     .update({
       validated: validateProps.validatedValue,
       updated_at: validateProps.updated_at,
@@ -296,7 +289,7 @@ export const shipArticle = async (shipProps: {
   updated_by: string;
 }) => {
   const { error, status } = await supabase
-    .from('articles-development')
+    .from(articlesDB)
     .update({
       shipped: shipProps.shippedValue,
       updated_at: shipProps.updated_at,

@@ -79,8 +79,6 @@ export async function createArticleAction(prevState: any, data: any) {
   const shipped = false;
   const slug = slugify(title, { lower: true, remove: /[*+~.()'"!:@]/g });
 
-  // let createdArticleId;
-  // let createdSlugId;
   try {
     const articleResult = await createArticle({
       slug,
@@ -99,8 +97,6 @@ export async function createArticleAction(prevState: any, data: any) {
       validated,
       shipped,
     });
-
-    console.log('article result ', articleResult);
 
     return {
       message: true,
@@ -137,28 +133,27 @@ export async function createArticleAction(prevState: any, data: any) {
  * - an online or validated article is set to false
  *  for validated, pubished_at = null, shipped
  */
-export async function updateArticleAction(prevState: any, formData: FormData) {
+export async function updateArticleAction(prevState: any, data: any) {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
   }
 
-  const id = parseInt(formData.get('id') as string, 10);
-  const author = formData.get('author') as string;
-  const author_email = formData.get('author_email') as string;
-  const slug = formData.get('slug') as string;
-  const title = formData.get('title') as string;
-  const introduction = formData.get('introduction') as string;
-  const main = formData.get('main') as string;
-  const urls = formData.get('urls') as Json;
-  const main_audio_url = formData.get('main_audio_url') as string;
-  const url_to_main_illustration = formData.get(
-    'url_to_main_illustration'
-  ) as string;
-  const created_at = formData.get('created_at') as unknown as Date;
-  const published_at = new Date(formData.get('published_at') as string) ?? null;
+  const id = parseInt(data.id as string, 10);
+  const slug = data.slug as string;
+  const title = data.title as string;
+  const introduction = data.introduction as string;
+  const main = data.main as string;
+  const urls = data.urls as Json;
+  const main_audio_url = data.main_audio_url as string;
+  const url_to_main_illustration = data.url_to_main_illustration as string;
+  const created_at = new Date(data.created_at as string);
+  const published_at = new Date(data.published_at as string) ?? null;
   const validated = false; // NEX-72
   const shipped = false;
+
+  const author = data.author;
+  const author_email = data.author_email;
 
   const updated_at = new Date();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';

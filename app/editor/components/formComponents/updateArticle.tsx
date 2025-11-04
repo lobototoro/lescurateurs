@@ -24,6 +24,7 @@ import {
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { Json } from '@/lib/supabase/database.types';
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -70,7 +71,7 @@ export default function UpdateArticleForm({
       introduction: '',
       main: '',
       published_at: null,
-      created_at: new Date(),
+      created_at: '',
       updated_at: null,
       updated_by: null,
       author: 'x',
@@ -137,46 +138,7 @@ export default function UpdateArticleForm({
         ) &&
         isEmpty(errors)
       ) {
-        // Build FormData expected by the action
-        const formData = new FormData();
-        formData.append('id', String((data.id ?? 0) as number));
-        formData.append('slug', data.slug ?? '');
-        formData.append('title', data.title ?? '');
-        formData.append('introduction', data.introduction ?? '');
-        formData.append('main', data.main ?? '');
-        // urls as JSON string to preserve array structure
-        formData.append('urls', JSON.stringify(data.urls ?? []));
-        formData.append('main_audio_url', data.main_audio_url ?? '');
-        formData.append(
-          'url_to_main_illustration',
-          data.url_to_main_illustration ?? ''
-        );
-        formData.append('author', data.author ?? '');
-        formData.append('author_email', data.author_email ?? '');
-        // dates -> ISO strings if present
-        formData.append(
-          'created_at',
-          data.created_at instanceof Date
-            ? data.created_at.toISOString()
-            : String(data.created_at ?? '')
-        );
-        formData.append(
-          'updated_at',
-          data.updated_at instanceof Date
-            ? data.updated_at.toISOString()
-            : String(data.updated_at ?? '')
-        );
-        formData.append('updated_by', String(data.updated_by ?? ''));
-        formData.append(
-          'published_at',
-          data.published_at instanceof Date
-            ? data.published_at.toISOString()
-            : String(data.published_at ?? '')
-        );
-        formData.append('validated', String(Boolean(data.validated)));
-        formData.append('shipped', String(Boolean(data.shipped)));
-
-        formAction(formData);
+        formAction(data);
       }
     });
   };
@@ -191,7 +153,6 @@ export default function UpdateArticleForm({
         return;
       }
       const response = await fetchArticleById(selectedId as number | bigint);
-
       // cast via unknown to avoid unsafe direct cast diagnostics
       setCurrentArticle(
         response.article as unknown as z.infer<typeof articleSchema>
