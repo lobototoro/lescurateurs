@@ -1,10 +1,12 @@
 'use server';
 
-import { createClient } from './client';
+// import { createClient } from './client';
+import { createClient } from './back-office.client';
 
 import { User } from '@/models/user';
 import { Json } from './database.types';
 
+// const supabaseFront = createClient();
 const supabase = createClient();
 const usersDb = `users-${process.env.NODE_ENV}`;
 
@@ -20,16 +22,14 @@ export const getAllUsers = async () => {
 };
 
 export const getUser = async (email: string) => {
-  const { data, error } = await supabase
-    .from(usersDb)
-    .select()
-    .eq('email', email);
+  try {
+    const { data } = await supabase.from(usersDb).select().eq('email', email);
+    // response is an array of object, even if there's one item
 
-  if (error) {
+    return data;
+  } catch (err) {
     throw new Error('Users: could not find the user');
   }
-
-  return data;
 };
 
 // create items in tables actions

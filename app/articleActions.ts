@@ -68,7 +68,7 @@ export async function createArticleAction(prevState: any, data: any) {
   const title = data.title as string;
   const introduction = data.introduction as string;
   const main = data.main as string;
-  const urls = JSON.parse(data.urls) as Json;
+  const urls = data.urls as Json;
   const main_audio_url = data.main_audio_url as string;
   const url_to_main_illustration = data.url_to_main_illustration as string;
   const created_at = new Date();
@@ -100,7 +100,7 @@ export async function createArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    console.log(articleResult.toString());
+    console.log('article result ', articleResult);
 
     return {
       message: true,
@@ -368,7 +368,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
       text: 'Article inconnu',
     };
   }
-  if (!article[0].validated && ship) {
+  if (!article.validated && ship) {
     return {
       message: false,
       text: "L'article doit être validé avant d'être mis en MeP",

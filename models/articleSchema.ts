@@ -27,9 +27,9 @@ export const articleSchema = z.object({
     .string()
     .trim()
     .min(1, 'Au moins un lien est requis'),
-  author: z.string().trim(),
-  author_email: z.email().trim(),
-  created_at: z.date(),
+  author: z.string().trim().optional(),
+  author_email: z.email().trim().optional(),
+  created_at: z.date().optional(),
   updated_at: z.date().optional().nullable(),
   updated_by: z.string().optional().nullable(),
   published_at: z.date().optional().nullable(),

@@ -103,7 +103,7 @@ export default function UpdateArticleForm({
 
   // special treatment for urls added by the user
   register('urls');
-  const urlsToArray = urlsToArrayUtil(getValues('urls'));
+  const urlsToArray = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
@@ -194,7 +194,7 @@ export default function UpdateArticleForm({
 
       // cast via unknown to avoid unsafe direct cast diagnostics
       setCurrentArticle(
-        response?.article as unknown as z.infer<typeof articleSchema>
+        response.article as unknown as z.infer<typeof articleSchema>
       );
     });
   }, [selectedId]);

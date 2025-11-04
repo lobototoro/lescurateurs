@@ -2,7 +2,7 @@
 
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
-import { searchArticles, searchSlugs } from '@/lib/articles';
+import { searchArticles, searchSlugs } from '@/lib/supabase/articles';
 import { Slugs } from '@/models/slugs';
 
 export async function searchForSlugs(searchTerm: string) {
@@ -13,6 +13,7 @@ export async function searchForSlugs(searchTerm: string) {
 
   try {
     const slugs = (await searchSlugs(searchTerm)) as Slugs[];
+    console.log('in back func ', slugs);
 
     return {
       message: true,

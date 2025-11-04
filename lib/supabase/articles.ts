@@ -1,7 +1,9 @@
-import { createClient } from './client';
+import { createClient as createClientFront } from './client';
+import { createClient } from './back-office.client';
 import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
 
+const supabaseFront = createClientFront();
 const supabase = createClient();
 
 // fetch in tables actions
@@ -19,7 +21,9 @@ export const getArticle = async (slug: string) => {
 };
 
 export const getSlugs = async () => {
-  const { data, error } = await supabase.from('slugs-development').select();
+  const { data, error } = await supabaseFront
+    .from('slugs-development')
+    .select();
 
   if (error) {
     throw new Error('articles: could not fetch slugs');
@@ -28,8 +32,8 @@ export const getSlugs = async () => {
   return data;
 };
 
-export const getArticleById = async (id: number | bigint) => {
-  const { data, error } = await supabase
+export const getArticleById = async (id: number | bigint): Promise<Article> => {
+  const { data, error } = await supabaseFront
     .from('articles-development')
     .select()
     .eq('id', id);
@@ -38,7 +42,11 @@ export const getArticleById = async (id: number | bigint) => {
     throw new Error('Articles: could not find this article');
   }
 
-  return data;
+  if (!data || data.length === 0) {
+    throw new Error('Articles: article not found');
+  }
+
+  return data[0] as Article;
 };
 
 // create items in tables actions
@@ -52,33 +60,17 @@ export const createSlug = async (slugObject: Slugs) => {
   });
 
   if (error) {
-    throw new Error('Slug: coud not create slug');
+    console.log('error in slug creation ', error);
   }
+
+  console.log('status ', status);
 
   return status;
 };
 
 export const createArticle = async (article: Article) => {
-  const {
-    slug,
-    title,
-    introduction,
-    main,
-    urls,
-    main_audio_url,
-    url_to_main_illustration,
-    author,
-    author_email,
-    created_at,
-    updated_at,
-    updated_by,
-    published_at,
-    validated,
-    shipped,
-  } = article;
-  const { data, error, status } = await supabase
-    .from('articles-development')
-    .insert({
+  try {
+    const {
       slug,
       title,
       introduction,
@@ -94,27 +86,51 @@ export const createArticle = async (article: Article) => {
       published_at,
       validated,
       shipped,
-    })
-    .select();
+    } = article;
+    const { data, error, status } = await supabase
+      .from('articles-development')
+      .insert({
+        slug,
+        title,
+        introduction,
+        main,
+        urls,
+        main_audio_url,
+        url_to_main_illustration,
+        author,
+        author_email,
+        created_at,
+        updated_at,
+        updated_by,
+        published_at,
+        validated,
+        shipped,
+      })
+      .select();
 
-  if (error) {
-    throw new Error('Articles: could not create article');
-  }
-  const lastInsertedId = data[0].id;
-  let slugCreationResult;
-  if (status === 201) {
-    slugCreationResult = await createSlug({
-      slug,
-      created_at,
-      article_id: lastInsertedId,
-      validated,
-    });
-  }
+    console.log('data ', data);
+    const lastInsertedId = data && data.length > 0 ? data[0].id : null;
+    if (!lastInsertedId && error) {
+      throw new Error('Article: could not create article', error);
+    } else {
+      let slugCreationResult;
+      if (status === 201) {
+        slugCreationResult = await createSlug({
+          slug,
+          created_at,
+          article_id: lastInsertedId,
+          validated,
+        });
+      }
 
-  return {
-    articleStatus: status,
-    slugStatus: slugCreationResult,
-  };
+      return {
+        articleStatus: status,
+        slugStatus: slugCreationResult,
+      };
+    }
+  } catch (err) {
+    console.log('Articles: could not complete article creation process ', err);
+  }
 };
 
 // update items in tables actions

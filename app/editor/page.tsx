@@ -1,5 +1,6 @@
 import { auth0 } from '@/lib/auth0';
 import { getUser, logConnection } from '@/lib/supabase/users';
+
 import { User } from '@/models/user';
 import EditorForm from './components/editorForm';
 import { RedirectFragment } from '../components/single-elements/redirectFragment';
@@ -20,7 +21,7 @@ export default async function Login() {
     console.error('Error logging connection:', error);
   }
 
-  const credentials = (await getUser(session.user.email)) as unknown as User;
+  const credentials = (await getUser(session.user.email)) as unknown as User[];
   if (!credentials) {
     throw new Error('User not found in database');
   }
@@ -29,8 +30,8 @@ export default async function Login() {
     <>
       {credentials && (
         <EditorForm
-          role={credentials.role}
-          permissions={credentials.permissions}
+          role={credentials[0].role}
+          permissions={credentials[0].permissions}
         />
       )}
       <br />
