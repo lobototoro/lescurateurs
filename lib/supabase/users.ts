@@ -6,7 +6,9 @@ import { User } from '@/models/user';
 
 // const supabaseFront = createClient();
 const supabase = createClient();
-const usersDb = `users-${process.env.NODE_ENV}`;
+
+// const usersDb = `users-${process.env.NODE_ENV}`;
+const usersDb = `users-development`;
 
 // fetch in tables actions
 export const getAllUsers = async () => {
