@@ -13,7 +13,6 @@ export async function searchForSlugs(searchTerm: string) {
 
   try {
     const slugs = (await searchSlugs(searchTerm)) as Slugs[];
-    console.log('in back func ', slugs);
 
     return {
       message: true,

@@ -302,10 +302,10 @@ export async function validateArticleAction(
 
   try {
     const validation = await validateArticle(validationArgs);
-
+    console.log('vali response ', validation);
     if (
-      validation.articleValidationStatus !== 201 &&
-      validation.slugValidationStatus !== 201
+      validation.articleValidationStatus !== 204 &&
+      validation.slugValidationStatus !== 204
     ) {
       return {
         message: false,
@@ -357,6 +357,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
 
   // get article to check for validity: 'true' or 'false'
   const article = await getArticleById(id);
+
   if (!article) {
     return {
       message: false,
@@ -376,7 +377,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
     updated_at, // NEX-59
     updated_by,
   });
-  if (result !== 201) {
+  if (result !== 204) {
     return {
       message: false,
       text: "Une erreur est survenue lors de la mise en MeP de l'article",

@@ -264,11 +264,11 @@ export const validateArticle = async (validateProps: {
     .eq('id', validateProps.article_id);
 
   if (error) {
-    throw new Error('Valdiation: couuld not validate this article');
+    throw new Error('Validation: could not validate this article');
   }
 
   let slugValidationResult;
-  if (status === 201) {
+  if (status === 204) {
     slugValidationResult = await validateSlugField({
       article_id: validateProps.article_id,
       validatedValue: validateProps.validatedValue,
