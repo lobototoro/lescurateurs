@@ -12,10 +12,7 @@ import { z } from 'zod';
 import { articleSchema } from '@/models/articleSchema';
 import { createArticleAction } from '@/app/articleActions';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
-import {
-  urlsToArrayUtil,
-  addRemoveInputsFactory,
-} from '@/lib/utility-functions';
+import { addRemoveInputsFactory } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
@@ -69,7 +66,7 @@ export default function CreateArticleForm({
     return setValue('main', value);
   };
 
-  // adding, removing and updating those fields are handled by the urlsToArrayUtil function
+  // adding, removing and updating those fields are handled here
   register('urls');
   const urlsToArray = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(

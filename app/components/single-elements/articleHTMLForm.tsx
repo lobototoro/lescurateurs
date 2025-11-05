@@ -14,7 +14,6 @@ export default function ArticleMarkupForm({
   target,
   isPending,
   getMainContent,
-  setMainContent,
   watch,
 }: {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -30,7 +29,6 @@ export default function ArticleMarkupForm({
   target: string;
   isPending?: boolean;
   getMainContent: (v: string) => void;
-  setMainContent?: () => string;
   watch: (
     names?: string | string[] | ((data: any, options: any) => void)
   ) => unknown;

@@ -1,23 +1,10 @@
 'use server';
-import { z } from 'zod';
+
 import slugify from 'slugify';
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
 
-import { articleSchema } from '@/models/articleSchema';
 import type { Json } from '@/lib/supabase/database.types';
-
-// import {
-//   // createArticle,
-//   // createSlug,
-//   // deleteArticle,
-//   // updateArticle,
-//   // getArticleById,
-//   // deleteSlug,
-//   // validateArticle,
-//   // validateSlugField,
-//   // shipArticle,
-// } from '@/lib/articles';
 
 import {
   createArticle,

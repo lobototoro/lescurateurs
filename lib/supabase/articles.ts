@@ -6,8 +6,6 @@ import { Slugs } from '@/models/slugs';
 const supabaseFront = createClientFront();
 const supabase = createClient();
 
-// const articlesDB = `articles-${process.env.NODE_ENV}`;
-// const slugsDB = `slugs-${process.env.NODE_ENV}`;
 const articlesDB = `articles-development`;
 const slugsDB = `slugs-development`;
 

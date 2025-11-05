@@ -12,13 +12,6 @@ export function isEmpty(obj: any): boolean {
   return true;
 }
 
-/* produce an parsed json object into js object
- *  if supabase is used, this func must be deactivated
- *  since supabase supports json object natively
- */
-export const urlsToArrayUtil = (urls: any[] | any) =>
-  urls && urls !== '' ? JSON.parse(urls) : [];
-
 /* hardcoded names of icon, chosen arbitrarily */
 export const iconMapper = (permissionLabel: string): string => {
   switch (permissionLabel) {

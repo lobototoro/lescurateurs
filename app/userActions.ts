@@ -9,7 +9,6 @@ import {
   deleteUser,
 } from '@/lib/supabase/users';
 import { User, UserRole } from '@/models/user';
-import { Json } from '@/lib/supabase/database.types';
 
 export async function createUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();

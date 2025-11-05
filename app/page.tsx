@@ -1,4 +1,3 @@
-// import styles from "./page.module.css";
 import { getSlugs } from '@/lib/supabase/articles';
 import { Slugs } from '@/models/slugs';
 import { ArticleList } from './components/ArticleList';
