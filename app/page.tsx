@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 export default function Home() {
   const Content = async () => {
     const slugs = (await getSlugs()) as Slugs[];
+
     return <ArticleList list={slugs} />;
   };
 

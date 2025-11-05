@@ -16,15 +16,10 @@ import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
 import { articleSchema } from '@/models/articleSchema';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
 import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
-import {
-  isEmpty,
-  urlsToArrayUtil,
-  addRemoveInputsFactory,
-} from '@/lib/utility-functions';
+import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
-import { Json } from '@/lib/supabase/database.types';
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -153,6 +148,7 @@ export default function UpdateArticleForm({
         return;
       }
       const response = await fetchArticleById(selectedId as number | bigint);
+
       // cast via unknown to avoid unsafe direct cast diagnostics
       setCurrentArticle(
         response.article as unknown as z.infer<typeof articleSchema>

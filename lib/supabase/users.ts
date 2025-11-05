@@ -3,7 +3,6 @@
 import { createClient } from './back-office.client';
 
 import { User } from '@/models/user';
-import { Json } from './database.types';
 
 // const supabaseFront = createClient();
 const supabase = createClient();
@@ -23,6 +22,7 @@ export const getAllUsers = async () => {
 export const getUser = async (email: string) => {
   try {
     const { data } = await supabase.from(usersDb).select().eq('email', email);
+
     // response is an array of object, even if there's one item
 
     return data;
@@ -58,15 +58,14 @@ export const createUser = async (user: User) => {
 
 // update items in tables actions
 export const updateUser = async (user: User) => {
-  const { id, tiers_service_ident, role, permissions, updated_at, updated_by } =
-    user;
+  const { id, tiers_service_ident, role, permissions, updated_by } = user;
   const { error, status } = await supabase
     .from(usersDb)
     .update({
       tiers_service_ident,
       role,
       permissions,
-      updated_at,
+      updated_at: new Date(),
       updated_by,
     })
     .eq('id', id);

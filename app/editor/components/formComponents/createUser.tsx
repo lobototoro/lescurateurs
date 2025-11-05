@@ -84,8 +84,6 @@ export default function CreateUserForm({
     };
   }, [state, watch, clearErrors]);
 
-  console.info('errors ', errors);
-
   return (
     <section className="section">
       {notification && (

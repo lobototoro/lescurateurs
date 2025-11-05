@@ -4,9 +4,9 @@ export interface User {
   tiers_service_ident: string;
   role: UserRole;
   permissions: string;
-  created_at?: Date;
-  last_connection_at?: Date | null;
-  updated_at?: Date | null;
+  created_at?: string;
+  last_connection_at?: string | null;
+  updated_at?: string | null;
   updated_by?: string | null;
 }
 

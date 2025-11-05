@@ -67,6 +67,7 @@ export const addRemoveInputsFactory = (
   ) => {
     const newUrls = [...urlsArray];
     newUrls[index] = newUrl;
+
     // valueSetter('urls', JSON.stringify(newUrls));
     valueSetter('urls', newUrls);
   };

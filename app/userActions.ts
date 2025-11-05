@@ -1,7 +1,7 @@
 'use server';
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
-// import { createUser, updateUser, getAllUsers, deleteUser } from '@/lib/users';
+
 import {
   createUser,
   updateUser,
@@ -53,9 +53,9 @@ export async function updateUserAction(preState: any, formData: FormData) {
     email: formData.get('email') as string,
     tiers_service_ident: formData.get('tiers_service_ident') as string,
     role: formData.get('role') as UserRole,
-    permissions: formData.get('permissions') as Json,
-    updated_at: new Date(),
-    updated_by: session.user.nickname ?? ('' as string),
+    permissions: formData.get('permissions') as string,
+    updated_by:
+      session.user.nickname || session.user.email || ('Anon' as string),
   };
 
   try {
@@ -63,7 +63,7 @@ export async function updateUserAction(preState: any, formData: FormData) {
 
     return {
       message: true,
-      status: updateUser,
+      status: updatedUserSatus,
       text: 'L’utilisateur a été modifié avec succès',
     };
   } catch (error) {
