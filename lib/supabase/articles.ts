@@ -20,7 +20,7 @@ export const getArticle = async (slug: string) => {
     throw new Error('articles: could not fetch article');
   }
 
-  return data;
+  return data[0];
 };
 
 export const getSlugs = async () => {
