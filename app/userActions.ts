@@ -21,9 +21,7 @@ export async function createUserAction(preState: any, formData: FormData) {
     email: formData.get('email') as string,
     tiers_service_ident: formData.get('tiers_service_ident') as string,
     role: formData.get('role') as UserRole,
-    permissions: formData.get('permissions') as Json,
-    created_at: formData.get('created_at') as unknown as Date,
-    last_connection_at: formData.get('last_connection_at') as unknown as Date,
+    permissions: formData.get('permissions') as string,
   };
 
   try {

@@ -1,6 +1,5 @@
 'use server';
 
-// import { createClient } from './client';
 import { createClient } from './back-office.client';
 
 import { User } from '@/models/user';
@@ -34,21 +33,20 @@ export const getUser = async (email: string) => {
 
 // create items in tables actions
 export const createUser = async (user: User) => {
-  const permissions = user.permissions as Json;
   const created_at = new Date();
   const last_connection_at = new Date();
 
-  const mutatedUser = {
+  const insertedUser = {
     ...user,
-    permissions,
     created_at,
     last_connection_at,
     updated_at: null,
     updated_by: null,
   };
+
   const { error, status } = await supabase
     .from(usersDb)
-    .insert(mutatedUser)
+    .insert(insertedUser)
     .select();
 
   if (error) {
