@@ -21,19 +21,19 @@ export default async function Login() {
     console.error('Error logging connection:', error);
   }
 
-  const credentials = (await getUser(session.user.email)) as unknown as User[];
-  if (!credentials) {
+  const credentials = (await getUser(session.user.email)) as unknown as
+    | User[]
+    | null;
+  if (!credentials || credentials.length === 0) {
     throw new Error('User not found in database');
   }
 
+  const [user] = credentials;
+  const { role, permissions } = user;
+
   return (
     <>
-      {credentials && (
-        <EditorForm
-          role={credentials[0].role}
-          permissions={credentials[0].permissions}
-        />
-      )}
+      {user && <EditorForm role={role} permissions={permissions} />}
       <br />
       <a href="/auth/logout">
         <button>Log out</button>
