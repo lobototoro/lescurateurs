@@ -1,7 +1,7 @@
 export interface Slugs {
   id?: number | bigint;
   slug: string;
-  created_at: Date;
+  created_at: string;
   article_id: number | bigint;
   validated: boolean;
 }

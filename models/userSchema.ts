@@ -9,7 +9,7 @@ export const userSchema = z.object({
   tiers_service_ident: z.string().min(1, { message: 'Champ requis' }).trim(),
   role: z.enum(['admin', 'contributor']),
   created_at: z.string().optional(),
-  last_connection_at: z.string().optional(),
+  last_connection_at: z.string().optional().nullable(),
   permissions: z.string(),
   updated_at: z.string().optional().nullable(),
   updated_by: z.string().optional().nullable(),

@@ -22,9 +22,9 @@ export interface Article {
   main: string;
   main_audio_url: string;
   url_to_main_illustration: string;
-  published_at: Date | null;
-  created_at: Date;
-  updated_at: Date | null;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string | null;
   updated_by: string | null;
   author: string;
   author_email: string;
