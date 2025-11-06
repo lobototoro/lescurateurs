@@ -70,7 +70,7 @@ export default function UpdateArticleForm({
       updated_at: null,
       updated_by: null,
       author: 'x',
-      author_email: 'examplae@examaple.com',
+      author_email: 'example@example.com',
       validated: false,
       shipped: false,
       urls: [],

@@ -6,8 +6,9 @@ import { Slugs } from '@/models/slugs';
 const supabaseFront = createClientFront();
 const supabase = createClient();
 
-const articlesDB = `articles-development`;
-const slugsDB = `slugs-development`;
+const articlesDB =
+  process.env.NEXT_PUBLIC_ARTICLES_TABLE || 'articles-development';
+const slugsDB = process.env.NEXT_PUBLIC_SLUGS_TABLE || 'slugs-development';
 
 // fetch in tables actions
 export const getArticle = async (slug: string): Promise<Article> => {
@@ -108,8 +109,10 @@ export const createArticle = async (article: Article) => {
       .select();
 
     const lastInsertedId = data && data.length > 0 ? data[0].id : null;
-    if (!lastInsertedId && error) {
-      throw new Error('Article: could not create article', error);
+    if (!lastInsertedId || error) {
+      throw new Error(
+        `Article: could not create article ${error ? error.toString() : ''}`
+      );
     } else {
       let slugCreationResult;
       if (status === 201) {
@@ -127,7 +130,11 @@ export const createArticle = async (article: Article) => {
       };
     }
   } catch (err) {
-    console.log('Articles: could not complete article creation process ', err);
+    console.error(
+      'Articles: could not complete article creation process ',
+      err
+    );
+    throw err;
   }
 };
 
@@ -187,9 +194,9 @@ export const searchArticles = async (searchTerm: string) => {
   const { data, error } = await supabase
     .from(articlesDB)
     .select()
-    .textSearch('title', searchTerm)
-    .textSearch('introduction', searchTerm)
-    .textSearch('main', searchTerm);
+    .or(
+      `title.textSearch.${searchTerm},introduction.textSearch.${searchTerm},main.textSearch.${searchTerm}`
+    );
 
   if (error) {
     throw new Error(

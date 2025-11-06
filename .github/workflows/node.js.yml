@@ -28,6 +28,8 @@ jobs:
       #- run: npm run build --if-present
       - name: Execute Unit tests
         env:
+          NEXT_PUBLIC_ARTICLES_TABLE: ${{ vars.NEXT_PUBLIC_ARTICLES_TABLE }}
+          NEXT_PUBLIC_SLUGS_TABLE: ${{ vars.NEXT_PUBLIC_SLUGS_TABLE }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

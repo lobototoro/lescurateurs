@@ -135,7 +135,9 @@ export async function updateArticleAction(prevState: any, data: any) {
   const main_audio_url = data.main_audio_url as string;
   const url_to_main_illustration = data.url_to_main_illustration as string;
   const created_at = new Date(data.created_at as string);
-  const published_at = new Date(data.published_at as string) ?? null;
+  const published_at = data.published_at
+    ? new Date(data.published_at as string)
+    : null;
   const validated = false; // NEX-72
   const shipped = false;
 
@@ -291,7 +293,7 @@ export async function validateArticleAction(
     const validation = await validateArticle(validationArgs);
     console.log('vali response ', validation);
     if (
-      validation.articleValidationStatus !== 204 &&
+      validation.articleValidationStatus !== 204 ||
       validation.slugValidationStatus !== 204
     ) {
       return {
