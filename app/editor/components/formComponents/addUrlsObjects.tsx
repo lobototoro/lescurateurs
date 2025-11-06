@@ -1,19 +1,21 @@
-"use client";
-import { UrlsTypes } from "@/models/article";
-import { UrlObjectItem } from "./urlObjectItem";
+'use client';
+import { UrlsTypes, CustomFormInputs } from '@/models/article';
+import { UrlObjectItem } from './urlObjectItem';
 
 export function AddUrlsObjects({
   urls,
   updateUrls,
   addInputs,
-  removeInputs
+  removeInputs,
 }: {
-  urls: { type: UrlsTypes; url: string; credits?: string }[];
-  updateUrls: (newUrl: { type: UrlsTypes; url: string; credits?: string }, index: number) => void;
+  urls: CustomFormInputs;
+  updateUrls: (
+    newUrl: { type: UrlsTypes; url: string; credits?: string },
+    index: number
+  ) => void;
   addInputs: () => void;
   removeInputs: () => void;
 }) {
-
   return (
     <>
       <div className="field" data-testid="url-inputs-container">
@@ -47,4 +49,4 @@ export function AddUrlsObjects({
       </div>
     </>
   );
-};
+}

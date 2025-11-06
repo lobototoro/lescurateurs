@@ -16,11 +16,7 @@ import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
 import { articleSchema } from '@/models/articleSchema';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
 import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
-import {
-  isEmpty,
-  urlsToArrayUtil,
-  addRemoveInputsFactory,
-} from '@/lib/utility-functions';
+import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
@@ -69,15 +65,15 @@ export default function UpdateArticleForm({
       title: '',
       introduction: '',
       main: '',
-      published_at: '',
+      published_at: null,
       created_at: '',
-      updated_at: '',
-      updated_by: '',
-      author: '',
-      author_email: '',
-      validated: 'false',
-      shipped: 'false',
-      urls: '',
+      updated_at: null,
+      updated_by: null,
+      author: 'x',
+      author_email: 'example@example.com',
+      validated: false,
+      shipped: false,
+      urls: [],
       main_audio_url: '',
       url_to_main_illustration: '',
     },
@@ -103,7 +99,7 @@ export default function UpdateArticleForm({
 
   // special treatment for urls added by the user
   register('urls');
-  const urlsToArray = urlsToArrayUtil(getValues('urls'));
+  const urlsToArray = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
@@ -137,27 +133,7 @@ export default function UpdateArticleForm({
         ) &&
         isEmpty(errors)
       ) {
-        const formData = new FormData();
-        formData.append('id', data.id as unknown as string);
-        formData.append('slug', data.slug as string);
-        formData.append('title', data.title as string);
-        formData.append('introduction', data.introduction as string);
-        formData.append('main', data.main as string);
-        formData.append('urls', data.urls as string);
-        formData.append('main_audio_url', data.main_audio_url as string);
-        formData.append(
-          'url_to_main_illustration',
-          data.url_to_main_illustration as string
-        );
-        formData.append('author', data.author as string);
-        formData.append('author_email', data.author_email as string);
-        formData.append('created_at', data.created_at as string);
-        formData.append('updated_at', data.updated_at as string);
-        formData.append('updated_by', data.updated_by as string);
-        formData.append('published_at', data.published_at as string);
-        formData.append('validated', data.validated as string);
-        formData.append('shipped', data.shipped as string);
-        formAction(formData);
+        formAction(data);
       }
     });
   };
@@ -173,13 +149,16 @@ export default function UpdateArticleForm({
       }
       const response = await fetchArticleById(selectedId as number | bigint);
 
-      setCurrentArticle(response?.article as z.infer<typeof articleSchema>);
+      // cast via unknown to avoid unsafe direct cast diagnostics
+      setCurrentArticle(
+        response.article as unknown as z.infer<typeof articleSchema>
+      );
     });
   }, [selectedId]);
 
   useEffect(() => {
     // clearing errors when addressed
-    const subscription = watch((value, { name }) => {
+    const subscription = watch((_value, { name }) => {
       if (name) {
         clearErrors(name);
       }

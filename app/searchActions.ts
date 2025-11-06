@@ -2,7 +2,7 @@
 
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
-import { searchArticles, searchSlugs } from '@/lib/articles';
+import { searchArticles, searchSlugs } from '@/lib/supabase/articles';
 import { Slugs } from '@/models/slugs';
 
 export async function searchForSlugs(searchTerm: string) {

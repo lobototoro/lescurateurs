@@ -1,9 +1,9 @@
 export interface Slugs {
-  id?: number;
+  id?: number | bigint;
   slug: string;
   created_at: string;
   article_id: number | bigint;
-  validated: string;
+  validated: boolean;
 }
 
 export interface Params {

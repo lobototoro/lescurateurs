@@ -4,7 +4,7 @@ import xss from 'xss';
 
 export const ArticleList = ({ list }: { list: Slugs[] }) => {
   const unslugged = (str: string) => xss(str.replace(/-/g, ' '));
-  const formatDate = (date: string) =>
+  const formatDate = (date: Date) =>
     new Date(date).toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'long',
@@ -13,13 +13,16 @@ export const ArticleList = ({ list }: { list: Slugs[] }) => {
 
   return (
     <ul className="container">
-      {list.map((article) => (
-        <li key={article.id}>
-          <Link href={`article/${article.slug}`}>
-            {unslugged(article.slug)} - {formatDate(article.created_at)}
-          </Link>
-        </li>
-      ))}
+      {list.map(
+        (article) =>
+          article.validated && (
+            <li key={article.id}>
+              <Link href={`article/${article.slug}`}>
+                {unslugged(article.slug)} - {formatDate(article.created_at)}
+              </Link>
+            </li>
+          )
+      )}
     </ul>
   );
 };

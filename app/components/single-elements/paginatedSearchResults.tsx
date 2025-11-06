@@ -84,7 +84,7 @@ export function PaginatedSearchDisplay({
                     text={`${swapValue(item)}`}
                   />
                 </td>
-                <td>{item?.created_at}</td>
+                <td>{item?.created_at && item.created_at.toString()}</td>
                 <td>
                   {context === 'article' && target === 'search' && (
                     <button

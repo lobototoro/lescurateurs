@@ -1,4 +1,13 @@
 import { z } from 'zod';
+import { UrlsTypes } from './article';
+
+const urlsTypes = z.enum(UrlsTypes);
+
+const urlLinksSchema = z.object({
+  type: urlsTypes,
+  url: z.string(),
+  credits: z.string().optional(),
+});
 
 export const articleSchema = z.object({
   id: z.number().optional(),
@@ -21,18 +30,15 @@ export const articleSchema = z.object({
     .string()
     .trim()
     .min(50, 'Le texte principal doit avoir au moins 50 caractères'),
-  urls: z.string().trim(),
+  urls: z.array(urlLinksSchema).optional(),
   main_audio_url: z.string().trim(),
-  url_to_main_illustration: z
-    .string()
-    .trim()
-    .min(1, 'Au moins un lien est requis'),
+  url_to_main_illustration: z.string().trim(),
   author: z.string().trim().optional(),
-  author_email: z.string().optional(),
+  author_email: z.email().trim().optional(),
   created_at: z.string().optional(),
-  updated_at: z.string().optional(),
+  updated_at: z.string().optional().nullable(),
   updated_by: z.string().optional().nullable(),
-  published_at: z.string().optional(),
-  validated: z.string().optional(),
-  shipped: z.string().optional(),
+  published_at: z.string().optional().nullable(),
+  validated: z.boolean().optional(),
+  shipped: z.boolean().optional(),
 });

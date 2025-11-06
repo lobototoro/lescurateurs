@@ -16,7 +16,8 @@ vi.mock('next/font/google', () => ({
   }),
 }));
 
-vi.stubEnv('NEXT_DATABASE_NAME', 'test_db');
+// keeping the next line as an example
+// vi.stubEnv('NEXT_DATABASE_NAME', 'test_db');
 
 afterEach(() => {
   cleanup();

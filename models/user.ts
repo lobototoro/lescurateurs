@@ -2,10 +2,10 @@ export interface User {
   id?: number | bigint;
   email: string;
   tiers_service_ident: string;
-  role: string;
+  role: UserRole;
   permissions: string;
-  created_at: string;
-  last_connection_at: string;
+  created_at?: string;
+  last_connection_at?: string | null;
   updated_at?: string | null;
   updated_by?: string | null;
 }

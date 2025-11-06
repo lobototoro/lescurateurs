@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -42,8 +41,6 @@ export default function CreateUserForm({
       email: '',
       tiers_service_ident: '',
       role: 'contributor',
-      created_at: new Date().toISOString(),
-      last_connection_at: new Date().toISOString(),
       permissions: JSON.stringify(contributorPermissions),
     },
   });
@@ -55,8 +52,6 @@ export default function CreateUserForm({
       formData.append('tiers_service_ident', data.tiers_service_ident);
       formData.append('role', data.role);
       formData.append('permissions', data.permissions);
-      formData.append('created_at', data.created_at);
-      formData.append('last_connection_at', data.last_connection_at);
       formAction(formData);
     });
   };

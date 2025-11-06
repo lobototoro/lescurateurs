@@ -2,13 +2,14 @@ import { fr } from 'date-fns/locale/fr';
 import { formatDistanceToNow } from 'date-fns';
 
 import { Article } from '@/models/article';
-import { getArticle } from '@/lib/articles';
+import { getArticle } from '@/lib/supabase/articles';
 import { Params } from '@/models/slugs';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 export default async function ArticlePage(props: { params: Promise<Params> }) {
   const params = await props.params;
-  const article = (await getArticle(params.slug)) as Article;
+  const article = await getArticle(params.slug);
+
   const publishedDate =
     article.published_at &&
     formatDistanceToNow(article.published_at || '', {
