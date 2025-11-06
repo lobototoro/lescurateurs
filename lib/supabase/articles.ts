@@ -61,7 +61,7 @@ export const createSlug = async (slugObject: Slugs) => {
   });
 
   if (error) {
-    throw new Error(error.toString());
+    throw new Error(`Slugs: could not create slug - ${error.message}`);
   }
 
   return status;

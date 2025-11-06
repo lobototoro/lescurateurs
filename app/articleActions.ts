@@ -278,7 +278,7 @@ export async function validateArticleAction(
     redirect('/editor');
   }
 
-  const validatedValue = formData.get('validation') === 'true' ? true : false;
+  const validatedValue = formData.get('validation') === 'true';
 
   const validationArgs: ValidateTypes = {
     article_id: parseInt(formData.get('id') as string, 10),
@@ -338,7 +338,7 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   }
 
   const id = parseInt(formData.get('id') as string, 10);
-  const ship = formData.get('shipped') === 'true' ? true : false;
+  const ship = formData.get('shipped') === 'true';
   const updated_at = new Date();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
