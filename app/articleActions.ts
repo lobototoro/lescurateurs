@@ -342,39 +342,48 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
   const updated_at = new Date();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
-  // get article to check for validity: 'true' or 'false'
-  const article = await getArticleById(id);
+  try {
+    // get article to check for validity: 'true' or 'false'
+    const article = await getArticleById(id);
 
-  if (!article) {
-    return {
-      message: false,
-      text: 'Article inconnu',
-    };
-  }
-  if (!article.validated && ship) {
-    return {
-      message: false,
-      text: "L'article doit être validé avant d'être mis en MeP",
-    };
-  }
+    if (!article) {
+      return {
+        message: false,
+        text: 'Article inconnu',
+      };
+    }
+    if (!article.validated && ship) {
+      return {
+        message: false,
+        text: "L'article doit être validé avant d'être mis en MeP",
+      };
+    }
 
-  const result = await shipArticle({
-    article_id: id,
-    shippedValue: ship,
-    updated_at, // NEX-59
-    updated_by,
-  });
-  if (result !== 204) {
+    const result = await shipArticle({
+      article_id: id,
+      shippedValue: ship,
+      updated_at, // NEX-59
+      updated_by,
+    });
+    if (result !== 204) {
+      return {
+        message: false,
+        text: "Une erreur est survenue lors de la mise en MeP de l'article",
+      };
+    }
+
+    return {
+      message: true,
+      text: ship
+        ? "L'article a été mis en MeP avec succès"
+        : "L'article a été mis offline avec succès",
+    };
+  } catch (err) {
+    console.log(err);
+
     return {
       message: false,
       text: "Une erreur est survenue lors de la mise en MeP de l'article",
     };
   }
-
-  return {
-    message: true,
-    text: ship
-      ? "L'article a été mis en MeP avec succès"
-      : "L'article a été mis offline avec succès",
-  };
 }

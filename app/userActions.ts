@@ -32,7 +32,7 @@ export async function createUserAction(preState: any, formData: FormData) {
       text: 'L’utilisateur a été créé avec succès',
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return {
       message: false,
@@ -66,7 +66,7 @@ export async function updateUserAction(preState: any, formData: FormData) {
       text: 'L’utilisateur a été modifié avec succès',
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return {
       message: false,
@@ -107,7 +107,7 @@ export async function deleteUserAction(preState: any, formData: FormData) {
   const email = formData.get('email') as string;
 
   try {
-    const deletedUserStatus = await deleteUser(email as string);
+    const deletedUserStatus = await deleteUser(email);
 
     return {
       message: true,

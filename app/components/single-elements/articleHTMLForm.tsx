@@ -22,7 +22,7 @@ export default function ArticleMarkupForm({
     options?: any
   ) => { onChange: any; onBlur: any; name: any; ref: any };
   errors: any;
-  urlsToArray: any;
+  urlsToArray: Array<{ type: string; url: string; credits?: string }>;
   updateUrls: (newUrl: any, index: number) => void;
   addInputs: () => void;
   removeInputs: () => void;
