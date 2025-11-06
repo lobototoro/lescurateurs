@@ -8,7 +8,7 @@ import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 export default async function ArticlePage(props: { params: Promise<Params> }) {
   const params = await props.params;
-  const article = (await getArticle(params.slug)) as unknown as Article;
+  const article = await getArticle(params.slug);
 
   const publishedDate =
     article.published_at &&

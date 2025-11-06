@@ -10,7 +10,7 @@ const articlesDB = `articles-development`;
 const slugsDB = `slugs-development`;
 
 // fetch in tables actions
-export const getArticle = async (slug: string) => {
+export const getArticle = async (slug: string): Promise<Article> => {
   const { data, error } = await supabase
     .from(articlesDB)
     .select()
@@ -23,7 +23,7 @@ export const getArticle = async (slug: string) => {
   return data[0];
 };
 
-export const getSlugs = async () => {
+export const getSlugs = async (): Promise<Slugs[]> => {
   const { data, error } = await supabaseFront.from(slugsDB).select();
 
   if (error) {
