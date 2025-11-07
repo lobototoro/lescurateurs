@@ -68,7 +68,7 @@ export default function CreateArticleForm({
 
   // adding, removing and updating those fields are handled here
   register('urls');
-  const urlsToArray = getValues('urls');
+  const urlsToArray: any = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
@@ -82,13 +82,6 @@ export default function CreateArticleForm({
   };
 
   useEffect(() => {
-    // utility that helps clear errors when addressed live by the user
-    const subscription = watch((value, { name }) => {
-      if (name) {
-        clearErrors(name);
-      }
-    });
-
     // display of the final notification, on success or failure
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
@@ -105,12 +98,11 @@ export default function CreateArticleForm({
     }
 
     return () => {
-      subscription.unsubscribe();
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
     };
-  }, [watch, clearErrors, state]);
+  }, [state]);
 
   return (
     <>

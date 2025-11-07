@@ -58,6 +58,8 @@ export default function UpdateArticleForm({
     reset,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: customResolver(articleSchema),
     defaultValues: {
       id: 0,
@@ -99,7 +101,7 @@ export default function UpdateArticleForm({
 
   // special treatment for urls added by the user
   register('urls');
-  const urlsToArray = getValues('urls');
+  const urlsToArray: any = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
@@ -157,13 +159,6 @@ export default function UpdateArticleForm({
   }, [selectedId]);
 
   useEffect(() => {
-    // clearing errors when addressed
-    const subscription = watch((_value, { name }) => {
-      if (name) {
-        clearErrors(name);
-      }
-    });
-
     // success or failure notification
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
@@ -178,12 +173,11 @@ export default function UpdateArticleForm({
     }
 
     return () => {
-      subscription.unsubscribe();
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
     };
-  }, [watch, clearErrors, state]);
+  }, [state]);
 
   // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {

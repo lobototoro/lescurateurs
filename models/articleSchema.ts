@@ -31,8 +31,8 @@ export const articleSchema = z.object({
     .trim()
     .min(50, 'Le texte principal doit avoir au moins 50 caractères'),
   urls: z.array(urlLinksSchema).optional(),
-  main_audio_url: z.string().trim(),
-  url_to_main_illustration: z.string().trim(),
+  main_audio_url: z.string().trim().min(2, 'champ requis'),
+  url_to_main_illustration: z.string().trim().min(2, 'champ requis'),
   author: z.string().trim().optional(),
   author_email: z.email().trim().optional(),
   created_at: z.string().optional(),
