@@ -52,7 +52,6 @@ export default function UpdateArticleForm({
     register,
     handleSubmit,
     watch,
-    clearErrors,
     setValue,
     getValues,
     reset,

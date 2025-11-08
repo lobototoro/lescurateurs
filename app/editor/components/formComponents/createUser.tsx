@@ -30,8 +30,6 @@ export default function CreateUserForm({
     handleSubmit,
     setValue,
     reset,
-    watch,
-    clearErrors,
     formState: { errors },
   } = useForm<z.infer<typeof userSchema>>({
     mode: 'onChange',
