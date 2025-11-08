@@ -68,7 +68,7 @@ export const createSlug = async (slugObject: Slugs) => {
   return status;
 };
 
-export const createArticle = async (article: Article) => {
+export const createArticle = async (article: any) => {
   try {
     const {
       slug,
@@ -142,7 +142,7 @@ export const createArticle = async (article: Article) => {
 // updates only affect articles table, never slugs table
 // once created, slugs table can only be updated via manageArticles menu
 // setting the `validated` prop only
-export const updateArticle = async (article: Article) => {
+export const updateArticle = async (article: any) => {
   const {
     id,
     introduction,

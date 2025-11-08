@@ -39,11 +39,10 @@ export default function CreateArticleForm({
     register,
     handleSubmit,
     watch,
-    clearErrors,
     setValue,
     getValues,
     reset,
-    formState: { errors },
+    formState: { dirtyFields, touchedFields, errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -103,6 +102,8 @@ export default function CreateArticleForm({
       }
     };
   }, [state]);
+
+  console.info('main ', touchedFields, dirtyFields);
 
   return (
     <>
