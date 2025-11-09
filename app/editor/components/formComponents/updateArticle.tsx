@@ -100,7 +100,7 @@ export default function UpdateArticleForm({
 
   // special treatment for urls added by the user
   register('urls');
-  const urlsToArray: any = getValues('urls');
+  const urlsToArray = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
@@ -176,7 +176,7 @@ export default function UpdateArticleForm({
         clearTimeout(notifTimeout);
       }
     };
-  }, [state]);
+  }, [state, reset, scrollTopAction]);
 
   // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {
@@ -223,7 +223,7 @@ export default function UpdateArticleForm({
             handleSubmit={handleSubmit(onSubmit)}
             register={register as any}
             errors={errors}
-            urlsToArray={urlsToArray}
+            urlsToArray={urlsToArray as any[]}
             updateUrls={updateUrls}
             addInputs={addInputs}
             removeInputs={removeInputs}

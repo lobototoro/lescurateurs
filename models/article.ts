@@ -1,5 +1,3 @@
-import type { Json } from '@/lib/supabase/database.types';
-
 export enum UrlsTypes {
   WEBSITE = 'website',
   VIDEOS = 'videos',

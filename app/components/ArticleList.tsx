@@ -4,7 +4,7 @@ import xss from 'xss';
 
 export const ArticleList = ({ list }: { list: Slugs[] }) => {
   const unslugged = (str: string) => xss(str.replace(/-/g, ' '));
-  const formatDate = (date: Date) =>
+  const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'long',

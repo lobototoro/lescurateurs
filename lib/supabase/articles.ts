@@ -2,6 +2,7 @@ import { createClient as createClientFront } from './client';
 import { createClient } from './back-office.client';
 import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
+import { _undefined } from 'zod/v4/core';
 
 const supabaseFront = createClientFront();
 const supabase = createClient();
@@ -9,6 +10,20 @@ const supabase = createClient();
 const articlesDB =
   process.env.NEXT_PUBLIC_ARTICLES_TABLE || 'articles-development';
 const slugsDB = process.env.NEXT_PUBLIC_SLUGS_TABLE || 'slugs-development';
+
+type ArticleInput = Omit<
+  Article,
+  'id' | 'created_at' | 'updated_at' | 'published_at'
+> & {
+  id?: number | bigint;
+  created_at?: Date;
+  updated_at?: Date | null;
+  published_at?: Date | null;
+};
+
+type SlugInput = Omit<Slugs, 'created_at'> & {
+  created_at?: Date;
+};
 
 // fetch in tables actions
 export const getArticle = async (slug: string): Promise<Article> => {
@@ -52,7 +67,7 @@ export const getArticleById = async (id: number | bigint): Promise<Article> => {
 };
 
 // create items in tables actions
-export const createSlug = async (slugObject: Slugs) => {
+export const createSlug = async (slugObject: SlugInput) => {
   const { slug, created_at, article_id, validated } = slugObject;
   const { error, status } = await supabase.from(slugsDB).insert({
     slug,
@@ -68,7 +83,7 @@ export const createSlug = async (slugObject: Slugs) => {
   return status;
 };
 
-export const createArticle = async (article: any) => {
+export const createArticle = async (article: ArticleInput) => {
   try {
     const {
       slug,
@@ -142,7 +157,7 @@ export const createArticle = async (article: any) => {
 // updates only affect articles table, never slugs table
 // once created, slugs table can only be updated via manageArticles menu
 // setting the `validated` prop only
-export const updateArticle = async (article: any) => {
+export const updateArticle = async (article: ArticleInput) => {
   const {
     id,
     introduction,

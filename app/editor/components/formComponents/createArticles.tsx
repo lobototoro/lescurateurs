@@ -67,7 +67,7 @@ export default function CreateArticleForm({
 
   // adding, removing and updating those fields are handled here
   register('urls');
-  const urlsToArray: any = getValues('urls');
+  const urlsToArray = getValues('urls');
   const [addInputs, removeInputs, updateUrls] = addRemoveInputsFactory(
     urlsToArray,
     setValue
@@ -101,9 +101,7 @@ export default function CreateArticleForm({
         clearTimeout(notifTimeout);
       }
     };
-  }, [state]);
-
-  console.info('main ', touchedFields, dirtyFields);
+  }, [state, reset, scrollTopAction]);
 
   return (
     <>
@@ -123,7 +121,7 @@ export default function CreateArticleForm({
         handleSubmit={handleSubmit(onSubmit)}
         register={register as any}
         errors={errors}
-        urlsToArray={urlsToArray}
+        urlsToArray={urlsToArray as any[]}
         updateUrls={updateUrls}
         addInputs={addInputs}
         removeInputs={removeInputs}
