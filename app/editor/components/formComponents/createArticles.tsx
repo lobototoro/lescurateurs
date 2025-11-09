@@ -39,11 +39,10 @@ export default function CreateArticleForm({
     register,
     handleSubmit,
     watch,
-    clearErrors,
     setValue,
     getValues,
     reset,
-    formState: { errors },
+    formState: { dirtyFields, touchedFields, errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -82,13 +81,6 @@ export default function CreateArticleForm({
   };
 
   useEffect(() => {
-    // utility that helps clear errors when addressed live by the user
-    const subscription = watch((value, { name }) => {
-      if (name) {
-        clearErrors(name);
-      }
-    });
-
     // display of the final notification, on success or failure
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
@@ -105,12 +97,11 @@ export default function CreateArticleForm({
     }
 
     return () => {
-      subscription.unsubscribe();
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
     };
-  }, [watch, clearErrors, state]);
+  }, [state, reset, scrollTopAction]);
 
   return (
     <>
@@ -130,7 +121,7 @@ export default function CreateArticleForm({
         handleSubmit={handleSubmit(onSubmit)}
         register={register as any}
         errors={errors}
-        urlsToArray={urlsToArray}
+        urlsToArray={urlsToArray as any[]}
         updateUrls={updateUrls}
         addInputs={addInputs}
         removeInputs={removeInputs}

@@ -30,8 +30,6 @@ export default function CreateUserForm({
     handleSubmit,
     setValue,
     reset,
-    watch,
-    clearErrors,
     formState: { errors },
   } = useForm<z.infer<typeof userSchema>>({
     mode: 'onChange',
@@ -59,12 +57,6 @@ export default function CreateUserForm({
   register('permissions', { required: true });
 
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name) {
-        clearErrors(name);
-      }
-    });
-
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
       setNotification(true);
@@ -79,10 +71,8 @@ export default function CreateUserForm({
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
-
-      subscription.unsubscribe();
     };
-  }, [state, watch, clearErrors]);
+  }, [state]);
 
   return (
     <section className="section">

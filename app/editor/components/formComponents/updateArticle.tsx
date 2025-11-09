@@ -52,12 +52,13 @@ export default function UpdateArticleForm({
     register,
     handleSubmit,
     watch,
-    clearErrors,
     setValue,
     getValues,
     reset,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: customResolver(articleSchema),
     defaultValues: {
       id: 0,
@@ -157,13 +158,6 @@ export default function UpdateArticleForm({
   }, [selectedId]);
 
   useEffect(() => {
-    // clearing errors when addressed
-    const subscription = watch((_value, { name }) => {
-      if (name) {
-        clearErrors(name);
-      }
-    });
-
     // success or failure notification
     let notifTimeout: NodeJS.Timeout | undefined;
     if (state) {
@@ -178,12 +172,11 @@ export default function UpdateArticleForm({
     }
 
     return () => {
-      subscription.unsubscribe();
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
     };
-  }, [watch, clearErrors, state]);
+  }, [state, reset, scrollTopAction]);
 
   // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {
@@ -230,7 +223,7 @@ export default function UpdateArticleForm({
             handleSubmit={handleSubmit(onSubmit)}
             register={register as any}
             errors={errors}
-            urlsToArray={urlsToArray}
+            urlsToArray={urlsToArray as any[]}
             updateUrls={updateUrls}
             addInputs={addInputs}
             removeInputs={removeInputs}

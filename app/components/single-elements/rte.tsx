@@ -37,11 +37,7 @@ export default function RTE(props: {
   return (
     <ReactQuill
       id={props['field-id']}
-      aria-label={props['aria-label']}
-      className={`custom-text-area ${props.className}`}
-      data-testid={props['data-testid']}
       theme="snow"
-      defaultValue=""
       value={mainContent as string}
       onChange={onChange}
     >

@@ -2,6 +2,7 @@ import { createClient as createClientFront } from './client';
 import { createClient } from './back-office.client';
 import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
+import { _undefined } from 'zod/v4/core';
 
 const supabaseFront = createClientFront();
 const supabase = createClient();
