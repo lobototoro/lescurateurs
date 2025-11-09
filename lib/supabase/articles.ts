@@ -11,20 +11,6 @@ const articlesDB =
   process.env.NEXT_PUBLIC_ARTICLES_TABLE || 'articles-development';
 const slugsDB = process.env.NEXT_PUBLIC_SLUGS_TABLE || 'slugs-development';
 
-type ArticleInput = Omit<
-  Article,
-  'id' | 'created_at' | 'updated_at' | 'published_at'
-> & {
-  id?: number | bigint;
-  created_at?: Date;
-  updated_at?: Date | null;
-  published_at?: Date | null;
-};
-
-type SlugInput = Omit<Slugs, 'created_at'> & {
-  created_at?: Date;
-};
-
 // fetch in tables actions
 export const getArticle = async (slug: string): Promise<Article> => {
   const { data, error } = await supabase
@@ -67,7 +53,7 @@ export const getArticleById = async (id: number | bigint): Promise<Article> => {
 };
 
 // create items in tables actions
-export const createSlug = async (slugObject: SlugInput) => {
+export const createSlug = async (slugObject: Slugs) => {
   const { slug, created_at, article_id, validated } = slugObject;
   const { error, status } = await supabase.from(slugsDB).insert({
     slug,
@@ -83,7 +69,7 @@ export const createSlug = async (slugObject: SlugInput) => {
   return status;
 };
 
-export const createArticle = async (article: ArticleInput) => {
+export const createArticle = async (article: Article) => {
   try {
     const {
       slug,
@@ -157,7 +143,7 @@ export const createArticle = async (article: ArticleInput) => {
 // updates only affect articles table, never slugs table
 // once created, slugs table can only be updated via manageArticles menu
 // setting the `validated` prop only
-export const updateArticle = async (article: ArticleInput) => {
+export const updateArticle = async (article: Article) => {
   const {
     id,
     introduction,

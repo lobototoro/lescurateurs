@@ -58,7 +58,7 @@ export async function createArticleAction(prevState: any, data: any) {
   const urls = data.urls as Json;
   const main_audio_url = data.main_audio_url as string;
   const url_to_main_illustration = data.url_to_main_illustration as string;
-  const created_at = new Date();
+  const created_at = new Date().toISOString();
   const updated_at = null;
   const updated_by = null;
   const published_at = null;
@@ -134,17 +134,15 @@ export async function updateArticleAction(prevState: any, data: any) {
   const urls = data.urls as Json;
   const main_audio_url = data.main_audio_url as string;
   const url_to_main_illustration = data.url_to_main_illustration as string;
-  const created_at = new Date(data.created_at as string);
-  const published_at = data.published_at
-    ? new Date(data.published_at as string)
-    : null;
+  const created_at = data.created_at as string;
+  const published_at = data.published_at ? (data.published_at as string) : null;
   const validated = false; // NEX-72
   const shipped = false;
 
   const author = data.author;
   const author_email = data.author_email;
 
-  const updated_at = new Date();
+  const updated_at = new Date().toISOString();
   const updated_by = session.user.nickname || session.user.email || 'Anonyme';
 
   try {
