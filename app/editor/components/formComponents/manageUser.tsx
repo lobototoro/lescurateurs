@@ -10,11 +10,7 @@ import { useForm } from 'react-hook-form';
 
 import { userSchema } from '@/models/userSchema';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
-import {
-  updateUserAction,
-  getUsersList,
-  deleteUserAction,
-} from '@/app/userActions';
+import { getUsersList, manageUsers } from '@/app/userActions';
 import { PaginatedSearchDisplay } from '@/app/components/single-elements/paginatedSearchResults';
 import {
   adminPermissions,
@@ -27,21 +23,13 @@ import { isEmpty } from '@/lib/utility-functions';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
-import { custom } from 'zod/v3';
 
 export default function ManageUserForm({
   scrollTopAction,
 }: {
   scrollTopAction: () => void;
 }) {
-  const [state, updateAction, isPending] = useActionState(
-    updateUserAction,
-    null
-  );
-  const [secondState, deleteAction, isDeletePending] = useActionState(
-    deleteUserAction,
-    null
-  );
+  const [state, sendAction, isPending] = useActionState(manageUsers, null);
   const [usersList, setUsersList] = useState<z.infer<typeof userSchema>[]>([]);
   const [selectedUser, setSelectedUser] = useState<z.infer<
     typeof userSchema
@@ -121,18 +109,13 @@ export default function ManageUserForm({
       scrollTopAction();
       notifTimeout = setTimer();
     }
-    if (secondState) {
-      setNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimer();
-    }
 
     return () => {
       if (notifTimeout) {
         clearTimeout(notifTimeout);
       }
     };
-  }, [state, secondState]);
+  }, [state]);
 
   const handleSelectedUser = (
     user: z.infer<typeof userSchema>,
@@ -156,8 +139,9 @@ export default function ManageUserForm({
     if (usertoBeDeleted !== null) {
       startTransition(() => {
         const formData = new FormData();
+        formData.append('actionName', 'delete');
         formData.append('email', usertoBeDeleted);
-        deleteAction(formData);
+        sendAction(formData);
         modalRef.current?.classList.remove('is-active');
       });
     }
@@ -173,12 +157,13 @@ export default function ManageUserForm({
   const onSubmit = (data: z.infer<typeof userSchema>) => {
     startTransition(() => {
       const formData = new FormData();
+      formData.append('actionName', 'update');
       formData.append('id', data.id !== undefined ? String(data.id) : '');
       formData.append('email', data.email);
       formData.append('tiers_service_ident', data.tiers_service_ident);
       formData.append('role', data.role);
       formData.append('permissions', data.permissions);
-      updateAction(formData);
+      sendAction(formData);
     });
   };
 
@@ -197,11 +182,6 @@ export default function ManageUserForm({
       {notification && state && (
         <NotificationsComponent
           state={state as { message: boolean; text: string }}
-        />
-      )}
-      {notification && secondState && (
-        <NotificationsComponent
-          state={secondState as { message: boolean; text: string }}
         />
       )}
       {usersList?.length > 0 && isEmpty(selectedUser) && (
@@ -325,14 +305,12 @@ export default function ManageUserForm({
                 data-testid="final-submit"
                 type="submit"
                 className={
-                  isPending || isDeletePending
+                  isPending
                     ? 'button is-primary is-size-6 has-text-white is-loading'
                     : 'button is-primary is-size-6 has-text-white'
                 }
               >
-                {isPending || isDeletePending
-                  ? 'Chargement...'
-                  : "Modifier l'utilisateur"}
+                {isPending ? 'Chargement...' : "Modifier l'utilisateur"}
               </button>
               <button
                 className="button is-secondary is-size-6 has-text-white"

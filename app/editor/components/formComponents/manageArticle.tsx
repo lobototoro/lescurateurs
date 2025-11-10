@@ -1,17 +1,13 @@
 'use client';
 import {
-  JSX,
   startTransition,
   useActionState,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import {
-  deleteArticleAction,
-  shipArticleAction,
-  validateArticleAction,
-} from '@/app/articleActions';
+
+import { manageArticleActions } from '@/app/articleActions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import SearchArticle from './searchArticle';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
@@ -25,6 +21,7 @@ const sendAction = (
 ) => {
   startTransition(() => {
     const formData = new FormData();
+    formData.append('actionName', action);
     formData.append('id', String(id));
     if (action === 'validate') {
       formData.append('validation', choice as string);
@@ -41,34 +38,17 @@ export default function ManageArticleForm({
   scrollTopAction,
 }: {
   scrollTopAction: () => void;
-}): JSX.Element {
-  const [deleteState, deleteAction, isDeletePending] = useActionState(
-    deleteArticleAction,
+}): React.ReactElement {
+  const [state, manageArticle, isPending] = useActionState(
+    manageArticleActions,
     null
   );
-  const [validateState, validateAction, isValidatePending] = useActionState(
-    validateArticleAction,
-    null
-  );
-  const [shipState, shipAction, isShipPending] = useActionState(
-    shipArticleAction,
-    null
-  ); // Assuming shipAction is defined elsewhere
-  const [deleteNotification, setDeleteNotification] = useState<boolean>(false);
-  const [validateNotification, setValidateNotification] =
-    useState<boolean>(false);
-  const [shipNotification, setShipNotification] = useState<boolean>(false);
+  const [notification, setNotification] = useState<boolean>(false);
   const [action, setAction] = useState<Record<string, any>>({});
   const [modalInfos, setModalInfos] = useState<Record<string, any>>({});
   const modalRef = useRef<HTMLDivElement>(null);
   const [cancelSearchDisplay, setCancelSearchDisplay] =
     useState<boolean>(false);
-  const [pendingFrom, setPendingFrom] = useState<
-    | typeof isDeletePending
-    | typeof isValidatePending
-    | typeof isShipPending
-    | null
-  >(null); // mix state for the pending action
 
   // close action on modal
   const onclose = () => {
@@ -86,7 +66,7 @@ export default function ManageArticleForm({
           text: 'Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.',
           ctaText: 'Supprimer',
           ctaAction: () => {
-            sendAction('delete', action.id, deleteAction);
+            sendAction('delete', action.id, manageArticle);
             onclose();
           },
           cancelAction: () => {
@@ -96,7 +76,7 @@ export default function ManageArticleForm({
           cancelText: 'Annuler',
           onClose: onclose,
         });
-        setPendingFrom(isDeletePending);
+
         modalRef.current?.classList.add('is-active');
         break;
       case 'validate':
@@ -105,17 +85,17 @@ export default function ManageArticleForm({
           text: 'Êtes-vous sûr de vouloir valider / invalider cet article ?',
           ctaText: 'Valider',
           ctaAction: () => {
-            sendAction('validate', action.id, validateAction, 'true');
+            sendAction('validate', action.id, manageArticle, 'true');
             onclose();
           },
           cancelAction: () => {
-            sendAction('validate', action.id, validateAction, 'false');
+            sendAction('validate', action.id, manageArticle, 'false');
             onclose();
           },
           cancelText: 'Invalider',
           onClose: onclose,
         });
-        setPendingFrom(isValidatePending);
+
         modalRef.current?.classList.add('is-active');
         break;
       case 'ship':
@@ -124,17 +104,17 @@ export default function ManageArticleForm({
           text: 'Êtes-vous sûr de vouloir MEP cet article ?',
           ctaText: 'ONLINE',
           ctaAction: () => {
-            sendAction('ship', action.id, shipAction, 'true');
+            sendAction('ship', action.id, manageArticle, 'true');
             onclose();
           },
           cancelAction: () => {
-            sendAction('ship', action.id, shipAction, 'false');
+            sendAction('ship', action.id, manageArticle, 'false');
             onclose();
           },
           cancelText: 'OFFLINE',
           onClose: onclose,
         });
-        setPendingFrom(isShipPending);
+
         modalRef.current?.classList.add('is-active');
         break;
       default:
@@ -155,27 +135,11 @@ export default function ManageArticleForm({
     // each server action gets to have its own timeout
     let notifTimeout: NodeJS.Timeout | undefined;
     let cancelDisplayTimeout: NodeJS.Timeout | undefined;
-    if (deleteState?.message) {
-      setDeleteNotification(true);
+    if (state) {
+      setNotification(true);
       scrollTopAction();
       notifTimeout = setTimeout(() => {
-        setDeleteNotification(false);
-      }, 6000);
-    }
-
-    if (validateState?.message) {
-      setValidateNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimeout(() => {
-        setValidateNotification(false);
-      }, 6000);
-    }
-
-    if (shipState?.message) {
-      setShipNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimeout(() => {
-        setShipNotification(false);
+        setNotification(false);
       }, 6000);
     }
 
@@ -194,7 +158,7 @@ export default function ManageArticleForm({
         clearTimeout(cancelDisplayTimeout);
       }
     };
-  }, [deleteState, validateState, shipState, cancelSearchDisplay]);
+  }, [cancelSearchDisplay, state]);
 
   return (
     <>
@@ -207,24 +171,14 @@ export default function ManageArticleForm({
         cancelAction={modalInfos.cancelAction}
         cancelText={modalInfos.cancelText}
         onClose={modalInfos.onClose}
-        isPending={pendingFrom}
+        isPending={isPending}
       />
-      {deleteNotification && deleteState?.message && (
+      {notification && state && (
         <NotificationsComponent
-          state={deleteState as { message: boolean; text: string }}
+          state={state as { message: boolean; text: string }}
         />
       )}
-      {validateNotification && validateState?.message && (
-        <NotificationsComponent
-          state={validateState as { message: boolean; text: string }}
-        />
-      )}
-      {shipNotification && shipState?.message && (
-        <NotificationsComponent
-          state={shipState as { message: boolean; text: string }}
-        />
-      )}
-      {!deleteNotification && !validateNotification && !shipNotification && (
+      {!notification && (
         <>
           <SearchArticle
             target="manage"

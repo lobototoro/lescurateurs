@@ -4,13 +4,10 @@ import { describe, test, expect, vi, beforeEach, Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ManageArticleForm from '@/app/editor/components/formComponents/manageArticle';
 import * as articleActions from '@/app/articleActions';
-import * as searchActions from '@/app/searchActions';
 
 // Mock the article actions
 vi.mock('@/app/articleActions', () => ({
-  deleteArticleAction: vi.fn(),
-  shipArticleAction: vi.fn(),
-  validateArticleAction: vi.fn(),
+  manageArticleActions: vi.fn(),
 }));
 
 // Mock the search actions
@@ -80,7 +77,7 @@ describe('ManageArticleForm', () => {
 
   test('handles delete action flow', async () => {
     // Mock useActionState return value
-    const mockDeleteState = articleActions.deleteArticleAction as Mock;
+    const mockDeleteState = articleActions.manageArticleActions as Mock;
     mockDeleteState.mockResolvedValue({
       message: true,
       text: 'Article deleted',

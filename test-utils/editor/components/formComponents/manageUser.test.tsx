@@ -2,17 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import ManageUserForm from '@/app/editor/components/formComponents/manageUser';
-import {
-  getUsersList,
-  updateUserAction,
-  deleteUserAction,
-} from '@/app/userActions';
+import { getUsersList, manageUsers } from '@/app/userActions';
 
 // Mocks for dependencies
 vi.mock('@/app/userActions', () => ({
-  updateUserAction: vi.fn(),
   getUsersList: vi.fn(),
-  deleteUserAction: vi.fn(),
+  manageUsers: vi.fn(),
 }));
 
 // vi.mock('@/models/userSchema', () => ({
@@ -79,17 +74,20 @@ const scrollTopAction = vi.fn();
 
 describe('ManageUserForm', () => {
   beforeEach(() => {
-    // @ts-ignore
-    getUsersList.mockResolvedValue({
+    (getUsersList as any).mockResolvedValue({
       message: true,
       usersList: [mockUser],
     });
 
-    // @ts-ignore
-    updateUserAction.mockResolvedValue({ message: true, text: 'User updated' });
-
-    // @ts-ignore
-    deleteUserAction.mockResolvedValue({ message: true, text: 'User deleted' });
+    // Set up sequential resolved values for manageUsers (e.g. update then delete)
+    (manageUsers as any).mockResolvedValueOnce({
+      message: true,
+      text: 'User updated',
+    });
+    (manageUsers as any).mockResolvedValueOnce({
+      message: true,
+      text: 'User deleted',
+    });
   });
 
   afterEach(() => {
