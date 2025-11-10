@@ -123,3 +123,19 @@ export async function deleteUserAction(preState: any, formData: FormData) {
     };
   }
 }
+
+export async function manageUsers(prevState: any, formData: FormData) {
+  const actionName = formData.get('actionName') as string;
+
+  switch (actionName) {
+    case 'update':
+      return updateUserAction(prevState, formData);
+    case 'delete':
+      return deleteUserAction(prevState, formData);
+    default:
+      return {
+        message: false,
+        text: "Action d'utilisateur non reconnue",
+      };
+  }
+}

@@ -289,7 +289,7 @@ export async function validateArticleAction(
 
   try {
     const validation = await validateArticle(validationArgs);
-    console.log('vali response ', validation);
+
     if (
       validation.articleValidationStatus !== 204 ||
       validation.slugValidationStatus !== 204
@@ -385,5 +385,23 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
       message: false,
       text: "Une erreur est survenue lors de la mise en MeP de l'article",
     };
+  }
+}
+
+export async function manageArticleActions(prevState: any, formData: FormData) {
+  const actionName = formData.get('actionName') as string;
+
+  switch (actionName) {
+    case 'delete':
+      return await deleteArticleAction(prevState, formData);
+    case 'validate':
+      return await validateArticleAction(prevState, formData);
+    case 'ship':
+      return await shipArticleAction(prevState, formData);
+    default:
+      return {
+        message: false,
+        text: 'Action inconnue',
+      };
   }
 }
