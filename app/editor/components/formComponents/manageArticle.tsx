@@ -135,7 +135,7 @@ export default function ManageArticleForm({
     // each server action gets to have its own timeout
     let notifTimeout: NodeJS.Timeout | undefined;
     let cancelDisplayTimeout: NodeJS.Timeout | undefined;
-    if (state?.message) {
+    if (state) {
       setNotification(true);
       scrollTopAction();
       notifTimeout = setTimeout(() => {
@@ -173,7 +173,7 @@ export default function ManageArticleForm({
         onClose={modalInfos.onClose}
         isPending={isPending}
       />
-      {notification && state?.message && (
+      {notification && state && (
         <NotificationsComponent
           state={state as { message: boolean; text: string }}
         />
