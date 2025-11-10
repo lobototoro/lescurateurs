@@ -77,7 +77,6 @@ export default function ManageArticleForm({
           onClose: onclose,
         });
 
-        // setPendingFrom(isDeletePending);
         modalRef.current?.classList.add('is-active');
         break;
       case 'validate':
@@ -97,7 +96,6 @@ export default function ManageArticleForm({
           onClose: onclose,
         });
 
-        // setPendingFrom(isValidatePending);
         modalRef.current?.classList.add('is-active');
         break;
       case 'ship':
@@ -117,7 +115,6 @@ export default function ManageArticleForm({
           onClose: onclose,
         });
 
-        // setPendingFrom(isShipPending);
         modalRef.current?.classList.add('is-active');
         break;
       default:

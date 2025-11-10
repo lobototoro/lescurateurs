@@ -305,14 +305,12 @@ export default function ManageUserForm({
                 data-testid="final-submit"
                 type="submit"
                 className={
-                  isPending || isPending
+                  isPending
                     ? 'button is-primary is-size-6 has-text-white is-loading'
                     : 'button is-primary is-size-6 has-text-white'
                 }
               >
-                {isPending || isPending
-                  ? 'Chargement...'
-                  : "Modifier l'utilisateur"}
+                {isPending ? 'Chargement...' : "Modifier l'utilisateur"}
               </button>
               <button
                 className="button is-secondary is-size-6 has-text-white"

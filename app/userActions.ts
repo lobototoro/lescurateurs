@@ -129,9 +129,9 @@ export async function manageUsers(prevState: any, formData: FormData) {
 
   switch (actionName) {
     case 'update':
-      return updateUserAction(prevState, formData);
+      return await updateUserAction(prevState, formData);
     case 'delete':
-      return deleteUserAction(prevState, formData);
+      return await deleteUserAction(prevState, formData);
     default:
       return {
         message: false,
