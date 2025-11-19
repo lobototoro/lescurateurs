@@ -37,7 +37,6 @@ export default function ManageUserForm({
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
   );
-  const [notification, setNotification] = useState<boolean>(false);
   const [usertoBeDeleted, setUserToBeDeleted] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +61,6 @@ export default function ManageUserForm({
   });
 
   const performedAttheEnd = () => {
-    setNotification(false);
     setSelectedUser(null);
     setUserToBeDeleted(null);
     setUsersList([]);
@@ -86,12 +84,6 @@ export default function ManageUserForm({
     }
   };
 
-  const setTimer = () => {
-    return setTimeout(() => {
-      performedAttheEnd();
-    }, 6000);
-  };
-
   const fetchUsers = async () => {
     const usersList = await getAllUsers();
     setUsersList(usersList);
@@ -101,21 +93,6 @@ export default function ManageUserForm({
     //performed only once when page is first displayed
     fetchUsers();
   }, []);
-
-  useEffect(() => {
-    let notifTimeout: NodeJS.Timeout | undefined;
-    if (state) {
-      setNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimer();
-    }
-
-    return () => {
-      if (notifTimeout) {
-        clearTimeout(notifTimeout);
-      }
-    };
-  }, [state]);
 
   const handleSelectedUser = (
     user: z.infer<typeof userSchema>,
@@ -179,9 +156,11 @@ export default function ManageUserForm({
         cancelText="Annuler"
         onClose={cancelDeletion}
       />
-      {notification && state && (
+      {state && (
         <NotificationsComponent
-          state={state as { message: boolean; text: string }}
+          notificationAction={state as { message: boolean; text: string }}
+          performClosingActions={performedAttheEnd}
+          toTop={scrollTopAction}
         />
       )}
       {usersList?.length > 0 && isEmpty(selectedUser) && (
