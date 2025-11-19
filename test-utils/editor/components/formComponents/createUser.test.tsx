@@ -88,9 +88,7 @@ describe('CreateUserForm', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Succès: User created successfully')
-      ).toBeDefined();
+      expect(screen.getByText('User created successfully')).toBeDefined();
     });
   });
 
@@ -112,7 +110,7 @@ describe('CreateUserForm', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Erreur: Failed to create user')).toBeDefined();
+      expect(screen.getByText('Failed to create user')).toBeDefined();
     });
   });
 });

@@ -42,9 +42,11 @@ vi.mock('@/app/editor/components/formComponents/searchArticle', () => ({
 
 // Mock the notifications component
 vi.mock('@/app/components/single-elements/notificationsComponent', () => ({
-  default: ({ state }: { state: { message: boolean; text: string } }) => (
-    <div data-testid="notification">{state.text}</div>
-  ),
+  default: ({
+    notificationAction,
+  }: {
+    notificationAction: { message: boolean; text: string };
+  }) => <div data-testid="notification">{notificationAction.text}</div>,
 }));
 
 // Mock the modal component
@@ -99,7 +101,7 @@ describe('ManageArticleForm', () => {
 
     // Notification should appear
     await waitFor(() => {
-      expect(scrollTopActionMock).toHaveBeenCalled();
+      expect(screen.getByText('Article deleted')).toBeDefined();
     });
   });
 
