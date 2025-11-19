@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix",
+    "lint:fix": "eslint . --fix",
     "test": "vitest run --coverage",
     "test:all": "playwright test && npm run test",
     "playwright": "playwright test",

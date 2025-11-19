@@ -1,10 +1,9 @@
 import { getSlugs } from '@/lib/supabase/articles';
-import { Slugs } from '@/models/slugs';
 import { ArticleList } from './components/ArticleList';
 import { Suspense } from 'react';
 
 export default async function Home() {
-  const slugs = (await getSlugs()) as Slugs[];
+  const slugs = await getSlugs();
 
   return (
     <section>

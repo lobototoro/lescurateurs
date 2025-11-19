@@ -81,7 +81,6 @@ const ignoredFolders = defineConfig([
     'final-coverage/**',
     'playwright-report/**',
     'test-results/**',
-    'test-utils/**',
     'tests-e2e/**',
     'out/**',
     'build/**',

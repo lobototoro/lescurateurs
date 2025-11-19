@@ -9,7 +9,7 @@ export default function NotificationsComponent({
   notificationAction: {
     message: boolean;
     text: string;
-  };
+  } | null;
   performClosingActions: () => void;
   toTop: () => void;
 }): React.ReactElement {
@@ -31,7 +31,7 @@ export default function NotificationsComponent({
         clearTimeout(notifTimeout);
       }
     };
-  }, [notificationAction]);
+  }, [notificationAction, performClosingActions, toTop]);
 
   return (
     <div
@@ -39,7 +39,7 @@ export default function NotificationsComponent({
       data-testid="notification"
     >
       <p className="content">
-        {notificationAction?.text && (
+        {notificationAction !== null && (
           <span className="has-text-weight-bold">
             {notificationAction.text}
           </span>
