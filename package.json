@@ -61,6 +61,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-hooks": "^6.1.1",
     "husky": "^9.1.7",
     "istanbul-merge": "^2.0.0",
     "jsdom": "^26.1.0",
