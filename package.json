@@ -18,7 +18,7 @@
     "report:coverage": "npx istanbul report --include ./final-coverage/final-coverage.json text"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^4.4.2",
+    "@auth0/nextjs-auth0": "^4.13.0",
     "@hookform/resolvers": "^5.0.1",
     "@material-design-icons/font": "^0.14.15",
     "@supabase/ssr": "^0.7.0",
