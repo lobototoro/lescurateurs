@@ -29,6 +29,7 @@ export default function SearchArticle({
 
   useEffect(() => {
     if (cancelSearchDisplay) {
+      /* eslint-disable-next-line */
       setSearchTerm('');
       setSlugs([]);
       setNotification('');

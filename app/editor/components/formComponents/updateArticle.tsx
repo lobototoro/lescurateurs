@@ -45,7 +45,6 @@ export default function UpdateArticleForm({
   const [currentArticle, setCurrentArticle] =
     useState<z.infer<typeof articleSchema>>();
   const [selectedId, setSelectedId] = useState<string | number>();
-  const [notification, setNotification] = useState<boolean>(false);
 
   // declaring react hook form variables with the full template of the article template
   const {
@@ -157,26 +156,11 @@ export default function UpdateArticleForm({
     });
   }, [selectedId]);
 
-  useEffect(() => {
-    // success or failure notification
-    let notifTimeout: NodeJS.Timeout | undefined;
-    if (state) {
-      setNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimeout(() => {
-        setSelectedId(undefined);
-        setCurrentArticle(undefined);
-        reset();
-        setNotification(false);
-      }, 6000);
-    }
-
-    return () => {
-      if (notifTimeout) {
-        clearTimeout(notifTimeout);
-      }
-    };
-  }, [state, reset, scrollTopAction]);
+  const closingActions = () => {
+    setSelectedId(undefined);
+    setCurrentArticle(undefined);
+    reset();
+  };
 
   // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {
@@ -194,9 +178,11 @@ export default function UpdateArticleForm({
         color="white"
         spacings="mt-6 mb-4"
       />
-      {notification && (
+      {state && (
         <NotificationsComponent
-          state={state as { message: boolean; text: string }}
+          notificationAction={state as { message: boolean; text: string }}
+          performClosingActions={closingActions}
+          toTop={scrollTopAction}
         />
       )}
       {identicalWarnMessage && (

@@ -1,11 +1,5 @@
 'use client';
-import {
-  useActionState,
-  useEffect,
-  startTransition,
-  JSX,
-  useState,
-} from 'react';
+import React, { useActionState, startTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -27,12 +21,11 @@ export default function CreateArticleForm({
   scrollTopAction,
 }: {
   scrollTopAction: () => void;
-}): JSX.Element {
+}): React.ReactElement {
   const [state, formAction, isPending] = useActionState(
     createArticleAction,
     null
   );
-  const [notification, setNotification] = useState<boolean>(false);
 
   // declaring react hook form variables
   const {
@@ -42,7 +35,7 @@ export default function CreateArticleForm({
     setValue,
     getValues,
     reset,
-    formState: { dirtyFields, touchedFields, errors },
+    formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -80,29 +73,6 @@ export default function CreateArticleForm({
     });
   };
 
-  useEffect(() => {
-    // display of the final notification, on success or failure
-    let notifTimeout: NodeJS.Timeout | undefined;
-    if (state) {
-      setNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimeout(() => {
-        if (state?.message) {
-          // NEX-65 in case of error, we don't reset the form
-          // NEX-65
-          reset();
-        }
-        setNotification(false);
-      }, 6000);
-    }
-
-    return () => {
-      if (notifTimeout) {
-        clearTimeout(notifTimeout);
-      }
-    };
-  }, [state, reset, scrollTopAction]);
-
   return (
     <>
       <ArticleTitle
@@ -112,9 +82,11 @@ export default function CreateArticleForm({
         color="white"
         spacings="mt-6 mb-4"
       />
-      {notification && (
+      {state && (
         <NotificationsComponent
-          state={state as { message: boolean; text: string }}
+          notificationAction={state as { message: boolean; text: string }}
+          performClosingActions={reset}
+          toTop={scrollTopAction}
         />
       )}
       <ArticleMarkupForm

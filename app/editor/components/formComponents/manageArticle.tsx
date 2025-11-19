@@ -43,7 +43,6 @@ export default function ManageArticleForm({
     manageArticleActions,
     null
   );
-  const [notification, setNotification] = useState<boolean>(false);
   const [action, setAction] = useState<Record<string, any>>({});
   const [modalInfos, setModalInfos] = useState<Record<string, any>>({});
   const modalRef = useRef<HTMLDivElement>(null);
@@ -127,38 +126,10 @@ export default function ManageArticleForm({
     if (action?.actionName === undefined) {
       return;
     } else {
+      /* eslint-disable-next-line react-hooks/set-state-in-effect */
       handleAction(action);
     }
   }, [action]);
-
-  useEffect(() => {
-    // each server action gets to have its own timeout
-    let notifTimeout: NodeJS.Timeout | undefined;
-    let cancelDisplayTimeout: NodeJS.Timeout | undefined;
-    if (state) {
-      setNotification(true);
-      scrollTopAction();
-      notifTimeout = setTimeout(() => {
-        setNotification(false);
-      }, 6000);
-    }
-
-    // in case of cancel search
-    if (cancelSearchDisplay) {
-      cancelDisplayTimeout = setTimeout(() => {
-        setCancelSearchDisplay(false);
-      }, 1000);
-    }
-
-    return () => {
-      if (notifTimeout) {
-        clearTimeout(notifTimeout);
-      }
-      if (cancelDisplayTimeout) {
-        clearTimeout(cancelDisplayTimeout);
-      }
-    };
-  }, [cancelSearchDisplay, state]);
 
   return (
     <>
@@ -173,35 +144,33 @@ export default function ManageArticleForm({
         onClose={modalInfos.onClose}
         isPending={isPending}
       />
-      {notification && state && (
+      {state && (
         <NotificationsComponent
-          state={state as { message: boolean; text: string }}
+          notificationAction={state as { message: boolean; text: string }}
+          performClosingActions={() => {}}
+          toTop={scrollTopAction}
         />
       )}
-      {!notification && (
-        <>
-          <SearchArticle
-            target="manage"
-            cancelSearchDisplay={cancelSearchDisplay}
-            manageSelection={setAction}
-          />
-          <div className="is-flex is-justify-content-flex-end">
-            <button
-              className="button is-secondary is-size-6 has-text-white mt-2 mb-2"
-              data-testid="back-to-search"
-              onClick={(event: React.MouseEvent) => {
-                event.preventDefault();
+      <SearchArticle
+        target="manage"
+        cancelSearchDisplay={cancelSearchDisplay}
+        manageSelection={setAction}
+      />
+      <div className="is-flex is-justify-content-flex-end">
+        <button
+          className="button is-secondary is-size-6 has-text-white mt-2 mb-2"
+          data-testid="back-to-search"
+          onClick={(event: React.MouseEvent) => {
+            event.preventDefault();
 
-                // probably flush states from all useActionState methods
-                // setNotification(false);
-                setCancelSearchDisplay(true);
-              }}
-            >
-              Retour à la recherche
-            </button>
-          </div>
-        </>
-      )}
+            // probably flush states from all useActionState methods
+            // setNotification(false);
+            setCancelSearchDisplay(true);
+          }}
+        >
+          Retour à la recherche
+        </button>
+      </div>
     </>
   );
 }

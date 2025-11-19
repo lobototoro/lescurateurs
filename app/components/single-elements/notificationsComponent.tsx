@@ -1,25 +1,52 @@
-import { JSX } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+import React, { useState, useEffect } from 'react';
 
 export default function NotificationsComponent({
-  state
+  notificationAction,
+  performClosingActions,
+  toTop,
 }: {
-  state: {
+  notificationAction: {
     message: boolean;
     text: string;
-  };
-}): JSX.Element {
+  } | null;
+  performClosingActions: () => void;
+  toTop: () => void;
+}): React.ReactElement {
+  const [visibility, setVisibility] = useState<boolean>(false);
+
+  useEffect(() => {
+    let notifTimeout: NodeJS.Timeout | undefined;
+    if (notificationAction !== null) {
+      toTop();
+      setVisibility(true);
+      notifTimeout = setTimeout(() => {
+        performClosingActions();
+        setVisibility(false);
+      }, 6000);
+    }
+
+    return () => {
+      if (notifTimeout) {
+        clearTimeout(notifTimeout);
+      }
+    };
+  }, [notificationAction, performClosingActions, toTop]);
+
   return (
     <div
-      className={`notification ${state?.message ? 'is-success' : 'is-danger'}`}
+      className={`notification ${notificationAction?.message ? 'is-success' : 'is-danger'} ${visibility ? 'is-block' : 'is-hidden'}`}
       data-testid="notification"
     >
       <p className="content">
-        {state?.text && (
-          <span className="has-text-weight-bold">{state.text}</span>
+        {notificationAction !== null && (
+          <span className="has-text-weight-bold">
+            {notificationAction.text}
+          </span>
         )}
         <br />
         <span>Cette notification se fermera d'elle-même</span>
       </p>
     </div>
   );
-};
+}

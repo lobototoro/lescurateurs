@@ -13,6 +13,7 @@ import {
 import { userSchema } from '@/models/userSchema';
 import { createUserAction } from '@/app/userActions';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
+import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 
 export default function CreateUserForm({
   scrollTopAction,
@@ -23,7 +24,6 @@ export default function CreateUserForm({
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
   );
-  const [notification, setNotification] = useState<boolean>(false);
 
   const {
     register,
@@ -56,37 +56,14 @@ export default function CreateUserForm({
 
   register('permissions', { required: true });
 
-  useEffect(() => {
-    let notifTimeout: NodeJS.Timeout | undefined;
-    if (state) {
-      setNotification(true);
-      scrollTopAction();
-      reset();
-      notifTimeout = setTimeout(() => {
-        setNotification(false);
-      }, 6000);
-    }
-
-    return () => {
-      if (notifTimeout) {
-        clearTimeout(notifTimeout);
-      }
-    };
-  }, [state]);
-
   return (
     <section className="section">
-      {notification && (
-        <div
-          className={`notification ${state && state.message ? 'is-success' : 'is-danger'}`}
-        >
-          <p className="content">
-            {state && state.message ? 'Succès' : 'Erreur'}:{' '}
-            {state && state.text}
-            <br />
-            <span>Cette notification se fermera d'elle-même</span>
-          </p>
-        </div>
+      {state && (
+        <NotificationsComponent
+          notificationAction={state as { message: boolean; text: string }}
+          performClosingActions={reset}
+          toTop={scrollTopAction}
+        />
       )}
       <ArticleTitle
         text="Créer un utilisateur"

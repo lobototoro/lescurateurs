@@ -40,7 +40,8 @@ vi.mock('@/app/editor/components/resolvers/customResolver', () => ({
 }));
 vi.mock(import('@/lib/utility-functions'), async (importOriginal) => {
   const actual = await importOriginal();
-  return {
+  
+return {
     ...actual,
     urlsToArrayUtil: (urls: string) => {
       try {
@@ -110,6 +111,7 @@ describe('CreateArticleForm', () => {
 
   it('adds and removes URL inputs', async () => {
     render(<CreateArticleForm scrollTopAction={scrollTopAction} />);
+
     // Simulate addInputs and removeInputs via props
     // Since ArticleMarkupForm is mocked, we can't trigger addInputs directly
     // Instead, test that urlsToArray is initially empty
@@ -142,6 +144,7 @@ describe('CreateArticleForm', () => {
     fireEvent.change(illustrationInput, {
       target: { value: 'http://example.com/1.jpg' },
     });
+
     // No errors should be present
     expect(screen.queryByText(/champ requis/i)).not.toBeInTheDocument();
   });

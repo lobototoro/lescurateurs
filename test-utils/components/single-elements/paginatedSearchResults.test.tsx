@@ -319,13 +319,16 @@ describe('PaginatedSearchDisplay', () => {
         handleReference={mockHandleReference}
       />
     );
+
     // Page 1
     expect(screen.getByText('slug-1')).toBeInTheDocument();
+
     // Go to page 2
     const nextButton = screen.getByTestId('next-button');
     fireEvent.click(nextButton);
     expect(screen.getByText('slug-2')).toBeInTheDocument();
     expect(screen.queryByText('slug-1')).toBeNull();
+
     // Go to page 3
     fireEvent.click(nextButton);
     expect(screen.getByText('slug-3')).toBeInTheDocument();
