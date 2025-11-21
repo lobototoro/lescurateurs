@@ -1,56 +1,34 @@
 /**
+ * Module documentation for the RedirectFragment component file.
+ *
  * @packageDocumentation
- * Client-side redirection fragment for Next.js applications.
+ *
+ * This module exposes a small React component that displays a "Redirecting..."
+ * message and performs a client-side navigation to a provided URL after a short delay.
  *
  * @remarks
- * This module exports a React component that performs a delayed, client-side redirect
- * using the Next.js App Router. To mitigate open redirect attacks, the destination
- * URL is validated and must be same-origin with the current page.
- *
- * The component provides:
- * - A short delay before navigation for better UX and screen reader announcements.
- * - An accessible status region with a fallback link if automatic navigation fails.
- * - Clear error messaging when an invalid URL is supplied.
- *
- * @example
- * ```tsx
- * import { RedirectFragment } from './RedirectFragment';
- *
- * export default function Page() {
- *   return <RedirectFragment url="/dashboard" />;
- * }
- * ```
- *
- * @security
- * Only same-origin URLs are allowed. Cross-origin or malformed URLs will be rejected
- * and no navigation will occur.
- *
- * @see https://nextjs.org/docs/app/building-your-application/routing#linking-and-navigating
- * @see https://typedoc.org/
- * @since 1.0.0
+ * - The implementation relies on a client-only effect (useEffect) to perform the redirect.
+ * - A timer is used to delay the navigation and it's cleared on unmount to avoid leaks.
  */
 
 /**
- * Redirects to a validated, same-origin URL after a short delay while rendering an
- * accessible status message and a fallback link.
+ * RedirectFragment
  *
- * @param props - Component properties.
- * @param props.url - Destination URL. Must share the same origin as the current page.
- * If invalid or cross-origin, the component displays an error and does not navigate.
- *
- * @returns A status UI indicating redirect progress, or an error message when the
- * provided URL is invalid.
- *
- * @example
- * ```tsx
- * // Navigate to an internal route
- * <RedirectFragment url="/settings/profile" />
- * ```
+ * Renders a brief "Redirecting..." message and programmatically navigates the browser
+ * to the provided URL after a short timeout.
  *
  * @remarks
- * - Uses Next.js `useRouter().push` for internal navigation.
- * - Announces status changes via `aria-live="polite"` for assistive technologies.
- * - Includes a fallback anchor so users can manually navigate if needed.
+ * - This component is intended for client-side use only.
+ * - It uses window.location.href to perform the redirect.
+ * - The internal timer is cleaned up in the effect cleanup function.
+ *
+ * @param props - Component properties.
+ * @param props.url - The destination URL to navigate to. Example: "https://example.com"
+ *
+ * @example
+ * <RedirectFragment url="https://example.com" />
+ *
+ * @public
  */
 'use client';
 
