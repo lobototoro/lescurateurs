@@ -15,21 +15,21 @@ describe('PaginatedSearchDisplay', () => {
       slug: 'slug-1',
       created_at: '2023-01-01',
       article_id: 1,
-      validated: 'false',
+      validated: false,
     },
     {
       id: 2,
       slug: 'slug-2',
       created_at: '2023-01-02',
       article_id: 2,
-      validated: 'true',
+      validated: true,
     },
     {
       id: 3,
       slug: 'slug-3',
       created_at: '2023-01-03',
       article_id: 3,
-      validated: 'false',
+      validated: false,
     },
   ];
 
