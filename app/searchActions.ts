@@ -80,9 +80,11 @@ export async function searchForSlugs(searchTerm: string) {
       slugs,
     };
   } catch (error) {
+    console.error('Error searching for slugs:', error);
+    
     return {
       message: false,
-      text: 'Error searching for slugs',
+      text: error instanceof Error ? error.message : 'Error searching for slugs',
     };
   }
 }
@@ -101,9 +103,11 @@ export async function searchForArticle(slug: string) {
       article,
     };
   } catch (error) {
+    console.error('Error getting article:', error);
+    
     return {
       message: false,
-      text: 'Error getting article',
+      text: error instanceof Error ? error.message : 'Error getting article',
     };
   }
 }

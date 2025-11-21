@@ -64,28 +64,17 @@ export type NotificationsComponentProps = {
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useState, useEffect } from 'react';
 
-export default function NotificationsComponent({
-  notificationAction,
-  performClosingActions,
-  toTop,
-}: {
-  notificationAction: {
-    message: boolean;
-    text: string;
-  } | null;
-  performClosingActions: () => void;
-  toTop: () => void;
-}): React.ReactElement {
+export default function NotificationsComponent(props: NotificationsComponentProps): React.ReactElement {
   const [visibility, setVisibility] = useState<boolean>(false);
 
   useEffect(() => {
     let notifTimeout: NodeJS.Timeout | undefined;
-    if (notificationAction !== null) {
-      toTop();
+    if (props.notificationAction !== null) {
+      props.toTop();
       setVisibility(true);
       notifTimeout = setTimeout(() => {
         setVisibility(false);
-        performClosingActions();
+        props.performClosingActions();
       }, 6000);
     }
 
@@ -94,17 +83,17 @@ export default function NotificationsComponent({
         clearTimeout(notifTimeout);
       }
     };
-  }, [notificationAction, performClosingActions, toTop]);
+  }, [props.notificationAction, props.performClosingActions, props.toTop]);
 
   return (
     <div
-      className={`notification ${notificationAction?.message ? 'is-success' : 'is-danger'} ${visibility ? 'is-block' : 'is-hidden'}`}
+      className={`notification ${props.notificationAction?.message ? 'is-success' : 'is-danger'} ${visibility ? 'is-block' : 'is-hidden'}`}
       data-testid="notification"
     >
       <p className="content">
-        {notificationAction !== null && (
+        {props.notificationAction !== null && (
           <span className="has-text-weight-bold">
-            {notificationAction.text}
+            {props.notificationAction.text}
           </span>
         )}
         <br />
