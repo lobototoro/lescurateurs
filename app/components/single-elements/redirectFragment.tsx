@@ -1,49 +1,104 @@
 /**
- * Module documentation for the RedirectFragment component file.
- *
  * @packageDocumentation
- *
- * This module exposes a small React component that displays a "Redirecting..."
- * message and performs a client-side navigation to a provided URL after a short delay.
+ * Client-side redirection fragment for Next.js applications.
  *
  * @remarks
- * - The implementation relies on a client-only effect (useEffect) to perform the redirect.
- * - A timer is used to delay the navigation and it's cleared on unmount to avoid leaks.
+ * This module exports a React component that performs a delayed, client-side redirect
+ * using the Next.js App Router. To mitigate open redirect attacks, the destination
+ * URL is validated and must be same-origin with the current page.
+ *
+ * The component provides:
+ * - A short delay before navigation for better UX and screen reader announcements.
+ * - An accessible status region with a fallback link if automatic navigation fails.
+ * - Clear error messaging when an invalid URL is supplied.
+ *
+ * @example
+ * ```tsx
+ * import { RedirectFragment } from './RedirectFragment';
+ *
+ * export default function Page() {
+ *   return <RedirectFragment url="/dashboard" />;
+ * }
+ * ```
+ *
+ * @security
+ * Only same-origin URLs are allowed. Cross-origin or malformed URLs will be rejected
+ * and no navigation will occur.
+ *
+ * @see https://nextjs.org/docs/app/building-your-application/routing#linking-and-navigating
+ * @see https://typedoc.org/
+ * @since 1.0.0
  */
 
 /**
- * RedirectFragment
- *
- * Renders a brief "Redirecting..." message and programmatically navigates the browser
- * to the provided URL after a short timeout.
- *
- * @remarks
- * - This component is intended for client-side use only.
- * - It uses window.location.href to perform the redirect.
- * - The internal timer is cleaned up in the effect cleanup function.
+ * Redirects to a validated, same-origin URL after a short delay while rendering an
+ * accessible status message and a fallback link.
  *
  * @param props - Component properties.
- * @param props.url - The destination URL to navigate to. Example: "https://example.com"
+ * @param props.url - Destination URL. Must share the same origin as the current page.
+ * If invalid or cross-origin, the component displays an error and does not navigate.
+ *
+ * @returns A status UI indicating redirect progress, or an error message when the
+ * provided URL is invalid.
  *
  * @example
- * <RedirectFragment url="https://example.com" />
+ * ```tsx
+ * // Navigate to an internal route
+ * <RedirectFragment url="/settings/profile" />
+ * ```
  *
- * @public
+ * @remarks
+ * - Uses Next.js `useRouter().push` for internal navigation.
+ * - Announces status changes via `aria-live="polite"` for assistive technologies.
+ * - Includes a fallback anchor so users can manually navigate if needed.
  */
 'use client';
-import { useEffect } from 'react';
+
+import { useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
 export const RedirectFragment = ({ url }: { url: string }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      window.location.href = url;
-    }, 1000);
-
-    return () => clearTimeout(timer);
+  const router = useRouter();
+    
+  // Validate URL to prevent open redirect attacks
+  const isValidUrl = useMemo(() => {
+    try {
+      const parsedUrl = new URL(url, window.location.origin);
+      
+      // Allow only same-origin URLs or explicitly allowlisted domains
+      return parsedUrl.origin === window.location.origin;
+    } catch {
+      return false;
+    }
   }, [url]);
-
+  
+  useEffect(() => {
+    if (!isValidUrl) {
+      console.error('Invalid redirect URL:', url);
+      
+      return;
+    }
+  
+    const timer = setTimeout(() => {
+      
+      // Use Next.js router for internal navigation
+      router.push(url);
+    }, 1000);
+  
+    return () => clearTimeout(timer);
+  }, [url, isValidUrl, router]);
+  
+  if (!isValidUrl) {
+    return (
+      <div>
+        <h1>Invalid redirect URL</h1>
+        <p>The provided URL is not valid.</p>
+      </div>
+    );
+  }
+  
   return (
-    <div>
+    <div role="status" aria-live="polite">
       <h1>Redirecting...</h1>
       <p>
         If you are not redirected automatically, follow this{' '}
