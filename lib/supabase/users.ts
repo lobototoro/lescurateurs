@@ -1,3 +1,9 @@
+'use server';
+
+import { createClient } from './back-office.client';
+
+import { User } from '@/models/user';
+
 /**
  * Back-office Users data-access layer powered by Supabase.
  *
@@ -49,11 +55,6 @@
  * await logConnection('john.doe@example.com');
  * ```
  */
-'use server';
-
-import { createClient } from './back-office.client';
-
-import { User } from '@/models/user';
 
 const supabase = createClient();
 

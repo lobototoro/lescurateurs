@@ -1,3 +1,11 @@
+import { fr } from 'date-fns/locale';
+import { formatDistanceToNow } from 'date-fns';
+
+import { Article } from '@/models/article';
+import { getArticle } from '@/lib/supabase/articles';
+import { Params } from '@/models/slugs';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+
 /**
  * @packageDocumentation
  * @module pages/article
@@ -39,13 +47,6 @@
  *
  * @public
  */
-import { fr } from 'date-fns/locale';
-import { formatDistanceToNow } from 'date-fns';
-
-import { Article } from '@/models/article';
-import { getArticle } from '@/lib/supabase/articles';
-import { Params } from '@/models/slugs';
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 export default async function ArticlePage(props: { params: Promise<Params> }) {
   const params = await props.params;

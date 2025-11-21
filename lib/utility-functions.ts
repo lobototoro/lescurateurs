@@ -1,3 +1,6 @@
+import { UrlsTypes } from '@/models/article';
+import { SetValueConfig } from 'react-hook-form';
+
 /**
  * Common utilities used by the articles feature and form helpers.
  *
@@ -33,8 +36,6 @@
  * @see iconMapper
  * @see addRemoveInputsFactory
  */
-import { UrlsTypes } from '@/models/article';
-import { SetValueConfig } from 'react-hook-form';
 
 // synchronous func to check if an object is empty of props
 export function isEmpty(obj: any): boolean {

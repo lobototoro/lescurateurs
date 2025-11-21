@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 /**
  * @packageDocumentation
  * NotificationsComponent module.
@@ -62,7 +64,6 @@ export type NotificationsComponentProps = {
  * @returns A React element representing the notification UI.
  */
 /* eslint-disable react-hooks/set-state-in-effect */
-import React, { useState, useEffect } from 'react';
 
 export default function NotificationsComponent(props: NotificationsComponentProps): React.ReactElement {
   const [visibility, setVisibility] = useState<boolean>(false);

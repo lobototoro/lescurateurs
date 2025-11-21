@@ -1,3 +1,7 @@
+import Link from 'next/link';
+import { Slugs } from '@/models/slugs';
+import xss from 'xss';
+
 /**
  * @packageDocumentation
  * Module providing a small presentational React component to render a list of articles.
@@ -29,9 +33,6 @@
  * @category Components
  * @public
  */
-import Link from 'next/link';
-import { Slugs } from '@/models/slugs';
-import xss from 'xss';
 
 export const ArticleList = ({ list }: { list: Slugs[] }) => {
   const unslugged = (str: string) => xss(str.replace(/-/g, ' '));

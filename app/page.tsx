@@ -1,3 +1,7 @@
+import { getSlugs } from '@/lib/supabase/articles';
+import { ArticleList } from './components/ArticleList';
+import { Suspense } from 'react';
+
 /**
  * Main module for the homepage.
  *
@@ -46,9 +50,6 @@
  *
  * @returns {JSX.Element} The homepage section containing the article list.
  */
-import { getSlugs } from '@/lib/supabase/articles';
-import { ArticleList } from './components/ArticleList';
-import { Suspense } from 'react';
 
 export default async function Home() {
   const slugs = await getSlugs();

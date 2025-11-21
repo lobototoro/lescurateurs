@@ -1,3 +1,12 @@
+'use client';
+import { useState } from 'react';
+import { z } from 'zod';
+
+import { Slugs } from '@/models/slugs';
+import { userSchema } from '@/models/userSchema';
+import { ArticleTitle } from './ArticleTitle';
+import styles from './paginatedSearchResults.module.css';
+
 /**
  * @packageDocumentation
  * Utilities and UI component for displaying paginated search results.
@@ -65,14 +74,6 @@
  *
  * @internal
  */
-'use client';
-import { useState } from 'react';
-import { z } from 'zod';
-
-import { Slugs } from '@/models/slugs';
-import { userSchema } from '@/models/userSchema';
-import { ArticleTitle } from './ArticleTitle';
-import styles from './paginatedSearchResults.module.css';
 
 export function PaginatedSearchDisplay({
   itemList,
