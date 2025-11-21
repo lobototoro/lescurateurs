@@ -1,5 +1,7 @@
 ***
 
+#LCFR
+
 Beginning a nextjs project (version 16).
 In the future it will be a mobile only webzine, but desktop displayed backoffice.
 
@@ -27,7 +29,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 The stack: (as for October 7th)
 - Next.js 16
-- BulmaCSS
+- BulmaCSS (temporary)
 - Typescript
 - React 19
 - supabase

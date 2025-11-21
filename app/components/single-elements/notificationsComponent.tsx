@@ -74,7 +74,7 @@ export default function NotificationsComponent(props: NotificationsComponentProp
       setVisibility(true);
       notifTimeout = setTimeout(() => {
         setVisibility(false);
-        props.performClosingActions();
+        performClosingActions();
       }, 6000);
     }
 
