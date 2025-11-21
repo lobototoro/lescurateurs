@@ -1,17 +1,19 @@
 ***
 
+#LCFR
+
 Beginning a nextjs project (version 16).
 In the future it will be a mobile only webzine, but desktop displayed backoffice.
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
 
 ```bash
 npm i --legacy-peer-deps
 ```
 
-First, run the development server:
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -27,7 +29,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 The stack: (as for October 7th)
 - Next.js 16
-- BulmaCSS
+- BulmaCSS (temporary)
 - Typescript
 - React 19
 - supabase

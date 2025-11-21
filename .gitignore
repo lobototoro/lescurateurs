@@ -68,3 +68,6 @@ test?(-*).?(c|m)[jt]s?(x)
 '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,slint,prettier}.config.*
 **/vitest.{workspace,projects}.[jt]s?(on)
 **/.{eslint,mocha,prettier}rc.{?(c|m)js,yml}
+
+#documentation
+docs/**

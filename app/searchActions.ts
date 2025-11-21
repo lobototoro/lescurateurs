@@ -63,6 +63,7 @@
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
 import { searchArticles, searchSlugs } from '@/lib/supabase/articles';
+import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
 
 export async function searchForSlugs(searchTerm: string) {
@@ -93,7 +94,7 @@ export async function searchForArticle(slug: string) {
   }
 
   try {
-    const article = await searchArticles(slug);
+    const article = await searchArticles(slug) as Article[];
 
     return {
       message: true,

@@ -39,7 +39,7 @@
  *
  * @public
  */
-import { fr } from 'date-fns/locale/fr';
+import { fr } from 'date-fns/locale';
 import { formatDistanceToNow } from 'date-fns';
 
 import { Article } from '@/models/article';

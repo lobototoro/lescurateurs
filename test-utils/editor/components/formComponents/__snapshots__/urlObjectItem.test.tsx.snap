@@ -55,6 +55,7 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
+        for="url-0"
       >
         url
       </label>
@@ -69,7 +70,7 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
-        role="label"
+        for="credits-0"
       >
         crédits
       </label>

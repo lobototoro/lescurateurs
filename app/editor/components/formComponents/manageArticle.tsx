@@ -62,6 +62,8 @@
  * <ManageArticleForm scrollTopAction={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
  */
 'use client';
+
+import { type MouseEvent, type RefObject } from 'react';
 import {
   startTransition,
   useActionState,
@@ -197,7 +199,7 @@ export default function ManageArticleForm({
   return (
     <>
       <ModalWithCTA
-        modalRef={modalRef as React.RefObject<HTMLDivElement>}
+        modalRef={modalRef as RefObject<HTMLDivElement>}
         title={modalInfos.title}
         description={modalInfos.text}
         ctaText={modalInfos.ctaText}
@@ -223,7 +225,7 @@ export default function ManageArticleForm({
         <button
           className="button is-secondary is-size-6 has-text-white mt-2 mb-2"
           data-testid="back-to-search"
-          onClick={(event: React.MouseEvent) => {
+          onClick={(event: MouseEvent) => {
             event.preventDefault();
 
             // probably flush states from all useActionState methods

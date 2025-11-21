@@ -333,6 +333,14 @@ export async function updateArticleAction(prevState: any, data: any) {
 export async function fetchArticleById(id: number | bigint) {
   try {
     const article = await getArticleById(id);
+    
+    if (!article) {
+      
+      return {
+        message: false,
+        text: 'Error: Pas d\'article avec cet ID',
+      }
+    }
 
     return {
       message: true,

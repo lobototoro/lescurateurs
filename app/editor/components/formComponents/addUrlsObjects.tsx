@@ -62,7 +62,7 @@ export function AddUrlsObjects({
       <div className="field" data-testid="url-inputs-container">
         {urls?.map(({ type, url, credits }, index: number) => (
           <UrlObjectItem
-            key={`add-url-${index}`}
+            key={urls[index].url || `add-url-${index}`}
             type={type}
             url={url}
             credits={credits}

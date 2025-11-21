@@ -84,8 +84,8 @@ export default function NotificationsComponent({
       toTop();
       setVisibility(true);
       notifTimeout = setTimeout(() => {
-        performClosingActions();
         setVisibility(false);
+        performClosingActions();
       }, 6000);
     }
 

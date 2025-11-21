@@ -29,7 +29,7 @@ import { ArticleTitle } from "./ArticleTitle";
 export default function UserPermissionsCheckboxes({
   role
 }: {
-  role: typeof userRoles | null;
+  role: UserRole | null;
 }) {
   const permissions = (role && role.includes("admin" as UserRole)) ? adminPermissions : contributorPermissions;
 

@@ -101,7 +101,7 @@ export function UrlObjectItem({
         </div>
       </div>
       <div className="ml-2">
-        <label className="mr-2">url</label>
+        <label className="mr-2" htmlFor={`url-${index}`}>url</label>
         <input
           type="url"
           name={`url-${index}`}
@@ -113,7 +113,7 @@ export function UrlObjectItem({
         />
       </div>
       <div className="ml-2">
-        <label className="mr-2" role="label">crédits</label>
+        <label className="mr-2" htmlFor={`credits-${index}`}>crédits</label>
         <input
           type="text"
           name={`credits-${index}`}
