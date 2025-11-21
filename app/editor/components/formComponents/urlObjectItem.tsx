@@ -105,6 +105,7 @@ export function UrlObjectItem({
         <input
           type="url"
           name={`url-${index}`}
+          id={`url-${index}`}
           value={givenUrl || ""}
           onChange={(e) => {
             addBlink(e?.currentTarget?.parentNode as unknown as HTMLDivElement);
@@ -117,6 +118,7 @@ export function UrlObjectItem({
         <input
           type="text"
           name={`credits-${index}`}
+          id={`credits-${index}`}
           value={givenCredits || ""}
           onChange={(e) => {
             addBlink(e?.currentTarget?.parentNode as unknown as HTMLDivElement

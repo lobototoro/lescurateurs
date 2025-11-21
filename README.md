@@ -1,9 +1,9 @@
 ***
 
-#LCFR
+# LCFR
 
 Beginning a nextjs project (version 16).
-In the future it will be a mobile only webzine, but desktop displayed backoffice.
+In the future it will be a mobile-only webzine, but desktop displayed backoffice.
 
 ## Getting Started
 
