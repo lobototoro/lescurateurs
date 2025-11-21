@@ -1,3 +1,15 @@
+'use server';
+import { auth0 } from '@/lib/auth0';
+import { redirect } from 'next/navigation';
+
+import {
+  createUser,
+  updateUser,
+  getAllUsers,
+  deleteUser,
+} from '@/lib/supabase/users';
+import { User, UserRole } from '@/models/user';
+
 /**
  * @packageDocumentation
  * Utilities for managing application users (server-actions).
@@ -105,17 +117,6 @@
  *
  * @public
  */
-'use server';
-import { auth0 } from '@/lib/auth0';
-import { redirect } from 'next/navigation';
-
-import {
-  createUser,
-  updateUser,
-  getAllUsers,
-  deleteUser,
-} from '@/lib/supabase/users';
-import { User, UserRole } from '@/models/user';
 
 export async function createUserAction(preState: any, formData: FormData) {
   const session = await auth0.getSession();

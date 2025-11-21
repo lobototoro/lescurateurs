@@ -1,3 +1,21 @@
+'use server';
+
+import slugify from 'slugify';
+import { auth0 } from '@/lib/auth0';
+import { redirect } from 'next/navigation';
+
+import type { Json } from '@/lib/supabase/database.types';
+
+import {
+  createArticle,
+  deleteArticle,
+  updateArticle,
+  getArticleById,
+  deleteSlug,
+  validateArticle,
+  shipArticle,
+} from '@/lib/supabase/articles';
+
 /**
  * @packageDocumentation
  * @module editorActions
@@ -148,23 +166,6 @@
  * @returns The result object returned by the delegated action.
  * @throws Returns `{ message: false, text: 'Action inconnue' }` if the action name is unrecognized.
  */
-'use server';
-
-import slugify from 'slugify';
-import { auth0 } from '@/lib/auth0';
-import { redirect } from 'next/navigation';
-
-import type { Json } from '@/lib/supabase/database.types';
-
-import {
-  createArticle,
-  deleteArticle,
-  updateArticle,
-  getArticleById,
-  deleteSlug,
-  validateArticle,
-  shipArticle,
-} from '@/lib/supabase/articles';
 
 interface ValidateTypes {
   article_id: number | bigint;

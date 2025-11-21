@@ -1,3 +1,11 @@
+'use server';
+
+import { auth0 } from '@/lib/auth0';
+import { redirect } from 'next/navigation';
+import { searchArticles, searchSlugs } from '@/lib/supabase/articles';
+import { Article } from '@/models/article';
+import { Slugs } from '@/models/slugs';
+
 /**
  * @module editor/search
  * @remarks
@@ -58,13 +66,6 @@
  *
  * @see {@link searchArticles} for the lower-level Supabase query implementation.
  */
-'use server';
-
-import { auth0 } from '@/lib/auth0';
-import { redirect } from 'next/navigation';
-import { searchArticles, searchSlugs } from '@/lib/supabase/articles';
-import { Article } from '@/models/article';
-import { Slugs } from '@/models/slugs';
 
 export async function searchForSlugs(searchTerm: string) {
   const session = await auth0.getSession();

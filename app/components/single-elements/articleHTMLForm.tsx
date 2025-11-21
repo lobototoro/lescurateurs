@@ -1,3 +1,8 @@
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { AddUrlsObjects } from '@/app/editor/components/formComponents/addUrlsObjects';
+import { isEmpty } from '@/lib/utility-functions';
+import RTE from '@/app/components/single-elements/rte';
+
 /**
  * @packageDocumentation
  * @module ArticleMarkupForm
@@ -77,10 +82,6 @@
  *
  * @public
  */
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
-import { AddUrlsObjects } from '@/app/editor/components/formComponents/addUrlsObjects';
-import { isEmpty } from '@/lib/utility-functions';
-import RTE from '@/app/components/single-elements/rte';
 
 export default function ArticleMarkupForm({
   handleSubmit,

@@ -1,3 +1,9 @@
+import { createClient as createClientFront } from './client';
+import { createClient } from './back-office.client';
+import { Article } from '@/models/article';
+import { Slugs } from '@/models/slugs';
+import { _undefined } from 'zod/v4/core';
+
 /**
  * Module providing CRUD and utility operations for Articles and Slugs stored in Supabase.
  *
@@ -40,11 +46,6 @@
  *
  * @see https://typedoc.org/
  */
-import { createClient as createClientFront } from './client';
-import { createClient } from './back-office.client';
-import { Article } from '@/models/article';
-import { Slugs } from '@/models/slugs';
-import { _undefined } from 'zod/v4/core';
 
 const supabaseFront = createClientFront();
 const supabase = createClient();

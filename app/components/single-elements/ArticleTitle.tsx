@@ -1,3 +1,6 @@
+import DOMPurify from 'isomorphic-dompurify';
+import { Alegreya } from 'next/font/google';
+
 /**
  * @packageDocumentation
  * @module components/ArticleTitle
@@ -43,8 +46,6 @@
  *
  * @returns A JSX element containing the sanitized heading HTML, optionally wrapped in a sanitized anchor.
  */
-import DOMPurify from 'isomorphic-dompurify';
-import { Alegreya } from 'next/font/google';
 
 const alegreya = Alegreya({
   subsets: ['latin'],

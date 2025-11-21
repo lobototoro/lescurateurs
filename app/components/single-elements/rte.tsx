@@ -1,3 +1,10 @@
+'use client';
+import dynamic from 'next/dynamic';
+import React, { useState, useMemo, useEffect } from 'react';
+
+import 'react-quill-new/dist/quill.snow.css';
+import './rte.css';
+
 /**
  * @packageDocumentation
  * Rich Text Editor (RTE) React component wrapper for react-quill-new.
@@ -56,12 +63,6 @@
  *
  * @public
  */
-'use client';
-import dynamic from 'next/dynamic';
-import React, { useState, useMemo, useEffect } from 'react';
-
-import 'react-quill-new/dist/quill.snow.css';
-import './rte.css';
 
 export default function RTE(props: {
   'field-id': string;

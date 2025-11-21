@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+
 /**
  * @packageDocumentation
  * Client-side redirection fragment for Next.js applications.
@@ -52,10 +57,6 @@
  * - Announces status changes via `aria-live="polite"` for assistive technologies.
  * - Includes a fallback anchor so users can manually navigate if needed.
  */
-'use client';
-
-import { useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 
 export const RedirectFragment = ({ url }: { url: string }) => {
   const router = useRouter();

@@ -1,3 +1,6 @@
+import { adminPermissions, contributorPermissions, UserRole, userRoles } from "@/models/user";
+import { ArticleTitle } from "./ArticleTitle";
+
 /**
  * Module: UserPermissionsCheckboxes
  *
@@ -23,8 +26,6 @@
  *
  * @public
  */
-import { adminPermissions, contributorPermissions, UserRole, userRoles } from "@/models/user";
-import { ArticleTitle } from "./ArticleTitle";
 
 export default function UserPermissionsCheckboxes({
   role
