@@ -130,10 +130,12 @@ export function PaginatedSearchDisplay({
         <thead>
           <tr>
             <th className={styles['id-cell']}>
-              <abbr title={styles['id-cell']}>#</abbr>{' '}
-              <abbr title={styles.identifiant}>ID</abbr>
+              <abbr title="Number">#</abbr>{' '}
+              <abbr title="Identifier">ID</abbr>
             </th>
-            <th className={styles['slug-cell']}>Slug</th>
+            <th className={styles['slug-cell']}>
+              {context === 'article' ? 'Slug' : 'Email'}
+            </th>
             <th className={styles['date-cell']}>Créé le</th>
             <th className={styles['actions-cell']}>Actions</th>
           </tr>
@@ -275,7 +277,7 @@ export function PaginatedSearchDisplay({
         <nav className="pagination" role="navigation" aria-label="pagination">
           <button
             className={`pagination-previous ${activePage <= 1 ? 'is-disabled' : ''}`}
-            title="This is the first page"
+            title={activePage <= 1 ? "This is the first page" : "Go to previous page"}
             onClick={() => handleChangePage(activePage - 1)}
             disabled={activePage <= 1}
           >
