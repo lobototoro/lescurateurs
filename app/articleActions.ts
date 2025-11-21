@@ -1,3 +1,153 @@
+/**
+ * @packageDocumentation
+ * @module editorActions
+ *
+ * Server-side actions for creating, updating, fetching, validating, shipping and deleting articles.
+ *
+ * These actions rely on the Auth0 session to determine the active user and on the Supabase
+ * helpers in "@/lib/supabase/articles" to perform database operations.
+ *
+ * Typical usage (Next.js server action invocation):
+ *
+ * ```ts
+ * // from a server component or route handler
+ * const result = await createArticleAction(prevState, articleData);
+ * if (result.message) {
+ *   // success
+ * } else {
+ *   // handle failure
+ * }
+ * ```
+ *
+ * Notes:
+ * - All actions will redirect to '/editor' if no authenticated user is present.
+ * - Most actions return a small object with `message: boolean` and `text: string` describing the outcome.
+ */
+
+/**
+ * ValidateTypes
+ *
+ * Structure for arguments passed to the article validation helper.
+ *
+ * @internal
+ * @property article_id - Numeric id of the article to validate.
+ * @property validatedValue - Boolean indicating whether the article is validated or not.
+ * @property updated_at - Timestamp for when the update occurred.
+ * @property updated_by - Identifier (nickname or email) of the user who performed the update.
+ */
+
+/**
+ * createArticleAction
+ *
+ * Create a new article in the database and ensure a matching slug exists.
+ *
+ * @remarks
+ * - Requires an authenticated user; redirects to '/editor' otherwise.
+ * - Generates a slug automatically from the provided title using `slugify`.
+ * - Returns an object describing success/failure and includes the created article status.
+ *
+ * @param prevState - Previous application state (not used by this action).
+ * @param data - Object containing article fields: title, introduction, main, urls, main_audio_url, url_to_main_illustration.
+ * @returns An object with `message: boolean`, `status?: number`, and `text: string`.
+ * @throws Will log errors to the server console and return a failure message on exceptions.
+ *
+ * @example
+ * const result = await createArticleAction(null, {
+ *   title: 'Mon article',
+ *   introduction: 'Intro...',
+ *   main: 'Contenu...',
+ *   urls: {...},
+ *   main_audio_url: '',
+ *   url_to_main_illustration: ''
+ * });
+ */
+
+/**
+ * updateArticleAction
+ *
+ * Update fields of an existing article. Some fields are intentionally immutable:
+ * - id, slug, title, author, author_email and created_at are preserved from the original record.
+ *
+ * @remarks
+ * - Requires an authenticated user; redirects to '/editor' otherwise.
+ * - Setting `validated` and `shipped` to false on update to ensure editorial workflow (NEX-72).
+ *
+ * @param prevState - Previous application state (not used).
+ * @param data - Object or form-like payload containing updated article fields and original immutable values.
+ * @returns An object with `message: boolean`, `status?: number`, and `text: string`.
+ * @throws Logs errors to the server console and returns a failure message on exceptions.
+ */
+
+/**
+ * fetchArticleById
+ *
+ * Retrieve an article by its numeric id.
+ *
+ * @param id - Numeric id or bigint of the requested article.
+ * @returns On success: `{ message: true, article }`, on failure: `{ message: false, text: string }`.
+ * @throws Logs the error and returns a localized failure message when retrieval fails.
+ */
+
+/**
+ * deleteArticleAction
+ *
+ * Delete an article and its associated slug.
+ *
+ * @remarks
+ * - Performs both deletions concurrently and checks that both settled promises fulfilled.
+ * - Requires an authenticated user; redirects to '/editor' otherwise.
+ *
+ * @param prevState - Previous application state (not used).
+ * @param formData - FormData containing at least an `id` field.
+ * @returns An object with `message: boolean` and `text: string` describing the outcome.
+ * @throws Logs errors to the server console and returns a localized failure message on exceptions.
+ */
+
+/**
+ * validateArticleAction
+ *
+ * Mark an article as validated or rejected.
+ *
+ * @remarks
+ * - The function constructs a ValidateTypes payload and delegates to `validateArticle`.
+ * - Requires an authenticated user; redirects to '/editor' otherwise.
+ *
+ * @param prevState - Previous application state (not used).
+ * @param formData - FormData containing `id` and `validation` ('true' | 'false').
+ * @returns A Promise resolving to `{ message: boolean; text: string }`.
+ * @throws Logs errors to the server console and returns an error object on exceptions.
+ */
+
+/**
+ * shipArticleAction
+ *
+ * Toggle the "shipped" (mise en production) status of an article.
+ *
+ * @remarks
+ * - An article must be validated before it can be shipped; the action will fail otherwise.
+ * - Requires an authenticated user; redirects to '/editor' otherwise.
+ *
+ * @param prevState - Previous application state (not used).
+ * @param formData - FormData containing `id` and `shipped` ('true' | 'false').
+ * @returns An object with `message: boolean` and `text: string` describing the result.
+ * @throws Logs errors to the server console and returns a localized failure message on exceptions.
+ */
+
+/**
+ * manageArticleActions
+ *
+ * Router helper that dispatches to the appropriate action based on `actionName` in the provided FormData.
+ *
+ * Supported actions:
+ * - 'delete'   -> deleteArticleAction
+ * - 'validate' -> validateArticleAction
+ * - 'ship'     -> shipArticleAction
+ *
+ * @param prevState - Previous application state (passed through to handlers).
+ * @param formData - FormData containing `actionName` plus any handler-specific fields.
+ * @returns The result object returned by the delegated action.
+ * @throws Returns `{ message: false, text: 'Action inconnue' }` if the action name is unrecognized.
+ */
 'use server';
 
 import slugify from 'slugify';

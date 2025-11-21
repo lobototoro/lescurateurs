@@ -1,3 +1,44 @@
+/**
+ * @packageDocumentation
+ * @module CreateArticleForm
+ *
+ * Provides a React component that renders a fully featured form for creating
+ * articles. The component wires up form state, validation, server actions and
+ * UI helpers for a streamlined article creation workflow.
+ *
+ * Features:
+ * - react-hook-form for controlled form state and lifecycle
+ * - zod-based schema validation via a custom resolver
+ * - integration with server actions using useActionState and startTransition
+ * - utilities to add, remove and update dynamic URL inputs
+ * - notifications support and a method to reset form state after actions
+ *
+ * @remarks
+ * This module is intended to be used in a client component context and
+ * expects a callback to be provided that will scroll the viewport to the
+ * top when called (typically used after showing notifications).
+ *
+ * @example
+ * import CreateArticleForm from '@/app/create-article';
+ *
+ * function Page() {
+ *   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+ *   return <CreateArticleForm scrollTopAction={scrollToTop} />;
+ * }
+ */
+
+/**
+ * Props for CreateArticleForm component.
+ *
+ * @public
+ * @typedef {Object} CreateArticleFormProps
+ * @property {() => void} scrollTopAction - Callback that scrolls the page to the top, used after notifications or other UI events.
+ *
+ * @example
+ * const props: CreateArticleFormProps = {
+ *   scrollTopAction: () => window.scrollTo(0, 0),
+ * };
+ */
 'use client';
 import React, { useActionState, startTransition } from 'react';
 import { useForm } from 'react-hook-form';

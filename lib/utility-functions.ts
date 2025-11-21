@@ -1,3 +1,38 @@
+/**
+ * Common utilities used by the articles feature and form helpers.
+ *
+ * - isEmpty: Shallow check for own enumerable properties.
+ * - iconMapper: Maps permission labels to Material Symbols icon names.
+ * - addRemoveInputsFactory: Small factory ("pseudo hook") that returns functions
+ *   to add, remove, and update "urls" fields in a React Hook Form.
+ *
+ * @remarks
+ * These utilities are framework-agnostic except for {@link addRemoveInputsFactory},
+ * which expects a React Hook Form `setValue`-compatible function.
+ *
+ * @packageDocumentation
+ *
+ * @example
+ * // isEmpty
+ * isEmpty({}); // true
+ * isEmpty({ a: 1 }); // false
+ *
+ * @example
+ * // iconMapper
+ * iconMapper('create:articles'); // "create"
+ * iconMapper('update:articles'); // "edit_note"
+ *
+ * @example
+ * // addRemoveInputsFactory with react-hook-form
+ * const [add, remove, update] = addRemoveInputsFactory(form.getValues('urls'), form.setValue);
+ * add();    // pushes an empty url entry
+ * remove(); // removes the last url entry (min 1 preserved)
+ * update({ type: 'website', url: 'https://example.com', credits: 'John' }, 0);
+ *
+ * @see isEmpty
+ * @see iconMapper
+ * @see addRemoveInputsFactory
+ */
 import { UrlsTypes } from '@/models/article';
 import { SetValueConfig } from 'react-hook-form';
 
