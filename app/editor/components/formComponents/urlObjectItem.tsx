@@ -1,3 +1,43 @@
+/**
+ * @packageDocumentation
+ * Client-side React component for managing a single URL entry within an article's collection.
+ *
+ * The component renders:
+ * - A select input for choosing a UrlsTypes value (website, videos, audio, sociaux, image)
+ * - Text inputs for the URL and optional credits
+ * - An action button that adds a new entry or updates an existing one if the URL matches
+ *
+ * Behavior:
+ * - On any field change, a "blink" CSS class is applied to indicate pending modifications
+ * - Clicking the action button removes the blink and invokes the provided addUrls callback with the current values and index
+ *
+ * Accessibility and testing:
+ * - Uses aria-labels and roles to aid assistive technologies
+ * - Exposes data-testid attributes for reliable querying in tests
+ *
+ * Styling and dependencies:
+ * - Consumes a CSS module that provides a "blink" class
+ * - Uses Bulma utility classes for layout
+ *
+ * @remarks
+ * Designed to be used within Next.js as a "use client" component and to work with the UrlsTypes enum exported from the article model.
+ *
+ * @see UrlsTypes
+ * @see UrlObjectItem
+ *
+ * @example
+ * // Basic usage
+ * <UrlObjectItem
+ *   index={0}
+ *   urls={[
+ *     { type: UrlsTypes.WEBSITE, url: "https://example.com", credits: "Example Inc." }
+ *   ]}
+ *   addUrls={(newUrl, index) => {
+ *     // Persist or update the URL entry at the given index
+ *     console.log(index, newUrl);
+ *   }}
+ * />
+ */
 "use client";
 import React from "react";
 
@@ -61,10 +101,11 @@ export function UrlObjectItem({
         </div>
       </div>
       <div className="ml-2">
-        <label className="mr-2">url</label>
+        <label className="mr-2" htmlFor={`url-${index}`}>url</label>
         <input
           type="url"
           name={`url-${index}`}
+          id={`url-${index}`}
           value={givenUrl || ""}
           onChange={(e) => {
             addBlink(e?.currentTarget?.parentNode as unknown as HTMLDivElement);
@@ -73,10 +114,11 @@ export function UrlObjectItem({
         />
       </div>
       <div className="ml-2">
-        <label className="mr-2" role="label">crédits</label>
+        <label className="mr-2" htmlFor={`credits-${index}`}>crédits</label>
         <input
           type="text"
           name={`credits-${index}`}
+          id={`credits-${index}`}
           value={givenCredits || ""}
           onChange={(e) => {
             addBlink(e?.currentTarget?.parentNode as unknown as HTMLDivElement

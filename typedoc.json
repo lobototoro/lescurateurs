@@ -1,0 +1,5 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./app/**", "./lib/**", "./models/**"],
+  "out": "docs"
+}

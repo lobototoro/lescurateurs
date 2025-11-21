@@ -48,7 +48,7 @@ describe('customResolver', () => {
 
     expect(result.values).toEqual({});
     expect(result.errors).toHaveProperty('root');
-    expect(result.errors.root.message).toBe(
+    expect(result.errors.root && result.errors.root.message).toBe(
       'An unknown error occurred during validation'
     );
   });

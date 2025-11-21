@@ -55,10 +55,12 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
+        for="url-0"
       >
         url
       </label>
       <input
+        id="url-0"
         name="url-0"
         type="url"
         value=""
@@ -69,11 +71,12 @@ exports[`checking rendering and data integrety > should render correctly 1`] = `
     >
       <label
         class="mr-2"
-        role="label"
+        for="credits-0"
       >
         crédits
       </label>
       <input
+        id="credits-0"
         name="credits-0"
         type="text"
         value=""

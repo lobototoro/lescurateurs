@@ -1,3 +1,65 @@
+/**
+ * @packageDocumentation
+ * @module CreateUserForm
+ *
+ * This module exports the default React component CreateUserForm which is used
+ * to render a form for creating new users in the administration UI.
+ *
+ * The form integrates:
+ * - react-hook-form for form state management,
+ * - a Zod schema resolver for runtime validation,
+ * - a server action (createUserAction) to submit the form,
+ * - role-driven default permissions that are serialized to JSON and submitted.
+ *
+ * @remarks
+ * The component ensures responsiveness by using startTransition for the submit
+ * action. Notifications displayed after form submission invoke a scroll-to-top
+ * action provided via props.
+ *
+ * @example
+ * <CreateUserForm scrollTopAction={() => window.scrollTo(0, 0)} />
+ *
+ * @see {@link createUserAction}
+ */
+
+/**
+ * Props for CreateUserForm component.
+ *
+ * @public
+ * @typedef {Object} CreateUserFormProps
+ * @property {() => void} scrollTopAction - Callback invoked when notifications
+ *   request scrolling the view to the top (typically after a submission).
+ */
+
+/**
+ * CreateUserForm
+ *
+ * Renders a user creation form including fields for:
+ * - email
+ * - tiers service identifier
+ * - role selection (with automatic permission defaults)
+ * - permission checkboxes (rendered by UserPermissionsCheckboxes)
+ *
+ * Validation and type safety are provided by a Zod schema wired to
+ * react-hook-form through a custom resolver.
+ *
+ * @public
+ * @function CreateUserForm
+ * @param {CreateUserFormProps} props - Component props.
+ * @returns {JSX.Element} The rendered create-user form section.
+ *
+ * @remarks
+ * Implementation details:
+ * - The permissions field is registered as a hidden form value and updated
+ *   whenever the role selector changes. Permission objects are serialized to JSON
+ *   before being appended to the FormData sent to the server.
+ * - The submit handler wraps the server action call in startTransition to avoid
+ *   blocking urgent UI updates.
+ *
+ * @example
+ * // Render the component in a parent page
+ * <CreateUserForm scrollTopAction={() => window.scrollTo(0, 0)} />
+ */
 import { startTransition, useActionState, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

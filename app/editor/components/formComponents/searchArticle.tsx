@@ -1,3 +1,28 @@
+/**
+* @packageDocumentation
+* @module SearchArticle 
+* This file handles a simple form for a search by terms
+ * it is combined with a paginated results component
+ * with no sorting.
+ * 
+ * @remarks
+ * It is a backoffice componenent not designed to be used on the public side.
+ * Even if the target pop is meant to receive a 'search' string, it is never used.
+ * This component is also designed to handle search with users table.
+ */
+ 
+ /**
+ * Props for SearchArticle component. Coulb be renamed later with `SearchComponent`
+ * 
+ * @public
+ * @typedef {Object} SearchArticle
+ * @property {enum of 3 strings} target - context for the search
+ * @property {boolean} cancelSearchDisplay - reset the form and back to the initial display
+ * @property {react dispatch} setSelection - optional function given by parent when target is 'update'
+ * @property {react dispatch} manageSelection - same as above but with target set to 'manage'
+ * 
+ **/
+
 'use client';
 import { useEffect, useState } from 'react';
 

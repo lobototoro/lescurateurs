@@ -1,10 +1,35 @@
+/**
+ * Module: UserPermissionsCheckboxes
+ *
+ * Renders a readonly list of permission checkboxes for a given user role.
+ *
+ * @packageDocumentation
+ */
+
+/**
+ * UserPermissionsCheckboxes
+ *
+ * Renders a list of permissions as disabled, checked checkboxes for a given role.
+ *
+ * @param role - The role to compute permissions for. When null, contributor permissions are used.
+ *               This value is expected to be one of the entries from `userRoles`.
+ * @returns A JSX fragment containing:
+ *   - A title describing that the role has the following permissions.
+ *   - A list of disabled, checked checkboxes displaying each permission string
+ *     (colons in permission keys are shown as slashes).
+ *
+ * @example
+ * <UserPermissionsCheckboxes role={userRoles.admin} />
+ *
+ * @public
+ */
 import { adminPermissions, contributorPermissions, UserRole, userRoles } from "@/models/user";
 import { ArticleTitle } from "./ArticleTitle";
 
 export default function UserPermissionsCheckboxes({
   role
 }: {
-  role: typeof userRoles | null;
+  role: UserRole | null;
 }) {
   const permissions = (role && role.includes("admin" as UserRole)) ? adminPermissions : contributorPermissions;
 

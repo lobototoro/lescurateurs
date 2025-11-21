@@ -1,3 +1,45 @@
+/**
+ * Module providing CRUD and utility operations for Articles and Slugs stored in Supabase.
+ *
+ * @packageDocumentation
+ * @module articlesService
+ *
+ * @remarks
+ * This module exposes functions that interact with two Supabase tables:
+ * - Articles table (configured via NEXT_PUBLIC_ARTICLES_TABLE, default: "articles-development")
+ * - Slugs table (configured via NEXT_PUBLIC_SLUGS_TABLE, default: "slugs-development")
+ *
+ * Two Supabase clients are used:
+ * - A front-end client (createClientFront) for public read operations
+ * - A back-office client (createClient) for write/administrative operations
+ *
+ * The exported functions include:
+ * - getArticle(slug): Promise<Article>
+ * - getSlugs(): Promise<Slugs[]>
+ * - getArticleById(id): Promise<Article>
+ * - createSlug(slugObject)
+ * - createArticle(article)
+ * - updateArticle(article)
+ * - searchSlugs(searchTerm)
+ * - searchArticles(searchTerm)
+ * - deleteSlug(slugId)
+ * - deleteArticle(article_id)
+ * - validateArticle(validateProps)
+ * - shipArticle(shipProps)
+ *
+ * Internal helper:
+ * - validateSlugField(validateProps) — internal; used to keep slug validation in sync with articles
+ *
+ * @example
+ * import {
+ *   getArticle,
+ *   createArticle,
+ * } from '@/services/articles';
+ *
+ * const article = await getArticle('example-slug');
+ *
+ * @see https://typedoc.org/
+ */
 import { createClient as createClientFront } from './client';
 import { createClient } from './back-office.client';
 import { Article } from '@/models/article';

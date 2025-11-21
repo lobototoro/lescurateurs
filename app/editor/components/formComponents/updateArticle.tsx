@@ -1,3 +1,39 @@
+/**
+ * @packageDocumentation
+ * Client-side form for searching and updating existing articles.
+ *
+ * This module exports the default React component {@link UpdateArticleForm},
+ * which orchestrates the flow:
+ *
+ * - Search an article by ID or slug
+ * - Load the article data from the server
+ * - Edit fields with React Hook Form + Zod validation
+ * - Prevent submission when no changes are detected
+ * - Submit updates via a server action
+ *
+ * @remarks
+ * - This is a Next.js "use client" component.
+ * - Validation is performed with a custom resolver powered by Zod.
+ * - Data fetching and mutations are handled via server actions:
+ *   {@link fetchArticleById} and {@link updateArticleAction}.
+ * - Expensive state updates are wrapped in `startTransition` for responsiveness.
+ * - The form includes dynamic URL inputs with add/remove controls.
+ *
+ * @category Components
+ * @see {@link updateArticleAction}
+ * @see {@link fetchArticleById}
+ * @see {@link articleSchema}
+ *
+ * @example
+ * // Usage in a Next.js route or page:
+ * import UpdateArticleForm from './UpdateArticleForm';
+ *
+ * export default function Page() {
+ *   return (
+ *     <UpdateArticleForm scrollTopAction={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
+ *   );
+ * }
+ */
 'use client';
 
 import {

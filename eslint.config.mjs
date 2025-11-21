@@ -73,6 +73,7 @@ const previousConfig = defineConfig([
 const ignoredFolders = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
+    'docs/**',
     '.next/**',
     '.github/**',
     '.nyc_output/**',

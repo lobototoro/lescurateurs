@@ -1,3 +1,54 @@
+/**
+ * Back-office Users data-access layer powered by Supabase.
+ *
+ * @packageDocumentation
+ * @module UsersActions
+ *
+ * This server-only module exposes CRUD operations and utility actions for the
+ * `users-development` table. Each action communicates with Supabase and throws
+ * a descriptive error when an operation fails.
+ *
+ * Exported actions:
+ * - getAllUsers: Fetch all users.
+ * - getUser: Fetch a user by email.
+ * - createUser: Insert a new user.
+ * - updateUser: Update an existing user by ID.
+ * - deleteUser: Delete a user by email.
+ * - logConnection: Update the last connection timestamp for a user.
+ *
+ * @remarks
+ * - These functions are intended to run on the server and rely on a Supabase client.
+ * - Error handling is standardized: failures throw `Error` with a human-readable message.
+ * - Some functions return Supabase status codes; others return data arrays as provided by Supabase.
+ *
+ * @see createClient for Supabase initialization
+ * @see User for the user model
+ *
+ * @example
+ * ```ts
+ * import { getUser, createUser, logConnection } from './back-office.users.actions';
+ *
+ * // Get a user
+ * const data = await getUser('jane.doe@example.com');
+ * const user = data?.[0];
+ *
+ * // Create a user
+ * await createUser({
+ *   id: 'uuid',
+ *   email: 'john.doe@example.com',
+ *   role: 'admin',
+ *   permissions: ['read', 'write'],
+ *   tiers_service_ident: 'service-123',
+ *   created_at: undefined as any, // server-populated
+ *   updated_at: null,
+ *   updated_by: null,
+ *   last_connection_at: undefined as any // server-populated
+ * });
+ *
+ * // Log connection
+ * await logConnection('john.doe@example.com');
+ * ```
+ */
 'use server';
 
 import { createClient } from './back-office.client';

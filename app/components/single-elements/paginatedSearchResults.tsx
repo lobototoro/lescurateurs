@@ -1,3 +1,70 @@
+/**
+ * @packageDocumentation
+ * Utilities and UI component for displaying paginated search results.
+ *
+ * This module exports PaginatedSearchDisplay, a presentational React component
+ * that renders a list of items (articles or users) in a paginated table.
+ *
+ * The component supports multiple contexts and targets:
+ * - context: 'article' | 'user' controls how items are interpreted and which actions are shown
+ * - target: string (e.g., 'search', 'update', 'manage') controls which action buttons are rendered
+ *
+ * The module relies on application specific types:
+ * - Slugs: model describing article slug entries
+ * - userSchema: zod schema used to infer user type
+ *
+ * Example:
+ * ```tsx
+ * <PaginatedSearchDisplay
+ *   itemList={items}
+ *   defaultPage={1}
+ *   defaultLimit={10}
+ *   target="search"
+ *   context="article"
+ *   handleReference={(id, name, action) => { ... }}
+ * />
+ * ```
+ */
+
+/**
+ * PaginatedSearchDisplay
+ *
+ * Render a paginated list of items (articles or users) with contextual actions.
+ *
+ * @param itemList - Array of items to display. Items are either Slugs or objects matching `userSchema`.
+ * @param defaultPage - Initial page number (1-based).
+ * @param defaultLimit - Number of items per page.
+ * @param target - Usage target that alters available actions (e.g. 'search', 'update', 'manage').
+ * @param context - Contextual type of the items, either 'article' or 'user'.
+ * @param handleReference - Optional callback invoked for article-related actions.
+ *   Receives (id: number, itemName?: string, actionName?: string).
+ * @param handleSelectedUser - Optional callback invoked for user-related actions.
+ *   Receives (user: z.infer<typeof userSchema>, action: 'update' | 'delete').
+ *
+ * @remarks
+ * - The component will compute pagination locally from the provided itemList and defaultLimit.
+ * - When rendering articles, the component uses the presence of 'slug' or 'article_id' fields
+ *   to determine how to display and reference items.
+ *
+ * @public
+ */
+
+/**
+ * Internal helper documentation
+ *
+ * handleChangePage(page: number) => void
+ *   Updates the component's active page state. This is used by the pagination controls.
+ *
+ * swapValue(item) => string
+ *   Extracts a display value from an item depending on the current context:
+ *   - For articles: returns the 'slug' field
+ *   - For users: returns the 'email' field
+ *
+ * These helpers are intentionally kept local to the component since they reference
+ * component state and props (context, activePage).
+ *
+ * @internal
+ */
 'use client';
 import { useState } from 'react';
 import { z } from 'zod';
@@ -63,10 +130,12 @@ export function PaginatedSearchDisplay({
         <thead>
           <tr>
             <th className={styles['id-cell']}>
-              <abbr title={styles['id-cell']}>#</abbr>{' '}
-              <abbr title={styles.identifiant}>ID</abbr>
+              <abbr title="Number">#</abbr>{' '}
+              <abbr title="Identifier">ID</abbr>
             </th>
-            <th className={styles['slug-cell']}>Slug</th>
+            <th className={styles['slug-cell']}>
+              {context === 'article' ? 'Slug' : 'Email'}
+            </th>
             <th className={styles['date-cell']}>Créé le</th>
             <th className={styles['actions-cell']}>Actions</th>
           </tr>
@@ -208,7 +277,7 @@ export function PaginatedSearchDisplay({
         <nav className="pagination" role="navigation" aria-label="pagination">
           <button
             className={`pagination-previous ${activePage <= 1 ? 'is-disabled' : ''}`}
-            title="This is the first page"
+            title={activePage <= 1 ? "This is the first page" : "Go to previous page"}
             onClick={() => handleChangePage(activePage - 1)}
             disabled={activePage <= 1}
           >
