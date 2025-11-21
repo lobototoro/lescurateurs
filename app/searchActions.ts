@@ -45,7 +45,7 @@
  *
  * @param slug - The slug of the article to retrieve.
  * @returns A promise resolving to an object describing the result:
- * - When successful: { message: true, article: unknown }
+ * - When successful: { message: true, article: Article[] }
  * - When an error occurs: { message: false, text: string }
  *
  * @example
