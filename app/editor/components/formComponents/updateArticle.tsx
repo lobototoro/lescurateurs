@@ -1,3 +1,27 @@
+'use client';
+
+import {
+  JSX,
+  startTransition,
+  Suspense,
+  useActionState,
+  useEffect,
+  useState,
+} from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import * as R from 'ramda';
+
+import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
+import { articleSchema } from '@/models/articleSchema';
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
+import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
+import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
+import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+import { customResolver } from '../resolvers/customResolver';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { useMainContentValidation } from '@/lib/useMaincontentValidation';
+
 /**
  * @packageDocumentation
  * Client-side form for searching and updating existing articles.
@@ -34,28 +58,6 @@
  *   );
  * }
  */
-'use client';
-
-import {
-  JSX,
-  startTransition,
-  Suspense,
-  useActionState,
-  useEffect,
-  useState,
-} from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import * as R from 'ramda';
-
-import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
-import { articleSchema } from '@/models/articleSchema';
-import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
-import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
-import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
-import { customResolver } from '../resolvers/customResolver';
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -131,7 +133,6 @@ export default function UpdateArticleForm({
   register('validated', { required: true });
   register('shipped', { required: true });
 
-  // register('main', { required: true });
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
@@ -212,22 +213,7 @@ export default function UpdateArticleForm({
   // since it's not a natural form element
   // variant: adding currentArticle to prevent validation
   // from stopping after getting article data
-  useEffect(() => {
-    const callback = subscribe({
-      formState: {
-        values: true,
-      },
-      callback: ({ values }) => {
-        if (values.main.length < 50) {
-          trigger('main');
-        } else {
-          clearErrors('main');
-        }
-      },
-    });
-
-    return () => callback();
-  }, [subscribe, trigger, clearErrors, currentArticle]);
+  useMainContentValidation(subscribe, trigger, clearErrors);
 
   return (
     <>

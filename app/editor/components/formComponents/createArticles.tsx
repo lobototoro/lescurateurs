@@ -1,3 +1,17 @@
+'use client';
+import React, { useEffect, useActionState, startTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { articleSchema } from '@/models/articleSchema';
+import { createArticleAction } from '@/app/articleActions';
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
+import { addRemoveInputsFactory } from '@/lib/utility-functions';
+import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+import { customResolver } from '@/app/editor/components/resolvers/customResolver';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { useMainContentValidation } from '@/lib/useMaincontentValidation';
+
 /**
  * @packageDocumentation
  * @module CreateArticleForm
@@ -39,18 +53,6 @@
  *   scrollTopAction: () => window.scrollTo(0, 0),
  * };
  */
-'use client';
-import React, { useEffect, useActionState, startTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { articleSchema } from '@/models/articleSchema';
-import { createArticleAction } from '@/app/articleActions';
-import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
-import { addRemoveInputsFactory } from '@/lib/utility-functions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
-import { customResolver } from '@/app/editor/components/resolvers/customResolver';
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 /**
  * CreateArticleForm is a React component that manages the creation of an article form.
@@ -118,22 +120,7 @@ export default function CreateArticleForm({
 
   // used to reinforce main text valdiation
   // since it's not a natural form element
-  useEffect(() => {
-    const callback = subscribe({
-      formState: {
-        values: true,
-      },
-      callback: ({ values }) => {
-        if (values.main.length < 50) {
-          trigger('main');
-        } else {
-          clearErrors('main');
-        }
-      },
-    });
-
-    return () => callback();
-  }, [subscribe, trigger, clearErrors]);
+  useMainContentValidation(subscribe, trigger, clearErrors);
 
   return (
     <>
