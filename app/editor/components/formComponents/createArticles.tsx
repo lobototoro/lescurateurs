@@ -40,7 +40,7 @@
  * };
  */
 'use client';
-import React, { useActionState, startTransition } from 'react';
+import React, { useEffect, useActionState, startTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -76,6 +76,9 @@ export default function CreateArticleForm({
     setValue,
     getValues,
     reset,
+    subscribe,
+    trigger,
+    clearErrors,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
@@ -94,7 +97,6 @@ export default function CreateArticleForm({
   });
 
   // registering urls that need a special treatment
-  register('main', { required: true });
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
@@ -113,6 +115,25 @@ export default function CreateArticleForm({
       formAction(data);
     });
   };
+
+  // used to reinforce main text valdiation
+  // since it's not a natural form element
+  useEffect(() => {
+    const callback = subscribe({
+      formState: {
+        values: true,
+      },
+      callback: ({ values }) => {
+        if (values.main.length < 50) {
+          trigger('main');
+        } else {
+          clearErrors('main');
+        }
+      },
+    });
+
+    return () => callback();
+  }, [subscribe, trigger, clearErrors]);
 
   return (
     <>

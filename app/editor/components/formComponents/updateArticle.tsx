@@ -90,6 +90,9 @@ export default function UpdateArticleForm({
     setValue,
     getValues,
     reset,
+    subscribe,
+    trigger,
+    clearErrors,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
@@ -128,7 +131,7 @@ export default function UpdateArticleForm({
   register('validated', { required: true });
   register('shipped', { required: true });
 
-  register('main', { required: true });
+  // register('main', { required: true });
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
@@ -204,6 +207,27 @@ export default function UpdateArticleForm({
     setSelectedId(undefined);
     scrollTopAction();
   };
+
+  // used to reinforce main text validation
+  // since it's not a natural form element
+  // variant: adding currentArticle to prevent validation
+  // from stopping after getting article data
+  useEffect(() => {
+    const callback = subscribe({
+      formState: {
+        values: true,
+      },
+      callback: ({ values }) => {
+        if (values.main.length < 50) {
+          trigger('main');
+        } else {
+          clearErrors('main');
+        }
+      },
+    });
+
+    return () => callback();
+  }, [subscribe, trigger, clearErrors, currentArticle]);
 
   return (
     <>
