@@ -36,6 +36,7 @@
     "react-quill-new": "^3.6.0",
     "server-only": "^0.0.1",
     "slugify": "^1.6.6",
+    "sonner": "^2.0.7",
     "xss": "^1.0.15",
     "zod": "^4.1.5"
   },
