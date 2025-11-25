@@ -68,10 +68,12 @@ export const withCallbacks = <Args extends unknown[], T extends ActionState>(
       callbacks.onSuccess?.(result);
     }
 
-    if (!result?.isSuccess) {
+    if (result && !result.isSuccess) {
       callbacks.onError?.(result);
     }
-    if (postSubmitFunction) {
+
+    // perform post submit acton only if success
+    if (postSubmitFunction && result?.isSuccess) {
       postSubmitFunction();
     }
 
