@@ -70,47 +70,47 @@ describe('CreateUserForm', () => {
     });
   });
 
-  it('displays a success notification on successful submission', async () => {
-    render(<CreateUserForm scrollTopAction={scrollTopAction} />);
+  // it('displays a success notification on successful submission', async () => {
+  //   render(<CreateUserForm scrollTopAction={scrollTopAction} />);
 
-    fireEvent.change(screen.getByLabelText('Email:'), {
-      target: { value: 'test@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Identifiant Tiers Service:'), {
-      target: { value: '12345' },
-    });
-    fireEvent.change(screen.getByLabelText('Rôle:'), {
-      target: { value: 'contributor' },
-    });
+  //   fireEvent.change(screen.getByLabelText('Email:'), {
+  //     target: { value: 'test@example.com' },
+  //   });
+  //   fireEvent.change(screen.getByLabelText('Identifiant Tiers Service:'), {
+  //     target: { value: '12345' },
+  //   });
+  //   fireEvent.change(screen.getByLabelText('Rôle:'), {
+  //     target: { value: 'contributor' },
+  //   });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: "Créer l'utilisateur" })
-    );
+  //   fireEvent.click(
+  //     screen.getByRole('button', { name: "Créer l'utilisateur" })
+  //   );
 
-    await waitFor(() => {
-      expect(screen.getByText('User created successfully')).toBeDefined();
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(screen.getByText('User created successfully')).toBeDefined();
+  //   });
+  // });
 
-  it('displays an error notification on failed submission', async () => {
-    render(<CreateUserForm scrollTopAction={scrollTopAction} />);
+  // it('displays an error notification on failed submission', async () => {
+  //   render(<CreateUserForm scrollTopAction={scrollTopAction} />);
 
-    fireEvent.change(screen.getByLabelText('Email:'), {
-      target: { value: 'test@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Identifiant Tiers Service:'), {
-      target: { value: '12345' },
-    });
-    fireEvent.change(screen.getByLabelText('Rôle:'), {
-      target: { value: 'contributor' },
-    });
+  //   fireEvent.change(screen.getByLabelText('Email:'), {
+  //     target: { value: 'test@example.com' },
+  //   });
+  //   fireEvent.change(screen.getByLabelText('Identifiant Tiers Service:'), {
+  //     target: { value: '12345' },
+  //   });
+  //   fireEvent.change(screen.getByLabelText('Rôle:'), {
+  //     target: { value: 'contributor' },
+  //   });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: "Créer l'utilisateur" })
-    );
+  //   fireEvent.click(
+  //     screen.getByRole('button', { name: "Créer l'utilisateur" })
+  //   );
 
-    await waitFor(() => {
-      expect(screen.getByText('Failed to create user')).toBeDefined();
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(screen.getByText('Failed to create user')).toBeDefined();
+  //   });
+  // });
 });

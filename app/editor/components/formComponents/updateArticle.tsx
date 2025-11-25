@@ -17,7 +17,6 @@ import { articleSchema } from '@/models/articleSchema';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
 import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
 import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { useMainContentValidation } from '@/lib/useMaincontentValidation';

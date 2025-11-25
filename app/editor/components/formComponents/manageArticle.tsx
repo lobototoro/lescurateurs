@@ -10,7 +10,6 @@ import {
 } from 'react';
 
 import { manageArticleActions } from '@/app/articleActions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import SearchArticle from './searchArticle';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
@@ -105,7 +104,7 @@ export default function ManageArticleForm({
 }: {
   scrollTopAction: () => void;
 }): React.ReactElement {
-  const [state, manageArticle, isPending] = useActionState(
+  const [, manageArticle, isPending] = useActionState(
     withCallbacks(manageArticleActions, toastCallbacks, scrollTopAction),
     null
   );

@@ -1,3 +1,20 @@
+import { startTransition, useActionState, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import UserPermissionsCheckboxes from '@/app/components/single-elements/userPermissions';
+import {
+  adminPermissions,
+  contributorPermissions,
+  UserRole,
+  userRoles,
+} from '@/models/user';
+import { userSchema } from '@/models/userSchema';
+import { createUserAction } from '@/app/userActions';
+import { customResolver } from '@/app/editor/components/resolvers/customResolver';
+import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
+
 /**
  * @packageDocumentation
  * @module CreateUserForm
@@ -60,29 +77,12 @@
  * // Render the component in a parent page
  * <CreateUserForm scrollTopAction={() => window.scrollTo(0, 0)} />
  */
-import { startTransition, useActionState, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
-import UserPermissionsCheckboxes from '@/app/components/single-elements/userPermissions';
-import {
-  adminPermissions,
-  contributorPermissions,
-  UserRole,
-  userRoles,
-} from '@/models/user';
-import { userSchema } from '@/models/userSchema';
-import { createUserAction } from '@/app/userActions';
-import { customResolver } from '@/app/editor/components/resolvers/customResolver';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 
 export default function CreateUserForm({
   scrollTopAction,
 }: {
   scrollTopAction: () => void;
 }) {
-  const [state, formAction, isPending] = useActionState(createUserAction, null);
   const [userRole, setUserRole] = useState<keyof typeof UserRole>(
     userRoles[1] as unknown as keyof typeof UserRole
   );
@@ -105,6 +105,16 @@ export default function CreateUserForm({
     },
   });
 
+  const performingAfter = () => {
+    scrollTopAction();
+    reset();
+  };
+
+  const [, formAction, isPending] = useActionState(
+    withCallbacks(createUserAction, toastCallbacks, performingAfter),
+    null
+  );
+
   const onSubmit = (data: z.infer<typeof userSchema>) => {
     startTransition(() => {
       const formData = new FormData();
@@ -120,13 +130,13 @@ export default function CreateUserForm({
 
   return (
     <section className="section">
-      {state && (
+      {/*{state && (
         <NotificationsComponent
           notificationAction={state as { message: boolean; text: string }}
           performClosingActions={reset}
           toTop={scrollTopAction}
         />
-      )}
+      )}*/}
       <ArticleTitle
         text="Créer un utilisateur"
         level="h2"
@@ -220,7 +230,7 @@ export default function CreateUserForm({
             </div>
             <div className="cell">
               {userRole && (
-                <UserPermissionsCheckboxes role={[userRole as UserRole]} />
+                <UserPermissionsCheckboxes role={userRole as UserRole} />
               )}
             </div>
           </div>

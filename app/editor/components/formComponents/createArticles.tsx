@@ -95,8 +95,8 @@ export default function CreateArticleForm({
   });
 
   const postprocessFunction = () => {
-    scrollTopAction();
     reset();
+    scrollTopAction();
   };
 
   const [, formAction, isPending] = useActionState(
