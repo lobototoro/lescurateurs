@@ -1,3 +1,17 @@
+'use client';
+import React, { useEffect, useActionState, startTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { articleSchema } from '@/models/articleSchema';
+import { createArticleAction } from '@/app/articleActions';
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
+import { addRemoveInputsFactory } from '@/lib/utility-functions';
+import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+import { customResolver } from '@/app/editor/components/resolvers/customResolver';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { useMainContentValidation } from '@/lib/useMaincontentValidation';
+
 /**
  * @packageDocumentation
  * @module CreateArticleForm
@@ -39,18 +53,6 @@
  *   scrollTopAction: () => window.scrollTo(0, 0),
  * };
  */
-'use client';
-import React, { useActionState, startTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { articleSchema } from '@/models/articleSchema';
-import { createArticleAction } from '@/app/articleActions';
-import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
-import { addRemoveInputsFactory } from '@/lib/utility-functions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
-import { customResolver } from '@/app/editor/components/resolvers/customResolver';
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 /**
  * CreateArticleForm is a React component that manages the creation of an article form.
@@ -76,6 +78,8 @@ export default function CreateArticleForm({
     setValue,
     getValues,
     reset,
+    trigger,
+    clearErrors,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
@@ -94,7 +98,6 @@ export default function CreateArticleForm({
   });
 
   // registering urls that need a special treatment
-  register('main', { required: true });
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
@@ -113,6 +116,10 @@ export default function CreateArticleForm({
       formAction(data);
     });
   };
+
+  // used to reinforce main text valdiation
+  // since it's not a natural form element
+  useMainContentValidation('main', watch, trigger, clearErrors);
 
   return (
     <>

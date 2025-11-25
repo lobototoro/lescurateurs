@@ -1,3 +1,27 @@
+'use client';
+
+import {
+  JSX,
+  startTransition,
+  Suspense,
+  useActionState,
+  useEffect,
+  useState,
+} from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import * as R from 'ramda';
+
+import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
+import { articleSchema } from '@/models/articleSchema';
+import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
+import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
+import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
+import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+import { customResolver } from '../resolvers/customResolver';
+import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
+import { useMainContentValidation } from '@/lib/useMaincontentValidation';
+
 /**
  * @packageDocumentation
  * Client-side form for searching and updating existing articles.
@@ -34,28 +58,6 @@
  *   );
  * }
  */
-'use client';
-
-import {
-  JSX,
-  startTransition,
-  Suspense,
-  useActionState,
-  useEffect,
-  useState,
-} from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import * as R from 'ramda';
-
-import { fetchArticleById, updateArticleAction } from '@/app/articleActions';
-import { articleSchema } from '@/models/articleSchema';
-import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
-import SearchArticle from '@/app/editor/components/formComponents/searchArticle';
-import { isEmpty, addRemoveInputsFactory } from '@/lib/utility-functions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
-import { customResolver } from '../resolvers/customResolver';
-import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 
 /**
  * UpdateArticleForm component for updating an existing article.
@@ -87,6 +89,8 @@ export default function UpdateArticleForm({
     register,
     handleSubmit,
     watch,
+    trigger,
+    clearErrors,
     setValue,
     getValues,
     reset,
@@ -128,7 +132,6 @@ export default function UpdateArticleForm({
   register('validated', { required: true });
   register('shipped', { required: true });
 
-  register('main', { required: true });
   const getMaincontent = (value: string) => {
     return setValue('main', value);
   };
@@ -204,6 +207,12 @@ export default function UpdateArticleForm({
     setSelectedId(undefined);
     scrollTopAction();
   };
+
+  // used to reinforce main text validation
+  // since it's not a natural form element
+  // variant: adding currentArticle to prevent validation
+  // from stopping after getting article data
+  useMainContentValidation('main', watch, trigger, clearErrors);
 
   return (
     <>
