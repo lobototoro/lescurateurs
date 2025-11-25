@@ -21,6 +21,8 @@ import NotificationsComponent from '@/app/components/single-elements/notificatio
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { useMainContentValidation } from '@/lib/useMaincontentValidation';
+import withCallbacks from '@/lib/withCallbacks';
+import toastCallbacks from '@/lib/toastCallbacks';
 
 /**
  * @packageDocumentation
@@ -73,11 +75,6 @@ export default function UpdateArticleForm({
 }: {
   scrollTopAction: () => void;
 }): JSX.Element {
-  const [state, formAction, isPending] = useActionState(
-    updateArticleAction,
-    null
-  );
-
   const [identicalWarnMessage, setIdenticalWarnMessage] =
     useState<boolean>(false);
   const [currentArticle, setCurrentArticle] =
@@ -119,6 +116,17 @@ export default function UpdateArticleForm({
     },
     values: currentArticle,
   });
+
+  const closingActions = () => {
+    setSelectedId(undefined);
+    setCurrentArticle(undefined);
+    reset();
+  };
+
+  const [, formAction, isPending] = useActionState(
+    withCallbacks(updateArticleAction, toastCallbacks, closingActions),
+    null
+  );
 
   // can't remember why I had to register everything again: maybe to enforce using 'required' properties
   register('id', { required: true });
@@ -195,12 +203,6 @@ export default function UpdateArticleForm({
     });
   }, [selectedId]);
 
-  const closingActions = () => {
-    setSelectedId(undefined);
-    setCurrentArticle(undefined);
-    reset();
-  };
-
   // cta on the bottom of the page
   const backToSearch = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -223,13 +225,13 @@ export default function UpdateArticleForm({
         color="white"
         spacings="mt-6 mb-4"
       />
-      {state && (
+      {/*{state && (
         <NotificationsComponent
           notificationAction={state as { message: boolean; text: string }}
           performClosingActions={closingActions}
           toTop={scrollTopAction}
         />
-      )}
+      )}*/}
       {identicalWarnMessage && (
         <div className="notification is-warning">
           <button

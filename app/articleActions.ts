@@ -248,7 +248,7 @@ export async function createArticleAction(prevState: any, data: any) {
   } catch (error) {
     console.log(error);
 
-    return toActionState('Error creating article or slug', {}, false);
+    return toActionState('Error creating article or slug', undefined, false);
   }
 }
 
@@ -317,18 +317,17 @@ export async function updateArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    return {
-      message: true,
-      status: updateResult,
-      text: 'Article was successfully updated',
-    };
+    revalidatePath('/editor');
+
+    return toActionState(
+      'Article was successfully updated',
+      updateResult,
+      true
+    );
   } catch (error) {
     console.log(error);
 
-    return {
-      message: false,
-      text: 'Error updating article',
-    };
+    return toActionState('Error updating article', undefined, false);
   }
 }
 
