@@ -17,6 +17,7 @@ import {
   shipArticle,
 } from '@/lib/supabase/articles';
 import { toActionState } from '@/lib/toActionState';
+import type { ActionState } from '@/models/actionState';
 
 /**
  * @packageDocumentation
@@ -378,7 +379,10 @@ export async function fetchArticleById(id: number | bigint) {
  *    - Otherwise, it returns an error message indicating a failure in the deletion process.
  * 4. Catches any errors during the process and returns a generic error message.
  */
-export async function deleteArticleAction(prevState: any, formData: FormData) {
+export async function deleteArticleAction(
+  prevState: any,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -397,24 +401,29 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
       }
     });
     if (successCount === 2) {
-      return {
-        message: true,
-        text: "L'article a été supprimé avec succès",
-      };
+      revalidatePath('/editor');
+
+      return toActionState(
+        "L'article a été supprimé avec succès",
+        undefined,
+        true
+      );
     }
 
-    return {
-      message: false,
-      text: "Une erreur s'est produite lors de la suppression de l'article ou du slug",
-    };
+    return toActionState(
+      "Une erreur s'est produite lors de la suppression de l'article ou du slug",
+      undefined,
+      false
+    );
   } catch (error) {
     // Log the error to the console for debugging purposes
     console.log(error);
 
-    return {
-      message: false,
-      text: "une erreur s'est produite : contactez l'administrateur",
-    };
+    return toActionState(
+      "une erreur s'est produite : contactez l'administrateur",
+      undefined,
+      false
+    );
   }
 }
 
@@ -430,7 +439,7 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
 export async function validateArticleAction(
   prevState: any,
   formData: FormData
-): Promise<{ message: boolean; text: string }> {
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -452,23 +461,20 @@ export async function validateArticleAction(
       validation.articleValidationStatus !== 204 ||
       validation.slugValidationStatus !== 204
     ) {
-      return {
-        message: false,
-        text: 'Article not found',
-      };
+      return toActionState('Article not found', undefined, false);
     }
 
-    return {
-      message: true,
-      text: `L'article a été ${validationArgs.validatedValue ? 'validé' : 'rejeté'} avec succès`,
-    };
+    revalidatePath('/editor');
+
+    return toActionState(
+      `L'article a été ${validationArgs.validatedValue ? 'validé' : 'rejeté'} avec succès`,
+      undefined,
+      true
+    );
   } catch (error) {
     console.log(error);
 
-    return {
-      message: false,
-      text: 'Error validating article',
-    };
+    return toActionState('Error validating article', undefined, false);
   }
 }
 
@@ -489,7 +495,10 @@ export async function validateArticleAction(
  * @Rules
  * - An article must be validated before it can be shipped.
  */
-export async function shipArticleAction(prevState: any, formData: FormData) {
+export async function shipArticleAction(
+  prevState: any,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -505,16 +514,14 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
     const article = await getArticleById(id);
 
     if (!article) {
-      return {
-        message: false,
-        text: 'Article inconnu',
-      };
+      return toActionState('Article inconnu', undefined, false);
     }
     if (!article.validated && ship) {
-      return {
-        message: false,
-        text: "L'article doit être validé avant d'être mis en MeP",
-      };
+      return toActionState(
+        "L'article doit être validé avant d'être mis en MeP",
+        undefined,
+        false
+      );
     }
 
     const result = await shipArticle({
@@ -524,25 +531,30 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
       updated_by,
     });
     if (result !== 204) {
-      return {
-        message: false,
-        text: "Une erreur est survenue lors de la mise en MeP de l'article",
-      };
+      return toActionState(
+        "Une erreur est survenue lors de la mise en MeP de l'article",
+        undefined,
+        false
+      );
     }
 
-    return {
-      message: true,
-      text: ship
+    revalidatePath('/editor');
+
+    return toActionState(
+      ship
         ? "L'article a été mis en MeP avec succès"
         : "L'article a été mis offline avec succès",
-    };
+      undefined,
+      true
+    );
   } catch (err) {
     console.log(err);
 
-    return {
-      message: false,
-      text: "Une erreur est survenue lors de la mise en MeP de l'article",
-    };
+    return toActionState(
+      "Une erreur est survenue lors de la mise en MeP de l'article",
+      undefined,
+      false
+    );
   }
 }
 
@@ -557,9 +569,6 @@ export async function manageArticleActions(prevState: any, formData: FormData) {
     case 'ship':
       return await shipArticleAction(prevState, formData);
     default:
-      return {
-        message: false,
-        text: 'Action inconnue',
-      };
+      return toActionState('Action inconnue', undefined, false);
   }
 }

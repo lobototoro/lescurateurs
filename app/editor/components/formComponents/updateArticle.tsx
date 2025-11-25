@@ -225,13 +225,6 @@ export default function UpdateArticleForm({
         color="white"
         spacings="mt-6 mb-4"
       />
-      {/*{state && (
-        <NotificationsComponent
-          notificationAction={state as { message: boolean; text: string }}
-          performClosingActions={closingActions}
-          toTop={scrollTopAction}
-        />
-      )}*/}
       {identicalWarnMessage && (
         <div className="notification is-warning">
           <button
