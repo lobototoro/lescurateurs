@@ -18,6 +18,7 @@ import {
 } from '@/lib/supabase/articles';
 import { toActionState } from '@/lib/toastCallbacks';
 import type { ActionState } from '@/models/actionState';
+import { ac } from 'vitest/dist/chunks/reporters.d.BFLkQcL6.js';
 
 /**
  * @packageDocumentation
@@ -402,7 +403,7 @@ export async function fetchArticleById(id: number | bigint) {
  * 4. Catches any errors during the process and returns a generic error message.
  */
 export async function deleteArticleAction(
-  _prevState: any,
+  _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
   const session = await auth0.getSession();
@@ -420,6 +421,17 @@ export async function deleteArticleAction(
     const successCount = settledResults.filter(
       (result) => result.status === 'fulfilled'
     ).length;
+
+    // if there's a rejected promise, we log it
+    // without affecting the script flow
+    settledResults
+      .filter((result) => result.status === 'rejected')
+      .forEach((result) => {
+        if (result.status === 'rejected') {
+          console.error('Deletion failed:', result.reason);
+        }
+      });
+
     if (successCount === 2) {
       revalidatePath('/editor');
 
@@ -460,7 +472,7 @@ export async function deleteArticleAction(
  * never the slug validation func, that is updated as well
  */
 export async function validateArticleAction(
-  _prevState: any,
+  _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
   const session = await auth0.getSession();
@@ -519,7 +531,7 @@ export async function validateArticleAction(
  * - An article must be validated before it can be shipped.
  */
 export async function shipArticleAction(
-  _prevState: any,
+  _prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
   const session = await auth0.getSession();
@@ -579,9 +591,9 @@ export async function shipArticleAction(
 }
 
 export async function manageArticleActions(
-  _prevState: any,
+  _prevState: ActionState,
   formData: FormData
-) {
+): Promise<ActionState> {
   const actionName = formData.get('actionName') as string;
 
   switch (actionName) {

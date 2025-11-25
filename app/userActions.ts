@@ -222,7 +222,7 @@ export async function getUsersList() {
 }
 
 export async function deleteUserAction(
-  _preState: any,
+  _preState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
   const session = await auth0.getSession();
@@ -253,7 +253,10 @@ export async function deleteUserAction(
   }
 }
 
-export async function manageUsers(_prevState: any, formData: FormData) {
+export async function manageUsers(
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const actionName = formData.get('actionName') as string;
 
   switch (actionName) {
