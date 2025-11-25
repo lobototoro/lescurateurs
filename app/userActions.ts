@@ -39,9 +39,9 @@ import { ActionState } from '@/models/actionState';
  *   - permissions: string
  *
  * @returns A promise that resolves to an object describing the result:
- *   - message: text of the result
- *   - status?: any, as an object of status results or a status in number or undefined if there's none
- *   - isSuccess: a boolean
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @example
  * const result = await createUserAction(prevState, formData);
@@ -64,9 +64,9 @@ import { ActionState } from '@/models/actionState';
  *   - permissions: string
  *
  * @returns A promise that resolves to an object describing the result:
- *   - message: text of the result
- *   - status?: any, as an object of status results or a status in number or undefined if there's none
- *   - isSuccess: a boolean
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @public
  */
@@ -94,9 +94,9 @@ import { ActionState } from '@/models/actionState';
  *   - email: string
  *
  * @returns A promise that resolves to an object describing the result:
- *   - message: text of the result
- *   - status?: any, as an object of status results or a status in number or undefined if there's none
- *   - isSuccess: a boolean
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @public
  */
@@ -122,9 +122,9 @@ import { ActionState } from '@/models/actionState';
  */
 
 export async function createUserAction(
-  preState: ActionState,
+  _preState: ActionState,
   formData: FormData
-) {
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -158,7 +158,10 @@ export async function createUserAction(
   }
 }
 
-export async function updateUserAction(preState: any, formData: FormData) {
+export async function updateUserAction(
+  _preState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -175,13 +178,13 @@ export async function updateUserAction(preState: any, formData: FormData) {
   };
 
   try {
-    const updatedUserSatus = await updateUser(userCandidate as User);
+    const updatedUserStatus = await updateUser(userCandidate as User);
 
     revalidatePath('/editor');
 
     return toActionState(
       'L’utilisateur a été modifié avec succès',
-      updatedUserSatus,
+      updatedUserStatus,
       true
     );
   } catch (error) {
@@ -218,7 +221,10 @@ export async function getUsersList() {
   }
 }
 
-export async function deleteUserAction(preState: any, formData: FormData) {
+export async function deleteUserAction(
+  _preState: any,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -247,14 +253,14 @@ export async function deleteUserAction(preState: any, formData: FormData) {
   }
 }
 
-export async function manageUsers(prevState: any, formData: FormData) {
+export async function manageUsers(_prevState: any, formData: FormData) {
   const actionName = formData.get('actionName') as string;
 
   switch (actionName) {
     case 'update':
-      return await updateUserAction(prevState, formData);
+      return await updateUserAction(_prevState, formData);
     case 'delete':
-      return await deleteUserAction(prevState, formData);
+      return await deleteUserAction(_prevState, formData);
     default:
       return toActionState(
         "Action d'utilisateur non reconnue",

@@ -104,8 +104,6 @@ export const toastCallbacks = {
 
 export const toActionState = (
   message: string,
-  status: any,
+  status: number | Record<string, unknown> | undefined,
   isSuccess: boolean
-): ActionState => {
-  return { message, status, isSuccess };
-};
+): ActionState => ({ message, status, isSuccess });
