@@ -1,4 +1,3 @@
-
 import {
   startTransition,
   useActionState,
@@ -22,15 +21,14 @@ import {
 import UserPermissionsCheckboxes from '@/app/components/single-elements/userPermissions';
 import { isEmpty } from '@/lib/utility-functions';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '../resolvers/customResolver';
+import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
 
 export default function ManageUserForm({
   scrollTopAction,
 }: {
   scrollTopAction: () => void;
 }) {
-  const [state, sendAction, isPending] = useActionState(manageUsers, null);
   const [usersList, setUsersList] = useState<z.infer<typeof userSchema>[]>([]);
   const [selectedUser, setSelectedUser] = useState<z.infer<
     typeof userSchema
@@ -65,10 +63,16 @@ export default function ManageUserForm({
     setSelectedUser(null);
     setUserToBeDeleted(null);
     setUsersList([]);
+    scrollTopAction();
     startTransition(() => {
       fetchUsers();
     });
   };
+
+  const [, sendAction, isPending] = useActionState(
+    withCallbacks(manageUsers, toastCallbacks, performedAttheEnd),
+    null
+  );
 
   const getAllUsers = async () => {
     const usersListResponse = await getUsersList();
@@ -157,13 +161,6 @@ export default function ManageUserForm({
         cancelText="Annuler"
         onClose={cancelDeletion}
       />
-      {state && (
-        <NotificationsComponent
-          notificationAction={state as { message: boolean; text: string }}
-          performClosingActions={performedAttheEnd}
-          toTop={scrollTopAction}
-        />
-      )}
       {usersList?.length > 0 && isEmpty(selectedUser) && (
         <div className="box">
           <ArticleTitle
@@ -272,7 +269,7 @@ export default function ManageUserForm({
                 <div className="cell">
                   {userRole && (
                     <UserPermissionsCheckboxes
-                      role={[userRole] as unknown as UserRole[] | null}
+                      role={userRole as UserRole | null}
                     />
                   )}
                 </div>

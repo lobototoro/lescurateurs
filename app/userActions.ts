@@ -1,6 +1,7 @@
 'use server';
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 import {
   createUser,
@@ -9,6 +10,8 @@ import {
   deleteUser,
 } from '@/lib/supabase/users';
 import { User, UserRole } from '@/models/user';
+import { toActionState } from '@/lib/toastCallbacks';
+import { ActionState } from '@/models/actionState';
 
 /**
  * @packageDocumentation
@@ -36,9 +39,9 @@ import { User, UserRole } from '@/models/user';
  *   - permissions: string
  *
  * @returns A promise that resolves to an object describing the result:
- *   - message: boolean (success flag)
- *   - status?: any (status returned by createUser)
- *   - text: string (localized user-facing message)
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @example
  * const result = await createUserAction(prevState, formData);
@@ -61,9 +64,9 @@ import { User, UserRole } from '@/models/user';
  *   - permissions: string
  *
  * @returns A promise that resolves to an object describing the result:
- *   - message: boolean (success flag)
- *   - status?: any (status returned by updateUser)
- *   - text: string (localized user-facing message)
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @public
  */
@@ -91,9 +94,9 @@ import { User, UserRole } from '@/models/user';
  *   - email: string
  *
  * @returns A promise that resolves to an object describing the result:
- *   - message: boolean (success flag)
- *   - status?: any (status returned by deleteUser)
- *   - text: string (localized user-facing message)
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @public
  */
@@ -118,7 +121,10 @@ import { User, UserRole } from '@/models/user';
  * @public
  */
 
-export async function createUserAction(preState: any, formData: FormData) {
+export async function createUserAction(
+  _preState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -134,22 +140,28 @@ export async function createUserAction(preState: any, formData: FormData) {
   try {
     const createUserStatus = await createUser(userCandidate as User);
 
-    return {
-      message: true,
-      status: createUserStatus,
-      text: 'L’utilisateur a été créé avec succès',
-    };
+    revalidatePath('/editor');
+
+    return toActionState(
+      'L’utilisateur a été créé avec succès',
+      createUserStatus,
+      true
+    );
   } catch (error) {
     console.error(error);
 
-    return {
-      message: false,
-      text: 'Une erreur est survenue lors de la création de l’utilisateur',
-    };
+    return toActionState(
+      'Une erreur est survenue lors de la création de l’utilisateur',
+      undefined,
+      false
+    );
   }
 }
 
-export async function updateUserAction(preState: any, formData: FormData) {
+export async function updateUserAction(
+  _preState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -166,20 +178,23 @@ export async function updateUserAction(preState: any, formData: FormData) {
   };
 
   try {
-    const updatedUserSatus = await updateUser(userCandidate as User);
+    const updatedUserStatus = await updateUser(userCandidate as User);
 
-    return {
-      message: true,
-      status: updatedUserSatus,
-      text: 'L’utilisateur a été modifié avec succès',
-    };
+    revalidatePath('/editor');
+
+    return toActionState(
+      'L’utilisateur a été modifié avec succès',
+      updatedUserStatus,
+      true
+    );
   } catch (error) {
     console.error(error);
 
-    return {
-      message: false,
-      text: 'Une erreur est survenue lors de la modification de l’utilisateur',
-    };
+    return toActionState(
+      'Une erreur est survenue lors de la modification de l’utilisateur',
+      undefined,
+      false
+    );
   }
 }
 
@@ -206,7 +221,10 @@ export async function getUsersList() {
   }
 }
 
-export async function deleteUserAction(preState: any, formData: FormData) {
+export async function deleteUserAction(
+  _preState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -217,33 +235,40 @@ export async function deleteUserAction(preState: any, formData: FormData) {
   try {
     const deletedUserStatus = await deleteUser(email);
 
-    return {
-      message: true,
-      status: deletedUserStatus,
-      text: 'L’utilisateur a été supprimé avec succès',
-    };
+    revalidatePath('/editor');
+
+    return toActionState(
+      'L’utilisateur a été supprimé avec succès',
+      deletedUserStatus,
+      true
+    );
   } catch (error) {
     console.error('[!] while deleting new user');
 
-    return {
-      message: false,
-      text: 'Une erreur est survenue lors de la suppression de l’utilisateur',
-    };
+    return toActionState(
+      'Une erreur est survenue lors de la suppression de l’utilisateur',
+      undefined,
+      false
+    );
   }
 }
 
-export async function manageUsers(prevState: any, formData: FormData) {
+export async function manageUsers(
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const actionName = formData.get('actionName') as string;
 
   switch (actionName) {
     case 'update':
-      return await updateUserAction(prevState, formData);
+      return await updateUserAction(_prevState, formData);
     case 'delete':
-      return await deleteUserAction(prevState, formData);
+      return await deleteUserAction(_prevState, formData);
     default:
-      return {
-        message: false,
-        text: "Action d'utilisateur non reconnue",
-      };
+      return toActionState(
+        "Action d'utilisateur non reconnue",
+        undefined,
+        false
+      );
   }
 }

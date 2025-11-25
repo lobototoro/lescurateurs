@@ -1,3 +1,19 @@
+'use client';
+
+import { type MouseEvent, type RefObject } from 'react';
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import { manageArticleActions } from '@/app/articleActions';
+import SearchArticle from './searchArticle';
+import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
+import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
+
 /**
  * ManageArticleForm module
  *
@@ -38,7 +54,6 @@
  *
  * Renders:
  *  - ModalWithCTA: confirmation modal used for delete/validate/ship flows.
- *  - NotificationsComponent: displays server-side notifications returned by actions.
  *  - SearchArticle: a search UI that can provide a selected item to `manageSelection`.
  *  - A "Retour à la recherche" button to reset the search state.
  *
@@ -61,21 +76,6 @@
  * @example
  * <ManageArticleForm scrollTopAction={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
  */
-'use client';
-
-import { type MouseEvent, type RefObject } from 'react';
-import {
-  startTransition,
-  useActionState,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-
-import { manageArticleActions } from '@/app/articleActions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
-import SearchArticle from './searchArticle';
-import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 
 // isolated submit for validation and shipping
 const sendAction = (
@@ -104,8 +104,8 @@ export default function ManageArticleForm({
 }: {
   scrollTopAction: () => void;
 }): React.ReactElement {
-  const [state, manageArticle, isPending] = useActionState(
-    manageArticleActions,
+  const [, manageArticle, isPending] = useActionState(
+    withCallbacks(manageArticleActions, toastCallbacks, scrollTopAction),
     null
   );
   const [action, setAction] = useState<Record<string, any>>({});
@@ -209,13 +209,6 @@ export default function ManageArticleForm({
         onClose={modalInfos.onClose}
         isPending={isPending}
       />
-      {state && (
-        <NotificationsComponent
-          notificationAction={state as { message: boolean; text: string }}
-          performClosingActions={() => {}}
-          toTop={scrollTopAction}
-        />
-      )}
       <SearchArticle
         target="manage"
         cancelSearchDisplay={cancelSearchDisplay}

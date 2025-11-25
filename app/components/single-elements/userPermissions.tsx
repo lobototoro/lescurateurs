@@ -1,5 +1,10 @@
-import { adminPermissions, contributorPermissions, UserRole, userRoles } from "@/models/user";
-import { ArticleTitle } from "./ArticleTitle";
+import {
+  adminPermissions,
+  contributorPermissions,
+  UserRole,
+  userRoles,
+} from '@/models/user';
+import { ArticleTitle } from './ArticleTitle';
 
 /**
  * Module: UserPermissionsCheckboxes
@@ -28,11 +33,12 @@ import { ArticleTitle } from "./ArticleTitle";
  */
 
 export default function UserPermissionsCheckboxes({
-  role
+  role,
 }: {
   role: UserRole | null;
 }) {
-  const permissions = (role && role.includes("admin" as UserRole)) ? adminPermissions : contributorPermissions;
+  const permissions =
+    role === UserRole.ADMIN ? adminPermissions : contributorPermissions;
 
   return (
     <>
@@ -53,8 +59,11 @@ export default function UserPermissionsCheckboxes({
             checked={true}
             disabled={true}
           />
-          {permission.split(":").join("/")}
-          <label htmlFor={permission} className="is-hidden text-sm text-gray-700">
+          {permission.split(':').join('/')}
+          <label
+            htmlFor={permission}
+            className="is-hidden text-sm text-gray-700"
+          >
             {permission}
           </label>
         </div>

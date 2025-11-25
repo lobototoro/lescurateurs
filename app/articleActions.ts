@@ -3,6 +3,7 @@
 import slugify from 'slugify';
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 import type { Json } from '@/lib/supabase/database.types';
 
@@ -15,6 +16,8 @@ import {
   validateArticle,
   shipArticle,
 } from '@/lib/supabase/articles';
+import { toActionState } from '@/lib/toastCallbacks';
+import type { ActionState } from '@/models/actionState';
 
 /**
  * @packageDocumentation
@@ -66,7 +69,10 @@ import {
  *
  * @param prevState - Previous application state (not used by this action).
  * @param data - Object containing article fields: title, introduction, main, urls, main_audio_url, url_to_main_illustration.
- * @returns An object with `message: boolean`, `status?: number`, and `text: string`.
+ * @returns An object with
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Will log errors to the server console and return a failure message on exceptions.
  *
  * @example
@@ -92,7 +98,10 @@ import {
  *
  * @param prevState - Previous application state (not used).
  * @param data - Object or form-like payload containing updated article fields and original immutable values.
- * @returns An object with `message: boolean`, `status?: number`, and `text: string`.
+ * @returns An object with
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Logs errors to the server console and returns a failure message on exceptions.
  */
 
@@ -117,7 +126,10 @@ import {
  *
  * @param prevState - Previous application state (not used).
  * @param formData - FormData containing at least an `id` field.
- * @returns An object with `message: boolean` and `text: string` describing the outcome.
+ * @returns An object with
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Logs errors to the server console and returns a localized failure message on exceptions.
  */
 
@@ -132,7 +144,10 @@ import {
  *
  * @param prevState - Previous application state (not used).
  * @param formData - FormData containing `id` and `validation` ('true' | 'false').
- * @returns A Promise resolving to `{ message: boolean; text: string }`.
+ * @returns A Promise resolving to
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Logs errors to the server console and returns an error object on exceptions.
  */
 
@@ -147,7 +162,10 @@ import {
  *
  * @param prevState - Previous application state (not used).
  * @param formData - FormData containing `id` and `shipped` ('true' | 'false').
- * @returns An object with `message: boolean` and `text: string` describing the result.
+ * @returns An object with
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Logs errors to the server console and returns a localized failure message on exceptions.
  */
 
@@ -194,7 +212,10 @@ interface ValidateTypes {
  *          text provides a description of the operation result.
  * @throws Will log any errors that occur during the article creation process.
  */
-export async function createArticleAction(prevState: any, data: any) {
+export async function createArticleAction(
+  _prevState: ActionState,
+  data: any
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -236,18 +257,17 @@ export async function createArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    return {
-      message: true,
-      status: articleResult,
-      text: 'Article and slug were successfully created',
-    };
-  } catch (error) {
-    console.log(error);
+    revalidatePath('/editor');
 
-    return {
-      message: false,
-      text: 'Error creating article or slug',
-    };
+    return toActionState(
+      'Article and slug were successfully created',
+      articleResult,
+      true
+    );
+  } catch (error) {
+    console.error(error);
+
+    return toActionState('Error creating article or slug', undefined, false);
   }
 }
 
@@ -260,9 +280,9 @@ export async function createArticleAction(prevState: any, data: any) {
  * @param prevState - The previous state of the application (not used in this function).
  * @param formData - FormData object containing the updated article details.
  * @returns An object with a message indicating success or failure, and a descriptive text.
- *          {message: boolean, text: string}
- *          message is true if the article was updated successfully, false otherwise.
- *          text provides a description of the operation result.
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Will log any errors that occur during the article update process.
  *
  * @Rules
@@ -271,7 +291,10 @@ export async function createArticleAction(prevState: any, data: any) {
  * - an online or validated article is set to false
  *  for validated, pubished_at = null, shipped
  */
-export async function updateArticleAction(prevState: any, data: any) {
+export async function updateArticleAction(
+  _prevState: ActionState,
+  data: any
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -316,31 +339,29 @@ export async function updateArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    return {
-      message: true,
-      status: updateResult,
-      text: 'Article was successfully updated',
-    };
-  } catch (error) {
-    console.log(error);
+    revalidatePath('/editor');
 
-    return {
-      message: false,
-      text: 'Error updating article',
-    };
+    return toActionState(
+      'Article was successfully updated',
+      updateResult,
+      true
+    );
+  } catch (error) {
+    console.error(error);
+
+    return toActionState('Error updating article', undefined, false);
   }
 }
 
 export async function fetchArticleById(id: number | bigint) {
   try {
     const article = await getArticleById(id);
-    
+
     if (!article) {
-      
       return {
         message: false,
-        text: 'Error: Pas d\'article avec cet ID',
-      }
+        text: "Error: Pas d'article avec cet ID",
+      };
     }
 
     return {
@@ -348,7 +369,7 @@ export async function fetchArticleById(id: number | bigint) {
       article,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return {
       message: false,
@@ -364,8 +385,9 @@ export async function fetchArticleById(id: number | bigint) {
  * @param formData - A `FormData` object containing the data required to delete the article.
  *                   Must include an `id` field representing the article's ID.
  * @returns A promise that resolves to an object containing:
- *          - `message`: A boolean indicating the success or failure of the operation.
- *          - `text`: A string message describing the result of the operation.
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * @throws Logs any errors encountered during the deletion process to the console.
  *
@@ -379,7 +401,10 @@ export async function fetchArticleById(id: number | bigint) {
  *    - Otherwise, it returns an error message indicating a failure in the deletion process.
  * 4. Catches any errors during the process and returns a generic error message.
  */
-export async function deleteArticleAction(prevState: any, formData: FormData) {
+export async function deleteArticleAction(
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -391,31 +416,45 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
       deleteSlug(id),
       deleteArticle(id),
     ]);
-    let successCount = 0;
-    settledResults.forEach((result: PromiseSettledResult<any>) => {
-      if (result.status === 'fulfilled') {
-        successCount += 1;
-      }
-    });
+
+    const successCount = settledResults.filter(
+      (result) => result.status === 'fulfilled'
+    ).length;
+
+    // if there's a rejected promise, we log it
+    // without affecting the script flow
+    settledResults
+      .filter((result) => result.status === 'rejected')
+      .forEach((result) => {
+        if (result.status === 'rejected') {
+          console.error('Deletion failed:', result.reason);
+        }
+      });
+
     if (successCount === 2) {
-      return {
-        message: true,
-        text: "L'article a été supprimé avec succès",
-      };
+      revalidatePath('/editor');
+
+      return toActionState(
+        "L'article a été supprimé avec succès",
+        undefined,
+        true
+      );
     }
 
-    return {
-      message: false,
-      text: "Une erreur s'est produite lors de la suppression de l'article ou du slug",
-    };
+    return toActionState(
+      "Une erreur s'est produite lors de la suppression de l'article ou du slug",
+      undefined,
+      false
+    );
   } catch (error) {
     // Log the error to the console for debugging purposes
-    console.log(error);
+    console.error(error);
 
-    return {
-      message: false,
-      text: "une erreur s'est produite : contactez l'administrateur",
-    };
+    return toActionState(
+      "une erreur s'est produite : contactez l'administrateur",
+      undefined,
+      false
+    );
   }
 }
 
@@ -423,15 +462,18 @@ export async function deleteArticleAction(prevState: any, formData: FormData) {
  *
  * @param prevState - Previous state
  * @param formData - FormData from the validation form
- * @returns {message: boolean; text: string}
+ * @returns
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  *
  * this function only call article validation backend func
  * never the slug validation func, that is updated as well
  */
 export async function validateArticleAction(
-  prevState: any,
+  _prevState: ActionState,
   formData: FormData
-): Promise<{ message: boolean; text: string }> {
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -453,23 +495,20 @@ export async function validateArticleAction(
       validation.articleValidationStatus !== 204 ||
       validation.slugValidationStatus !== 204
     ) {
-      return {
-        message: false,
-        text: 'Article not found',
-      };
+      return toActionState('Article not found', undefined, false);
     }
 
-    return {
-      message: true,
-      text: `L'article a été ${validationArgs.validatedValue ? 'validé' : 'rejeté'} avec succès`,
-    };
-  } catch (error) {
-    console.log(error);
+    revalidatePath('/editor');
 
-    return {
-      message: false,
-      text: 'Error validating article',
-    };
+    return toActionState(
+      `L'article a été ${validationArgs.validatedValue ? 'validé' : 'rejeté'} avec succès`,
+      undefined,
+      true
+    );
+  } catch (error) {
+    console.error(error);
+
+    return toActionState('Error validating article', undefined, false);
   }
 }
 
@@ -482,15 +521,18 @@ export async function validateArticleAction(
  * @param prevState - The previous state of the application (not used in this function).
  * @param formData - FormData object containing the article ID and shipping status.
  * @returns An object with a message indicating success or failure, and a descriptive text.
- *          {message: boolean, text: string}
- *          message is true if the article was shipped/unshipped successfully, false otherwise.
- *          text provides a description of the operation result.
+ *   message: string;
+ *   status: number | Record<string, unknown> | undefined;
+ *   isSuccess: boolean;
  * @throws Will log any errors that occur during the shipping process.
  *
  * @Rules
  * - An article must be validated before it can be shipped.
  */
-export async function shipArticleAction(prevState: any, formData: FormData) {
+export async function shipArticleAction(
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -505,17 +547,12 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
     // get article to check for validity: 'true' or 'false'
     const article = await getArticleById(id);
 
-    if (!article) {
-      return {
-        message: false,
-        text: 'Article inconnu',
-      };
-    }
     if (!article.validated && ship) {
-      return {
-        message: false,
-        text: "L'article doit être validé avant d'être mis en MeP",
-      };
+      return toActionState(
+        "L'article doit être validé avant d'être mis en MeP",
+        undefined,
+        false
+      );
     }
 
     const result = await shipArticle({
@@ -525,42 +562,47 @@ export async function shipArticleAction(prevState: any, formData: FormData) {
       updated_by,
     });
     if (result !== 204) {
-      return {
-        message: false,
-        text: "Une erreur est survenue lors de la mise en MeP de l'article",
-      };
+      return toActionState(
+        "Une erreur est survenue lors de la mise en MeP de l'article",
+        undefined,
+        false
+      );
     }
 
-    return {
-      message: true,
-      text: ship
+    revalidatePath('/editor');
+
+    return toActionState(
+      ship
         ? "L'article a été mis en MeP avec succès"
         : "L'article a été mis offline avec succès",
-    };
+      undefined,
+      true
+    );
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
-    return {
-      message: false,
-      text: "Une erreur est survenue lors de la mise en MeP de l'article",
-    };
+    return toActionState(
+      "Une erreur est survenue lors de la mise en MeP de l'article",
+      undefined,
+      false
+    );
   }
 }
 
-export async function manageArticleActions(prevState: any, formData: FormData) {
+export async function manageArticleActions(
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   const actionName = formData.get('actionName') as string;
 
   switch (actionName) {
     case 'delete':
-      return await deleteArticleAction(prevState, formData);
+      return await deleteArticleAction(_prevState, formData);
     case 'validate':
-      return await validateArticleAction(prevState, formData);
+      return await validateArticleAction(_prevState, formData);
     case 'ship':
-      return await shipArticleAction(prevState, formData);
+      return await shipArticleAction(_prevState, formData);
     default:
-      return {
-        message: false,
-        text: 'Action inconnue',
-      };
+      return toActionState('Action inconnue', undefined, false);
   }
 }
