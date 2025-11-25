@@ -13,8 +13,7 @@ import { manageArticleActions } from '@/app/articleActions';
 import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import SearchArticle from './searchArticle';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
-import withCallbacks from '@/lib/withCallbacks';
-import toastCallbacks from '@/lib/toastCallbacks';
+import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
 
 /**
  * ManageArticleForm module
@@ -56,7 +55,6 @@ import toastCallbacks from '@/lib/toastCallbacks';
  *
  * Renders:
  *  - ModalWithCTA: confirmation modal used for delete/validate/ship flows.
- *  - NotificationsComponent: displays server-side notifications returned by actions.
  *  - SearchArticle: a search UI that can provide a selected item to `manageSelection`.
  *  - A "Retour à la recherche" button to reset the search state.
  *

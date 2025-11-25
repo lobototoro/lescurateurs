@@ -16,7 +16,7 @@ import {
   validateArticle,
   shipArticle,
 } from '@/lib/supabase/articles';
-import { toActionState } from '@/lib/toActionState';
+import { toActionState } from '@/lib/toastCallbacks';
 import type { ActionState } from '@/models/actionState';
 
 /**

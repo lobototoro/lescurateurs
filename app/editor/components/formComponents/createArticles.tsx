@@ -12,8 +12,7 @@ import { addRemoveInputsFactory } from '@/lib/utility-functions';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { useMainContentValidation } from '@/lib/useMaincontentValidation';
-import withCallbacks from '@/lib/withCallbacks';
-import toastCallbacks from '@/lib/toastCallbacks';
+import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
 
 /**
  * @packageDocumentation

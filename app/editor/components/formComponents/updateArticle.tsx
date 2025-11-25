@@ -21,8 +21,7 @@ import NotificationsComponent from '@/app/components/single-elements/notificatio
 import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { useMainContentValidation } from '@/lib/useMaincontentValidation';
-import withCallbacks from '@/lib/withCallbacks';
-import toastCallbacks from '@/lib/toastCallbacks';
+import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
 
 /**
  * @packageDocumentation
