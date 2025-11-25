@@ -78,7 +78,6 @@ export default function CreateArticleForm({
     setValue,
     getValues,
     reset,
-    subscribe,
     trigger,
     clearErrors,
     formState: { errors },
@@ -120,7 +119,7 @@ export default function CreateArticleForm({
 
   // used to reinforce main text valdiation
   // since it's not a natural form element
-  useMainContentValidation(subscribe, trigger, clearErrors);
+  useMainContentValidation('main', watch, trigger, clearErrors);
 
   return (
     <>

@@ -89,12 +89,11 @@ export default function UpdateArticleForm({
     register,
     handleSubmit,
     watch,
+    trigger,
+    clearErrors,
     setValue,
     getValues,
     reset,
-    subscribe,
-    trigger,
-    clearErrors,
     formState: { errors },
   } = useForm<z.infer<typeof articleSchema>>({
     mode: 'onChange',
@@ -213,7 +212,7 @@ export default function UpdateArticleForm({
   // since it's not a natural form element
   // variant: adding currentArticle to prevent validation
   // from stopping after getting article data
-  useMainContentValidation(subscribe, trigger, clearErrors);
+  useMainContentValidation('main', watch, trigger, clearErrors);
 
   return (
     <>

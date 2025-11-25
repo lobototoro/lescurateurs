@@ -1,29 +1,29 @@
 // hooks/useMainContentValidation.ts
 import { useEffect } from 'react';
 import {
-  UseFormSubscribe,
+  UseFormWatch,
   UseFormTrigger,
   UseFormClearErrors,
 } from 'react-hook-form';
 
 export function useMainContentValidation(
-  subscribe: UseFormSubscribe<any>,
+  propName: string,
+  watch: UseFormWatch<any>,
   trigger: UseFormTrigger<any>,
   clearErrors: UseFormClearErrors<any>,
   minLength: number = 50
 ) {
   useEffect(() => {
-    const callback = subscribe({
-      formState: { values: true },
-      callback: ({ values }) => {
-        if (!values.main || values.main.length < minLength) {
-          trigger('main');
-        } else {
-          clearErrors('main');
-        }
-      },
+    const subscription = watch((data) => {
+      if (data[propName] && data[propName].length < minLength) {
+        trigger(propName);
+      } else {
+        clearErrors(propName);
+      }
     });
 
-    return () => callback();
-  }, [subscribe, trigger, clearErrors, minLength]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 }
