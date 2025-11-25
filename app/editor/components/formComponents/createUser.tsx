@@ -1,4 +1,4 @@
-import { startTransition, useActionState, useEffect, useState } from 'react';
+import { startTransition, useActionState, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -130,13 +130,6 @@ export default function CreateUserForm({
 
   return (
     <section className="section">
-      {/*{state && (
-        <NotificationsComponent
-          notificationAction={state as { message: boolean; text: string }}
-          performClosingActions={reset}
-          toTop={scrollTopAction}
-        />
-      )}*/}
       <ArticleTitle
         text="Créer un utilisateur"
         level="h2"
@@ -240,6 +233,7 @@ export default function CreateUserForm({
           role="button"
           data-testid="final-submit"
           type="submit"
+          disabled={isPending}
           className={
             isPending
               ? 'button is-primary is-size-6 has-text-white mt-5 is-loading'

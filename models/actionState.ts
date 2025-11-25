@@ -1,7 +1,7 @@
 export type ActionState =
   | {
       message: string;
-      status: any;
+      status: number | Record<string, unknown> | undefined;
       isSuccess: boolean;
     }
   | null // initial state

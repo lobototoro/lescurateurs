@@ -52,7 +52,7 @@ type Callbacks<T> = {
   onError?: (result: T) => void;
 };
 
-type PostSubmit = () => void | undefined;
+type PostSubmit = () => void;
 
 export const withCallbacks = <Args extends unknown[], T extends ActionState>(
   fn: (...args: Args) => Promise<T>,

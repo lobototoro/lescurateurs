@@ -11,6 +11,7 @@ import {
 } from '@/lib/supabase/users';
 import { User, UserRole } from '@/models/user';
 import { toActionState } from '@/lib/toastCallbacks';
+import { ActionState } from '@/models/actionState';
 
 /**
  * @packageDocumentation
@@ -120,7 +121,10 @@ import { toActionState } from '@/lib/toastCallbacks';
  * @public
  */
 
-export async function createUserAction(preState: any, formData: FormData) {
+export async function createUserAction(
+  preState: ActionState,
+  formData: FormData
+) {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');

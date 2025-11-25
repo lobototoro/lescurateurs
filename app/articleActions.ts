@@ -197,7 +197,10 @@ interface ValidateTypes {
  *          text provides a description of the operation result.
  * @throws Will log any errors that occur during the article creation process.
  */
-export async function createArticleAction(prevState: any, data: any) {
+export async function createArticleAction(
+  prevState: any,
+  data: any
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -247,7 +250,7 @@ export async function createArticleAction(prevState: any, data: any) {
       true
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return toActionState('Error creating article or slug', undefined, false);
   }
@@ -273,7 +276,10 @@ export async function createArticleAction(prevState: any, data: any) {
  * - an online or validated article is set to false
  *  for validated, pubished_at = null, shipped
  */
-export async function updateArticleAction(prevState: any, data: any) {
+export async function updateArticleAction(
+  prevState: any,
+  data: any
+): Promise<ActionState> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -326,7 +332,7 @@ export async function updateArticleAction(prevState: any, data: any) {
       true
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return toActionState('Error updating article', undefined, false);
   }
@@ -348,7 +354,7 @@ export async function fetchArticleById(id: number | bigint) {
       article,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return {
       message: false,
@@ -394,12 +400,10 @@ export async function deleteArticleAction(
       deleteSlug(id),
       deleteArticle(id),
     ]);
-    let successCount = 0;
-    settledResults.forEach((result: PromiseSettledResult<any>) => {
-      if (result.status === 'fulfilled') {
-        successCount += 1;
-      }
-    });
+
+    const successCount = settledResults.filter(
+      (result) => result.status === 'fulfilled'
+    ).length;
     if (successCount === 2) {
       revalidatePath('/editor');
 
@@ -417,7 +421,7 @@ export async function deleteArticleAction(
     );
   } catch (error) {
     // Log the error to the console for debugging purposes
-    console.log(error);
+    console.error(error);
 
     return toActionState(
       "une erreur s'est produite : contactez l'administrateur",
@@ -472,7 +476,7 @@ export async function validateArticleAction(
       true
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return toActionState('Error validating article', undefined, false);
   }
@@ -548,7 +552,7 @@ export async function shipArticleAction(
       true
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     return toActionState(
       "Une erreur est survenue lors de la mise en MeP de l'article",
