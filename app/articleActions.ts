@@ -3,6 +3,7 @@
 import slugify from 'slugify';
 import { auth0 } from '@/lib/auth0';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 import type { Json } from '@/lib/supabase/database.types';
 
@@ -15,6 +16,7 @@ import {
   validateArticle,
   shipArticle,
 } from '@/lib/supabase/articles';
+import { toActionState } from '@/lib/toActionState';
 
 /**
  * @packageDocumentation
@@ -236,18 +238,17 @@ export async function createArticleAction(prevState: any, data: any) {
       shipped,
     });
 
-    return {
-      message: true,
-      status: articleResult,
-      text: 'Article and slug were successfully created',
-    };
+    revalidatePath('/editor');
+
+    return toActionState(
+      'Article and slug were successfully created',
+      articleResult,
+      true
+    );
   } catch (error) {
     console.log(error);
 
-    return {
-      message: false,
-      text: 'Error creating article or slug',
-    };
+    return toActionState('Error creating article or slug', {}, false);
   }
 }
 
@@ -334,13 +335,12 @@ export async function updateArticleAction(prevState: any, data: any) {
 export async function fetchArticleById(id: number | bigint) {
   try {
     const article = await getArticleById(id);
-    
+
     if (!article) {
-      
       return {
         message: false,
-        text: 'Error: Pas d\'article avec cet ID',
-      }
+        text: "Error: Pas d'article avec cet ID",
+      };
     }
 
     return {

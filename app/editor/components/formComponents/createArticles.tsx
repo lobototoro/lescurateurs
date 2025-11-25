@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useActionState, startTransition } from 'react';
+import React, { useActionState, startTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -7,10 +7,13 @@ import { articleSchema } from '@/models/articleSchema';
 import { createArticleAction } from '@/app/articleActions';
 import ArticleMarkupForm from '@/app/components/single-elements/articleHTMLForm';
 import { addRemoveInputsFactory } from '@/lib/utility-functions';
-import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
+
+// import NotificationsComponent from '@/app/components/single-elements/notificationsComponent';
 import { customResolver } from '@/app/editor/components/resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { useMainContentValidation } from '@/lib/useMaincontentValidation';
+import withCallbacks from '@/lib/withCallbacks';
+import toastCallbacks from '@/lib/toastCallbacks';
 
 /**
  * @packageDocumentation
@@ -65,11 +68,6 @@ export default function CreateArticleForm({
 }: {
   scrollTopAction: () => void;
 }): React.ReactElement {
-  const [state, formAction, isPending] = useActionState(
-    createArticleAction,
-    null
-  );
-
   // declaring react hook form variables
   const {
     register,
@@ -96,6 +94,16 @@ export default function CreateArticleForm({
       urls: [],
     },
   });
+
+  const postprocessFunction = () => {
+    scrollTopAction();
+    reset();
+  };
+
+  const [, formAction, isPending] = useActionState(
+    withCallbacks(createArticleAction, toastCallbacks, postprocessFunction),
+    null
+  );
 
   // registering urls that need a special treatment
   const getMaincontent = (value: string) => {
@@ -130,13 +138,6 @@ export default function CreateArticleForm({
         color="white"
         spacings="mt-6 mb-4"
       />
-      {state && (
-        <NotificationsComponent
-          notificationAction={state as { message: boolean; text: string }}
-          performClosingActions={reset}
-          toTop={scrollTopAction}
-        />
-      )}
       <ArticleMarkupForm
         handleSubmit={handleSubmit(onSubmit)}
         register={register as any}
