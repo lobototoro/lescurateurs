@@ -23,6 +23,7 @@ import { isEmpty } from '@/lib/utility-functions';
 import ModalWithCTA from '@/app/components/single-elements/modalWithCTA';
 import { customResolver } from '../resolvers/customResolver';
 import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
+import { toast } from 'sonner';
 
 export default function ManageUserForm({
   scrollTopAction,
@@ -76,14 +77,18 @@ export default function ManageUserForm({
 
   const getAllUsers = async () => {
     const usersListResponse = await getUsersList();
-    if (usersListResponse.message) {
+    if (usersListResponse.isSuccess) {
       const usersList = usersListResponse?.usersList as z.infer<
         typeof userSchema
       >[];
 
       return usersList;
     } else {
-      console.error('[!] while fetching users list ', usersListResponse.text);
+      console.error(
+        '[!] while fetching users list ',
+        usersListResponse.message
+      );
+      toast.error(usersListResponse.message);
 
       return [];
     }

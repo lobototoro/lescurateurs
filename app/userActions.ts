@@ -11,7 +11,7 @@ import {
 } from '@/lib/supabase/users';
 import { User, UserRole } from '@/models/user';
 import { toActionState } from '@/lib/toastCallbacks';
-import { ActionState } from '@/models/actionState';
+import { ActionState, TSearchResponse } from '@/models/actionState';
 
 /**
  * @packageDocumentation
@@ -198,7 +198,7 @@ export async function updateUserAction(
   }
 }
 
-export async function getUsersList() {
+export async function getUsersList(): Promise<TSearchResponse> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -208,15 +208,16 @@ export async function getUsersList() {
     const usersList = (await getAllUsers()) as unknown as User[];
 
     return {
-      message: true,
+      isSuccess: true,
       usersList,
     };
   } catch (error) {
     console.error('[!] while getting all users ', error);
 
     return {
-      message: false,
-      text: 'Une erreur est survenue lors de la récupération de la liste des  utilisateurs',
+      isSuccess: false,
+      message:
+        'Une erreur est survenue lors de la récupération de la liste des  utilisateurs',
     };
   }
 }

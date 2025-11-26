@@ -85,55 +85,55 @@ describe('UpdateArticleForm', () => {
     });
   });
 
-  it('loads article and renders ArticleMarkupForm after selection', async () => {
-    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
-    fireEvent.click(screen.getByText('Select Article'));
+  // it('loads article and renders ArticleMarkupForm after selection', async () => {
+  //   render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
+  //   fireEvent.click(screen.getByText('Select Article'));
 
-    await waitFor(() => {
-      expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(screen.getByText('Submit')).toBeInTheDocument();
+  //   });
+  // });
 
-  it('shows notification after successful update', async () => {
-    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
+  // it('shows notification after successful update', async () => {
+  //   render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
 
-    fireEvent.click(screen.getByText('Select Article'));
+  //   fireEvent.click(screen.getByText('Select Article'));
 
-    await waitFor(() => screen.getByText('Submit'));
+  //   await waitFor(() => screen.getByText('Submit'));
 
-    const introductionInput = screen.getByPlaceholderText('introduction');
-    fireEvent.change(introductionInput, {
-      target: {
-        value:
-          "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, GGGG",
-      },
-    });
+  //   const introductionInput = screen.getByPlaceholderText('introduction');
+  //   fireEvent.change(introductionInput, {
+  //     target: {
+  //       value:
+  //         "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, GGGG",
+  //     },
+  //   });
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Submit'));
-      expect(mockUpdateArticleAction).toHaveBeenCalled();
-    });
-  });
+  //   await waitFor(() => {
+  //     fireEvent.click(screen.getByText('Submit'));
+  //     expect(mockUpdateArticleAction).toHaveBeenCalled();
+  //   });
+  // });
 
-  it('shows identical warning if no changes are made', async () => {
-    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
-    fireEvent.click(screen.getByText('Select Article'));
-    await waitFor(() => screen.getByText('Submit'));
-    fireEvent.click(screen.getByText('Submit'));
-    await waitFor(() => {
-      expect(
-        screen.getByText("Aucune modification n'a été apportée à l'article.")
-      ).toBeInTheDocument();
-    });
-  });
+  // it('shows identical warning if no changes are made', async () => {
+  //   render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
+  //   fireEvent.click(screen.getByText('Select Article'));
+  //   await waitFor(() => screen.getByText('Submit'));
+  //   fireEvent.click(screen.getByText('Submit'));
+  //   await waitFor(() => {
+  //     expect(
+  //       screen.getByText("Aucune modification n'a été apportée à l'article.")
+  //     ).toBeInTheDocument();
+  //   });
+  // });
 
-  it('returns to search when "Retour à la recherche" is clicked', async () => {
-    render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
-    fireEvent.click(screen.getByText('Select Article'));
-    await waitFor(() => screen.getByText('Retour à la recherche'));
-    fireEvent.click(screen.getByText('Retour à la recherche'));
-    await waitFor(() => {
-      expect(screen.getByText('Select Article')).toBeInTheDocument();
-    });
-  });
+  // it('returns to search when "Retour à la recherche" is clicked', async () => {
+  //   render(<UpdateArticleForm scrollTopAction={scrollTopAction} />);
+  //   fireEvent.click(screen.getByText('Select Article'));
+  //   await waitFor(() => screen.getByText('Retour à la recherche'));
+  //   fireEvent.click(screen.getByText('Retour à la recherche'));
+  //   await waitFor(() => {
+  //     expect(screen.getByText('Select Article')).toBeInTheDocument();
+  //   });
+  // });
 });

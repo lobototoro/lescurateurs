@@ -1,3 +1,7 @@
+import { User } from './user';
+import { Article } from './article';
+import type { Slugs } from './slugs';
+
 export type ActionState =
   | {
       message: string;
@@ -6,3 +10,11 @@ export type ActionState =
     }
   | null // initial state
   | undefined; // if server action does not return anything
+
+export type TSearchResponse = {
+  isSuccess: boolean;
+  article?: Article | Article[];
+  slugs?: Slugs[];
+  usersList?: User[];
+  message?: string;
+};

@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import React from 'react';
 import ManageUserForm from '@/app/editor/components/formComponents/manageUser';
 import { getUsersList, manageUsers } from '@/app/userActions';
 
@@ -75,18 +74,18 @@ const scrollTopAction = vi.fn();
 describe('ManageUserForm', () => {
   beforeEach(() => {
     (getUsersList as any).mockResolvedValue({
-      message: true,
+      isSuccess: true,
       usersList: [mockUser],
     });
 
     // Set up sequential resolved values for manageUsers (e.g. update then delete)
     (manageUsers as any).mockResolvedValueOnce({
-      message: true,
-      text: 'User updated',
+      isSuccess: true,
+      message: 'User updated',
     });
     (manageUsers as any).mockResolvedValueOnce({
-      message: true,
-      text: 'User deleted',
+      isSuccess: true,
+      message: 'User deleted',
     });
   });
 

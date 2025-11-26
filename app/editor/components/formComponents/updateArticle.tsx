@@ -21,6 +21,7 @@ import { customResolver } from '../resolvers/customResolver';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { useMainContentValidation } from '@/lib/useMaincontentValidation';
 import { withCallbacks, toastCallbacks } from '@/lib/toastCallbacks';
+import { toast } from 'sonner';
 
 /**
  * @packageDocumentation
@@ -193,11 +194,14 @@ export default function UpdateArticleForm({
         return;
       }
       const response = await fetchArticleById(selectedId as number | bigint);
-
-      // cast via unknown to avoid unsafe direct cast diagnostics
-      setCurrentArticle(
-        response.article as unknown as z.infer<typeof articleSchema>
-      );
+      if (!response?.isSuccess) {
+        toast.error(response?.message);
+      } else {
+        // cast via unknown to avoid unsafe direct cast diagnostics
+        setCurrentArticle(
+          response.article as unknown as z.infer<typeof articleSchema>
+        );
+      }
     });
   }, [selectedId]);
 

@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { searchArticles, searchSlugs } from '@/lib/supabase/articles';
 import { Article } from '@/models/article';
 import { Slugs } from '@/models/slugs';
+import type { TSearchResponse } from '@/models/actionState';
 
 /**
  * @module editor/search
@@ -67,7 +68,9 @@ import { Slugs } from '@/models/slugs';
  * @see {@link searchArticles} for the lower-level Supabase query implementation.
  */
 
-export async function searchForSlugs(searchTerm: string) {
+export async function searchForSlugs(
+  searchTerm: string
+): Promise<TSearchResponse> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
@@ -77,38 +80,39 @@ export async function searchForSlugs(searchTerm: string) {
     const slugs = (await searchSlugs(searchTerm)) as Slugs[];
 
     return {
-      message: true,
+      isSuccess: true,
       slugs,
     };
   } catch (error) {
     console.error('Error searching for slugs:', error);
-    
+
     return {
-      message: false,
-      text: error instanceof Error ? error.message : 'Error searching for slugs',
+      isSuccess: false,
+      message:
+        error instanceof Error ? error.message : 'Error searching for slugs',
     };
   }
 }
 
-export async function searchForArticle(slug: string) {
+export async function searchForArticle(slug: string): Promise<TSearchResponse> {
   const session = await auth0.getSession();
   if (!session?.user) {
     redirect('/editor');
   }
 
   try {
-    const article = await searchArticles(slug) as Article[];
+    const article = (await searchArticles(slug)) as Article[];
 
     return {
-      message: true,
+      isSuccess: true,
       article,
     };
   } catch (error) {
     console.error('Error getting article:', error);
-    
+
     return {
-      message: false,
-      text: error instanceof Error ? error.message : 'Error getting article',
+      isSuccess: false,
+      message: error instanceof Error ? error.message : 'Error getting article',
     };
   }
 }

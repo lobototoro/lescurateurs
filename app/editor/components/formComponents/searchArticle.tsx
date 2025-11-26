@@ -1,28 +1,3 @@
-/**
-* @packageDocumentation
-* @module SearchArticle 
-* This file handles a simple form for a search by terms
- * it is combined with a paginated results component
- * with no sorting.
- * 
- * @remarks
- * It is a backoffice componenent not designed to be used on the public side.
- * Even if the target pop is meant to receive a 'search' string, it is never used.
- * This component is also designed to handle search with users table.
- */
- 
- /**
- * Props for SearchArticle component. Coulb be renamed later with `SearchComponent`
- * 
- * @public
- * @typedef {Object} SearchArticle
- * @property {enum of 3 strings} target - context for the search
- * @property {boolean} cancelSearchDisplay - reset the form and back to the initial display
- * @property {react dispatch} setSelection - optional function given by parent when target is 'update'
- * @property {react dispatch} manageSelection - same as above but with target set to 'manage'
- * 
- **/
-
 'use client';
 import { useEffect, useState } from 'react';
 
@@ -30,6 +5,33 @@ import { searchForSlugs } from '@/app/searchActions';
 import { Slugs } from '@/models/slugs';
 import { ArticleTitle } from '@/app/components/single-elements/ArticleTitle';
 import { PaginatedSearchDisplay } from '@/app/components/single-elements/paginatedSearchResults';
+import { toast } from 'sonner';
+import type { TSearchResponse } from '@/models/actionState';
+
+/**
+ * @packageDocumentation
+ * @module SearchArticle
+ * This file handles a simple form for a search by terms
+ * it is combined with a paginated results component
+ * with no sorting.
+ *
+ * @remarks
+ * It is a backoffice componenent not designed to be used on the public side.
+ * Even if the target pop is meant to receive a 'search' string, it is never used.
+ * This component is also designed to handle search with users table.
+ */
+
+/**
+ * Props for SearchArticle component. Coulb be renamed later with `SearchComponent`
+ *
+ * @public
+ * @typedef {Object} SearchArticle
+ * @property {enum of 3 strings} target - context for the search
+ * @property {boolean} cancelSearchDisplay - reset the form and back to the initial display
+ * @property {react dispatch} setSelection - optional function given by parent when target is 'update'
+ * @property {react dispatch} manageSelection - same as above but with target set to 'manage'
+ *
+ **/
 
 type TargetTypes = 'search' | 'update' | 'manage';
 
@@ -49,7 +51,6 @@ export default function SearchArticle({
 }) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [slugs, setSlugs] = useState<Slugs[]>([]);
-  const [notification, setNotification] = useState<string>('');
   const [pendingSearch, setPendingSearch] = useState<boolean>(false);
 
   useEffect(() => {
@@ -57,7 +58,6 @@ export default function SearchArticle({
       /* eslint-disable-next-line */
       setSearchTerm('');
       setSlugs([]);
-      setNotification('');
     }
   }, [cancelSearchDisplay]);
 
@@ -65,20 +65,16 @@ export default function SearchArticle({
     e.preventDefault();
 
     if (searchTerm.trim() === '') return;
-    setNotification('');
 
     setPendingSearch(true);
 
-    const result = (await searchForSlugs(searchTerm)) as {
-      message: boolean;
-      slugs: Slugs[];
-    };
+    const result = (await searchForSlugs(searchTerm)) as TSearchResponse;
 
-    if (result?.message) {
+    if (result.isSuccess && result?.slugs) {
       setSlugs(result?.slugs);
     }
-    if (result?.slugs.length === 0) {
-      setNotification('No slug results found');
+    if (result?.message) {
+      toast.error(result.message);
       setPendingSearch(false);
 
       return;
@@ -106,10 +102,6 @@ export default function SearchArticle({
       default:
         return;
     }
-  };
-
-  const clearNotification = () => {
-    setNotification('');
   };
 
   return (
@@ -146,16 +138,6 @@ export default function SearchArticle({
             Search
           </button>
         </div>
-
-        {notification && (
-          <div className="notification is-primary is-light mt-4 mb-4">
-            <button
-              className="delete"
-              onClick={() => clearNotification()}
-            ></button>
-            {notification}
-          </div>
-        )}
 
         {slugs.length > 0 && (
           <ArticleTitle
