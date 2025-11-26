@@ -72,8 +72,11 @@ export default function SearchArticle({
 
     if (result.isSuccess && result?.slugs) {
       setSlugs(result?.slugs);
+    } else if (result.isSuccess) {
+      setSlugs([]);
     }
-    if (result?.message) {
+
+    if (!result.isSuccess) {
       toast.error(result.message);
       setPendingSearch(false);
 
