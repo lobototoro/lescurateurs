@@ -70,18 +70,12 @@ export default function SearchArticle({
 
     const result = (await searchForSlugs(searchTerm)) as TSearchResponse;
 
-    if (result.isSuccess && result?.slugs) {
-      setSlugs(result?.slugs);
-    } else if (result.isSuccess) {
-      setSlugs([]);
-    }
-
-    if (!result.isSuccess) {
+    if (result.isSuccess) {
+      setSlugs(result?.slugs ?? []);
+    } else {
       toast.error(result.message);
-      setPendingSearch(false);
-
-      return;
     }
+
     setPendingSearch(false);
   };
 
