@@ -17,7 +17,7 @@ import {
   shipArticle,
 } from '@/lib/supabase/articles';
 import { toActionState } from '@/lib/toastCallbacks';
-import type { ActionState } from '@/models/actionState';
+import type { ActionState, TSearchResponse } from '@/models/actionState';
 
 /**
  * @packageDocumentation
@@ -111,7 +111,11 @@ import type { ActionState } from '@/models/actionState';
  * Retrieve an article by its numeric id.
  *
  * @param id - Numeric id or bigint of the requested article.
- * @returns On success: `{ message: true, article }`, on failure: `{ message: false, text: string }`.
+ * @returns TSearchResponse
+ *  isSuccess: boolean;
+ *  article?: Article | Article[];
+ *  slugs?: Slugs[];
+ *  message?: string;
  * @throws Logs the error and returns a localized failure message when retrieval fails.
  */
 
@@ -353,27 +357,29 @@ export async function updateArticleAction(
   }
 }
 
-export async function fetchArticleById(id: number | bigint) {
+export async function fetchArticleById(
+  id: number | bigint
+): Promise<TSearchResponse> {
   try {
     const article = await getArticleById(id);
 
     if (!article) {
       return {
-        message: false,
-        text: "Error: Pas d'article avec cet ID",
+        isSuccess: false,
+        message: "Error: Pas d'article avec cet ID",
       };
     }
 
     return {
-      message: true,
+      isSuccess: true,
       article,
     };
   } catch (error) {
     console.error(error);
 
     return {
-      message: false,
-      text: "Pas d'article correspondant à cet ID",
+      isSuccess: false,
+      message: "Pas d'article correspondant à cet ID",
     };
   }
 }
