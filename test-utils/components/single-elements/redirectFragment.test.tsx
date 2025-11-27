@@ -23,20 +23,42 @@ vi.mock('next/navigation', () => ({
 }));
 
 describe('RedirectFragment', () => {
-  const originalLocation = window.location;
-  const originalConsoleError = console.error;
+  let originalLocation: Location;
+  let originalConsoleError: typeof console.error;
+  let defaultMockLocation: Location; // Store the default mock location object created in beforeEach
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
 
-    // Mock window.location
-    delete (window as any).location;
-    window.location = {
-      ...originalLocation,
-      origin: 'http://localhost:3000',
+    // Store the original window.location and console.error before mocking
+    originalLocation = window.location;
+    originalConsoleError = console.error;
+
+    // Define a comprehensive mock Location object for default tests
+    defaultMockLocation = {
       href: 'http://localhost:3000/current-page',
-    } as Location;
+      origin: 'http://localhost:3000',
+      protocol: 'http:',
+      host: 'localhost:3000',
+      hostname: 'localhost',
+      port: '3000',
+      pathname: '/current-page',
+      search: '',
+      hash: '',
+      assign: vi.fn(),
+      replace: vi.fn(),
+      reload: vi.fn(),
+      ancestorOrigins: originalLocation.ancestorOrigins, // Keep original ancestorOrigins or mock as needed
+      toString: () => 'http://localhost:3000/current-page',
+    } as Location; // Cast the mock object to Location
+
+    // Mock window.location using Object.defineProperty for reliable testing of read-only properties
+    Object.defineProperty(window, 'location', {
+      configurable: true, // Allows redefining the property
+      enumerable: true,
+      value: defaultMockLocation,
+    });
 
     // Mock console.error
     console.error = vi.fn();
@@ -44,7 +66,15 @@ describe('RedirectFragment', () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    window.location = originalLocation;
+
+    // Restore original window.location
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      enumerable: true,
+      value: originalLocation,
+    });
+
+    // Restore original console.error
     console.error = originalConsoleError;
     vi.clearAllMocks();
   });
@@ -166,11 +196,15 @@ describe('RedirectFragment', () => {
       );
     });
 
-    it('should handle relative URL as valid same-origin', () => {
+    // Modified test to correctly reflect behavior and fix diagnostic
+    it('should treat relative URLs as valid same-origin and redirect', () => {
       render(<RedirectFragment url="not-a-valid-url" />);
 
       // Relative URLs are valid and treated as same-origin
       expect(screen.getByText('Redirecting...')).toBeInTheDocument();
+      vi.advanceTimersByTime(1000); // Advance time to trigger redirection
+      expect(mockPush).toHaveBeenCalledTimes(1);
+      expect(mockPush).toHaveBeenCalledWith('not-a-valid-url');
     });
 
     it('should log error for malformed URL', () => {
@@ -182,28 +216,13 @@ describe('RedirectFragment', () => {
       );
     });
 
-    it('should not call router.push for malformed URL', () => {
-      // Mock window.location to make URL validation fail
-      delete (window as any).location;
-      window.location = {
-        ...originalLocation,
-        origin: 'http://localhost:3000',
-      } as Location;
-
-      render(<RedirectFragment url="not-a-valid-url" />);
-
-      vi.advanceTimersByTime(2000);
-
-      // Should still be called because relative URL is valid
-      // Changed expectation to match actual behavior
-      expect(screen.getByText('Redirecting...')).toBeInTheDocument();
-    });
-
     it('should handle empty string URL as same-origin', () => {
       render(<RedirectFragment url="" />);
 
       // Empty string is treated as same-origin by URL constructor
       expect(screen.getByText('Redirecting...')).toBeInTheDocument();
+      vi.advanceTimersByTime(1000);
+      expect(mockPush).toHaveBeenCalledWith('');
     });
 
     it('should show error for URL with different protocol on same domain', () => {
@@ -409,28 +428,70 @@ describe('RedirectFragment', () => {
   });
 
   describe('Different Window Origins', () => {
+    // Nested beforeEach/afterEach to manage temporary window.location changes
+    let tempMockLocation: Location;
+
+    beforeEach(() => {
+      // Capture the current mocked window.location (from the parent beforeEach)
+      tempMockLocation = window.location;
+    });
+
+    afterEach(() => {
+      // Restore the window.location to the state set by the parent beforeEach
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        enumerable: true,
+        value: tempMockLocation,
+      });
+    });
+
     it('should validate against current window origin', () => {
-      window.location = {
-        ...originalLocation,
-        origin: 'https://example.com',
-        href: 'https://example.com/page',
-      } as Location;
+      // Temporarily redefine window.location for this test
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        enumerable: true,
+        value: {
+          ...tempMockLocation, // Start with the base mock properties
+          origin: 'https://example.com',
+          href: 'https://example.com/page',
+          protocol: 'https:',
+          host: 'example.com',
+          hostname: 'example.com',
+          port: '', // Default HTTPS port
+          pathname: '/page',
+          toString: () => 'https://example.com/page',
+        } as Location,
+      });
 
       render(<RedirectFragment url="https://example.com/dashboard" />);
 
       expect(screen.getByText('Redirecting...')).toBeInTheDocument();
+      vi.advanceTimersByTime(1000);
+      expect(mockPush).toHaveBeenCalledWith('https://example.com/dashboard');
     });
 
     it('should reject URL with different origin when window origin changes', () => {
-      window.location = {
-        ...originalLocation,
-        origin: 'https://example.com',
-        href: 'https://example.com/page',
-      } as Location;
+      // Temporarily redefine window.location for this test
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        enumerable: true,
+        value: {
+          ...tempMockLocation, // Start with the base mock properties
+          origin: 'https://example.com',
+          href: 'https://example.com/page',
+          protocol: 'https:',
+          host: 'example.com',
+          hostname: 'example.com',
+          port: '',
+          pathname: '/page',
+          toString: () => 'https://example.com/page',
+        } as Location,
+      });
 
       render(<RedirectFragment url="http://localhost:3000/dashboard" />);
 
       expect(screen.getByText('Invalid redirect URL')).toBeInTheDocument();
+      expect(mockPush).not.toHaveBeenCalled();
     });
   });
 
