@@ -8,7 +8,7 @@ In the future it will be a mobile-only webzine, but desktop displayed backoffice
 ## History
 
 First used as a playground for nextjs and sqlite, then a real project with supabase,
-to test and implement mainly server actions and all new features from React framwework.
+to test and implement mainly server actions and all new features from React frawework.
 
 ## Getting Started
 
@@ -46,8 +46,8 @@ The stack: (as for October 7th)
 Aided by AI:
 
 - copilot, claude 4.5, chatgpt, gemini in Zed editor
-- coderabbit as an reviewer agent (a good one, with a good reputation, and a good track record)
+- coderabbit as a reviewer agent (a good one, with a good reputation, and a good track record)
 - healthcheck made by checkly every 12 hours
 - unit tests by claude 4.5 sonnet
 
-:heart: made with a mac :heart:
+❤️ made with a mac ❤️
