@@ -3,7 +3,7 @@ export interface User {
   email: string;
   tiers_service_ident: string;
   role: UserRole;
-  permissions: string;
+  permissions: string[];
   created_at?: string;
   last_connection_at?: string | null;
   updated_at?: string | null;

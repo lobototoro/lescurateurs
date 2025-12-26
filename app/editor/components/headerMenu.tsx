@@ -92,16 +92,17 @@ export default function HeaderMenu({
   selection,
 }: {
   role: string;
-  permissions: string;
+  permissions: string[];
   setSelection: React.Dispatch<React.SetStateAction<string>>;
   selection: string;
 }) {
   // NEX-50: whikle working on modal and notif, we simplify BO menu
   let definitivePermissions = [];
+  const permissionsArray = Array.isArray(permissions) ? permissions : [];
 
   const stringifiedPermissions =
     role === 'admin'
-      ? JSON.parse(permissions).filter(
+      ? permissionsArray.filter(
           (permission: string) =>
             permission !== 'update:user' &&
             permission !== 'delete:user' &&
@@ -109,7 +110,7 @@ export default function HeaderMenu({
             permission !== 'validate:articles' &&
             permission !== 'ship:articles'
         )
-      : JSON.parse(permissions);
+      : permissions;
 
   if (role === 'admin') {
     definitivePermissions = stringifiedPermissions
@@ -135,11 +136,11 @@ export default function HeaderMenu({
             onClick={() => setSelection(permission.split(':').join(''))}
             title={` ${permission.split(':')[0]} ${permission.split(':')[1]}`}
           >
-            {permission.split(':')[0]} {permission.split(':')[1]}
-            &nbsp;
             <span className="material-icons-outlined is-size-5">
               {iconMapper(permission)}
             </span>
+            {permission.split(':')[0]} {permission.split(':')[1]}
+            &nbsp;
           </a>
         </div>
       );

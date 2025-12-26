@@ -39,6 +39,7 @@ next-env.d.ts
 initdb.js
 initdb.cjs
 certificates
+lcfr.db
 
 # Playwright
 node_modules/

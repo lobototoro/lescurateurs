@@ -14,7 +14,7 @@ export default function EditorForm({
   permissions,
 }: {
   role: string;
-  permissions: string;
+  permissions: string[];
 }) {
   const [selection, setSelection] = useState<string>('');
   const topPointRef = React.useRef<HTMLDivElement | null>(null);

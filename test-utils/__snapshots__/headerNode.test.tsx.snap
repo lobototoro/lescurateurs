@@ -50,29 +50,14 @@ exports[`Should render correctly 1`] = `
         >
           <a
             class="button "
-            title=" edit articles"
-          >
-            edit articles 
-            <span
-              class="material-icons-outlined is-size-5"
-            >
-              error
-            </span>
-          </a>
-        </div>
-        <div
-          class="navbar-item"
-        >
-          <a
-            class="button "
             title=" manage user"
           >
-            manage user 
             <span
               class="material-icons-outlined is-size-5"
             >
               manage_accounts
             </span>
+            manage user 
           </a>
         </div>
         <div
@@ -82,12 +67,12 @@ exports[`Should render correctly 1`] = `
             class="button "
             title=" manage articles"
           >
-            manage articles 
             <span
               class="material-icons-outlined is-size-5"
             >
               library_books
             </span>
+            manage articles 
           </a>
         </div>
       </div>
