@@ -10,7 +10,7 @@
  *
  * @remarks
  * - The file uses a simplified BO (back-office) menu logic (see NEX-50).
- * - Permissions are expected to be a JSON-stringified array when provided.
+ * - Permissions are expected to be a native array of strings.
  * - This module relies on `iconMapper` and `ArticleTitle` imported from the
  *   application's utility and component libraries.
  */
@@ -21,8 +21,8 @@
  * @typedef HeaderMenuProps
  * @property {string} role - The user's role (e.g. 'admin'). Controls how
  *   permissions are transformed and which menu items are present.
- * @property {string} permissions - JSON string representing an array of
- *   permission strings (e.g. '["read:articles","manage:articles"]').
+ * @property {string[]} permissions - Array of permission strings
+ *   (e.g. ["read:articles","manage:articles"]).
  * @property {React.Dispatch<React.SetStateAction<string>>} setSelection - React
  *   state setter used to update the currently selected menu action.
  * @property {string} selection - The currently selected action key (used to
@@ -72,7 +72,7 @@
  * @example
  * <HeaderMenu
  *   role="editor"
- *   permissions='["read:articles","manage:articles","delete:comments"]'
+ *   permissions={["read:articles","manage:articles","delete:comments"]}
  *   selection="managearticles"
  *   setSelection={(s) => console.log(s)}
  * />
@@ -92,7 +92,7 @@ export default function HeaderMenu({
   selection,
 }: {
   role: string;
-  permissions: string;
+  permissions: string[];
   setSelection: React.Dispatch<React.SetStateAction<string>>;
   selection: string;
 }) {
@@ -101,7 +101,7 @@ export default function HeaderMenu({
 
   const stringifiedPermissions =
     role === 'admin'
-      ? JSON.parse(permissions).filter(
+      ? permissions.filter(
           (permission: string) =>
             permission !== 'update:user' &&
             permission !== 'delete:user' &&
@@ -109,7 +109,7 @@ export default function HeaderMenu({
             permission !== 'validate:articles' &&
             permission !== 'ship:articles'
         )
-      : JSON.parse(permissions);
+      : permissions;
 
   if (role === 'admin') {
     definitivePermissions = stringifiedPermissions
@@ -135,11 +135,11 @@ export default function HeaderMenu({
             onClick={() => setSelection(permission.split(':').join(''))}
             title={` ${permission.split(':')[0]} ${permission.split(':')[1]}`}
           >
-            {permission.split(':')[0]} {permission.split(':')[1]}
-            &nbsp;
             <span className="material-icons-outlined is-size-5">
               {iconMapper(permission)}
             </span>
+            {permission.split(':')[0]} {permission.split(':')[1]}
+            &nbsp;
           </a>
         </div>
       );

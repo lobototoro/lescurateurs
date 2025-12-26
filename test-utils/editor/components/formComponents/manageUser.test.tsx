@@ -649,7 +649,7 @@ describe('ManageUserForm', () => {
       await waitFor(() => {
         expect(mockFormMethods.setValue).toHaveBeenCalledWith(
           'permissions',
-          expect.stringContaining('delete:articles')
+          expect.arrayContaining(['delete:articles'])
         );
       });
     });
@@ -675,7 +675,11 @@ describe('ManageUserForm', () => {
       await waitFor(() => {
         expect(mockFormMethods.setValue).toHaveBeenCalledWith(
           'permissions',
-          expect.not.stringContaining('delete:articles')
+          expect.arrayContaining(['read:articles'])
+        );
+        expect(mockFormMethods.setValue).toHaveBeenCalledWith(
+          'permissions',
+          expect.not.arrayContaining(['delete:articles'])
         );
       });
     });
