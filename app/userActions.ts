@@ -36,7 +36,7 @@ import { ActionState, TSearchResponse } from '@/models/actionState';
  *   - email: string
  *   - tiers_service_ident: string
  *   - role: UserRole
- *   - permissions: string
+ *   - permissions: array<string>
  *
  * @returns A promise that resolves to an object describing the result:
  *   message: string;
@@ -61,7 +61,7 @@ import { ActionState, TSearchResponse } from '@/models/actionState';
  *   - email: string
  *   - tiers_service_ident: string
  *   - role: UserRole
- *   - permissions: string
+ *   - permissions: array<string>
  *
  * @returns A promise that resolves to an object describing the result:
  *   message: string;
@@ -134,7 +134,7 @@ export async function createUserAction(
     email: formData.get('email') as string,
     tiers_service_ident: formData.get('tiers_service_ident') as string,
     role: formData.get('role') as UserRole,
-    permissions: formData.get('permissions') as string,
+    permissions: JSON.parse(formData.get('permissions') as string),
   };
 
   try {
@@ -172,7 +172,7 @@ export async function updateUserAction(
     email: formData.get('email') as string,
     tiers_service_ident: formData.get('tiers_service_ident') as string,
     role: formData.get('role') as UserRole,
-    permissions: formData.get('permissions') as string,
+    permissions: JSON.parse(formData.get('permissions') as string),
     updated_by:
       session.user.nickname || session.user.email || ('Anon' as string),
   };

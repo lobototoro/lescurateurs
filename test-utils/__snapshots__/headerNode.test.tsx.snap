@@ -50,6 +50,21 @@ exports[`Should render correctly 1`] = `
         >
           <a
             class="button "
+            title=" edit articles"
+          >
+            <span
+              class="material-icons-outlined is-size-5"
+            >
+              error
+            </span>
+            edit articles 
+          </a>
+        </div>
+        <div
+          class="navbar-item"
+        >
+          <a
+            class="button "
             title=" manage user"
           >
             <span

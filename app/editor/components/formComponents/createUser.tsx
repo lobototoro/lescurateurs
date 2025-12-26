@@ -101,7 +101,7 @@ export default function CreateUserForm({
       email: '',
       tiers_service_ident: '',
       role: 'contributor',
-      permissions: JSON.stringify(contributorPermissions),
+      permissions: contributorPermissions,
     },
   });
 
@@ -121,7 +121,7 @@ export default function CreateUserForm({
       formData.append('email', data.email);
       formData.append('tiers_service_ident', data.tiers_service_ident);
       formData.append('role', data.role);
-      formData.append('permissions', data.permissions);
+      formData.append('permissions', JSON.stringify(data.permissions));
       formAction(formData);
     });
   };
@@ -191,16 +191,10 @@ export default function CreateUserForm({
                     onChange={(e) => {
                       setUserRole(e.target.value as keyof typeof UserRole);
                       if (e.target.value === 'admin') {
-                        setValue(
-                          'permissions',
-                          JSON.stringify(adminPermissions)
-                        );
+                        setValue('permissions', adminPermissions);
                       }
                       if (e.target.value === 'contributor') {
-                        setValue(
-                          'permissions',
-                          JSON.stringify(contributorPermissions)
-                        );
+                        setValue('permissions', contributorPermissions);
                       }
                     }}
                     className="select"

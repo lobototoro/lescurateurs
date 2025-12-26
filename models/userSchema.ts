@@ -10,7 +10,7 @@ export const userSchema = z.object({
   role: z.enum(['admin', 'contributor']),
   created_at: z.string().optional(),
   last_connection_at: z.string().optional().nullable(),
-  permissions: z.string(),
+  permissions: z.array(z.string()),
   updated_at: z.string().optional().nullable(),
   updated_by: z.string().optional().nullable(),
 });
