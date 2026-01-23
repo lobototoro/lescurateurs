@@ -1,9 +1,15 @@
 ---
 
-# LCFR
+# LCFR - nextjs version
 
 Beginning a nextjs project (version 16).
 In the future it will be a mobile-only webzine, but desktop displayed backoffice.
+
+as of 22nd january 2026, this project is only a playground for testing nextjs versions and react new features.
+It relies on supabase as a database, using supabase-js as ORM.
+I've tested server functions to assess the possibilities of fullstack jobs in a near future.
+Back office is fully corking, though.
+Feel free to look at the same project with tanstack start as a framework [https://github.com/lobototoro/lescurateurs-fr](https://github.com/lobototoro/lescurateurs-fr)
 
 ## History
 
